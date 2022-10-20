@@ -30,10 +30,10 @@ Use your **real name** (i.e., not a nickname or an abbreviation) and your offici
 * For implementation/coding problems, please open an issue in the GitLab Issue Tracker of this GitLab project and use the issue to document your own efforts while working towards a solution. In case you get stuck, ask our tutors for assistance by mentioning their handles in a comment to the issue. The SE2 tutor is:
   * Robert Sama, GitLab handle: @roberts95
 * If you have specific questions regarding grading or team issues, please also open a GitLab Issue in this GitLab project and assign it to your team's supervisor. Your **team supervisor** can be identified based on your team id which is also visible in your GitLab Team Project name. The team id consists of 4 digits and the first two digits encode your supervisor:
-  * Teams starting with `01` (e.g., team `0103`) are supervised by Stephen Warnett, GitLab handle: @stephenw64
-  * Teams starting with `02` (e.g., team `0206`) are supervised by Nicole Lueger, GitLab handle: @luegern93
-  * Teams starting with `03` (e.g., team `0304`) are supervised by Amirali Amiri, GitLab handle: @amiralia57
-  * Teams starting with `04` (e.g., team `0407`) are supervised by Georg Simhand, GitLab handle: @georgs74
+  * Teams starting with `01` (e.g., team `0103`) are supervised by S. Warnett, GitLab handle: @stephenw64
+  * Teams starting with `02` (e.g., team `0206`) are supervised by N. Lueger, GitLab handle: @luegern93
+  * Teams starting with `03` (e.g., team `0304`) are supervised by A. Amiri, GitLab handle: @amiralia57
+  * Teams starting with `04` (e.g., team `0407`) are supervised by G. Simhandl, GitLab handle: @georgs74
 * As a last resort you can contact the course supervisors directly via [email](mailto:se2@swa.univie.ac.at).
 
 # Which functions should not be used?
