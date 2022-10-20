@@ -26,7 +26,7 @@ Use your **real name** (i.e., not a nickname or an abbreviation) and your offici
 
 # How do I get assistance?
 
-* If you encounter problems directly related to the assignment, please post in the **[Moodle Discussion Forum - Practical Assignment](https://moodle.univie.ac.at/mod/forum/view.php?id=10356964)**, as it may also be of interest to other colleagues.
+* If you encounter problems directly related to the assignment, please post in the **[Moodle Discussion Forum - Practical Assignment](https://moodle.univie.ac.at/course/view.php?id=353431)**, as it may also be of interest to other colleagues.
 * For implementation/coding problems, please open an issue in the GitLab Issue Tracker of this GitLab project and use the issue to document your own efforts while working towards a solution. In case you get stuck, ask our tutors for assistance by mentioning their handles in a comment to the issue. The SE2 tutor is:
   * Robert Sama, GitLab handle: @roberts95
 * If you have specific questions regarding grading or team issues, please also open a GitLab Issue in this GitLab project and assign it to your team's supervisor. Your **team supervisor** can be identified based on your team id which is also visible in your GitLab Team Project name. The team id consists of 4 digits and the first two digits encode your supervisor:
