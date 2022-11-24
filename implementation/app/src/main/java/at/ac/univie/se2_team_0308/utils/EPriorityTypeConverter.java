@@ -13,10 +13,10 @@ public class EPriorityTypeConverter {
     @TypeConverter
     public EPriority toPriority(String priority){
         switch (priority){
-            case "MEDIUM":
-                return EPriority.MEDIUM;
             case "LOW":
                 return EPriority.LOW;
+            case "MEDIUM":
+                return EPriority.MEDIUM;
             default:
                 return EPriority.HIGH;
         }
