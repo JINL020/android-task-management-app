@@ -6,6 +6,9 @@ import java.util.Date;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+
+@Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {
 
     ArrayList<String> subtasks;

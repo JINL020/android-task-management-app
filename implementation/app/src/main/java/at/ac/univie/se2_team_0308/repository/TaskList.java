@@ -7,8 +7,11 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import at.ac.univie.se2_team_0308.models.TaskAppointment;
+import at.ac.univie.se2_team_0308.models.TaskChecklist;
+
 public interface TaskList {
     LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllTasks(Application application);
     TaskAppointmentDao getAppointmentDao();
-    ChecklistDao getChecklistDao();
+    TaskChecklistDao getChecklistDao();
 }

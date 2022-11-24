@@ -1,9 +1,14 @@
 package at.ac.univie.se2_team_0308.repository;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.Query;
 import androidx.room.Update;
+
+import java.util.List;
+
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 @Dao
@@ -19,4 +24,7 @@ public interface TaskChecklistDao {
 
     @Delete
     void delete(TaskChecklist task);
+
+    @Query("SELECT id, taskName, description, priority, status, categoryEnum, isSelected, creationDate FROM task_checklists")
+    LiveData<List<TaskChecklist>> getAllTasks();
 }

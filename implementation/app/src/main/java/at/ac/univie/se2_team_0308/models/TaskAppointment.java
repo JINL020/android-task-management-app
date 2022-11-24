@@ -3,6 +3,9 @@ import java.util.Date;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+
+@Entity(tableName = "task_appointments")
 public class TaskAppointment extends ATask implements Parcelable {
     private Date deadline;
 
