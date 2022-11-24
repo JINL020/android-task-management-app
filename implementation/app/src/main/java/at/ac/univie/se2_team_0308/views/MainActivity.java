@@ -31,6 +31,7 @@ import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
+import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog{
 
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
         } else {
             taskFactory = new TaskChecklistFactory();
-            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+//            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
         }
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }
