@@ -25,6 +25,7 @@ import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.DisplayClass;
+import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class TaskActivity extends AppCompatActivity {
 
