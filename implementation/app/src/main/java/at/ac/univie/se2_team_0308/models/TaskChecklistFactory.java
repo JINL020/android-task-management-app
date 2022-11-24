@@ -6,7 +6,7 @@ import java.util.Date;
 public class TaskChecklistFactory extends ATaskFactory {
 
     @Override
-    public Task createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, ArrayList<String> subtasks) {
+    public ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, ArrayList<String> subtasks) {
         subtasks = new ArrayList<>();
         subtasks.add("Subtask1");
         subtasks.add("Subtask2");
