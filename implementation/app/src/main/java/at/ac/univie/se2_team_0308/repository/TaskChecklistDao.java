@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Update;
+import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 @Dao
 public interface TaskChecklistDao {

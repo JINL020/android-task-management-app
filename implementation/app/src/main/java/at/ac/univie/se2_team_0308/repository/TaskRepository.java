@@ -1,4 +1,6 @@
 package at.ac.univie.se2_team_0308.repository;
+import at.ac.univie.se2_team_0308.models.TaskChecklist;
+import at.ac.univie.se2_team_0308.models.TaskAppointment;
 
 import android.app.Application;
 
