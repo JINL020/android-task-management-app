@@ -19,8 +19,8 @@ public class TaskRepository {
     public TaskRepository(Application application) {
         TaskList taskListProxy = new TaskListProxy();
         this.allTasks = taskListProxy.getAllTasks(application);
-        appointmentDao = taskListProxy.getAppointmentDao();
-        checklistDao = taskListProxy.getChecklistDao();
+        taskAppointmentDao = taskListProxy.getAppointmentDao();
+        taskChecklistDao = taskListProxy.getChecklistDao();
     }
 
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllTasks() {

@@ -7,6 +7,9 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import at.ac.univie.se2_team_0308.models.TaskAppointment;
+import at.ac.univie.se2_team_0308.models.TaskChecklist;
+
 public class TaskListImplementation implements TaskList {
 
     private static TaskAppointmentDao appointmentDao;
@@ -16,9 +19,9 @@ public class TaskListImplementation implements TaskList {
 
     @Override
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllTasks(Application application) {
-        AppDatabase database = AppDatabase.getInstance(application);
-        appointmentDao = database.appointmentDao();
-        checklistDao = database.checklistDao();
+        AppDatabase database = AppDatabase.getDatabase(application);
+        appointmentDao = database.taskAppointmentDao();
+        checklistDao = database.taskChecklistDao();
         return new CombinedLiveData(appointmentDao.getAllTasks(), checklistDao.getAllTasks());
     }
 

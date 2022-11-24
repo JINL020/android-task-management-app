@@ -7,6 +7,9 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import at.ac.univie.se2_team_0308.models.TaskAppointment;
+import at.ac.univie.se2_team_0308.models.TaskChecklist;
+
 public class TaskListProxy implements TaskList {
 
     private TaskList taskList;
