@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:backgroundTint="#E1E1E1"
+    android:elevation="10dp"
+    android:paddingVertical="10dp"
+    app:cardCornerRadius="10dp"
+    app:cardUseCompatPadding="true">
+
+
+    <RelativeLayout
+        android:id="@+id/relViewTaskList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <RadioButton
+            android:id="@+id/radioButtonSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp">
+
+
+        </RadioButton>
+
+        <TextView
+            android:id="@+id/taskNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@+id/radioButtonSelect"
+            android:text="Task Name"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/taskTypeImageAppointment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@+id/taskNameText"
+            android:src="@drawable/ic_task_type_appointment" />
+
+        <ImageView
+            android:id="@+id/taskTypeImageChecklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@+id/taskNameText"
+            android:src="@drawable/ic_task_type_checklist"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/taskDragButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_task_drag" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/taskNameText"
+            android:layout_toStartOf="@+id/taskNameText"
+            android:id="@+id/subtasksList"/>
+
+
+    </RelativeLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
