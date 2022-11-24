@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,101 +6,123 @@
     android:layout_height="match_parent"
     tools:context=".views.TaskActivity">
 
-<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    >
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relLayoutCard"
-            android:padding="30sp"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/taskInfoTitle"
-                android:text="Task 1"
-                android:layout_centerHorizontal="true"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                />
+            android:orientation="vertical">
 
             <RelativeLayout
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/taskInfoTitle"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/relLayoutTaskTitleEdit"
-                android:layout_marginTop="20dp"
+                android:id="@+id/relLayoutCard"
+                android:padding="30sp"
                 >
 
                 <TextView
+                    android:id="@+id/TaskInfoTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Task Title"
-                    android:id="@+id/txtTaskName"
-                />
+                    android:text="Task Info"
+                    android:textColor="#FF8F6372"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="30sp"
+                    android:textStyle="bold"/>
 
-                <EditText
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtTaskName"
-                    android:text="Enter Task Title"
-                    android:id="@+id/updateTaskName"
-                />
+                    android:layout_below="@+id/TaskInfoTitle"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/relLayoutTaskTitleEdit"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Task Title"
+                        android:textStyle="italic"
+                        android:id="@+id/txtTaskName"
+
+                        />
+
+                    <EditText
+                        android:layout_below="@+id/txtTaskName"
+                        android:hint="Enter Task Title"
+                        android:id="@+id/updateTaskName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relLayoutTaskTitleEdit"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/relLayoutTaskDeadlineEdit"
+                    android:layout_marginTop="20dp"
+                    android:animateLayoutChanges="true"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Task Deadline"
+                        android:textStyle="italic"
+                        android:id="@+id/txtTaskDeadline"
+
+                        />
+
+                    <DatePicker
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtTaskDeadline"
+                        android:datePickerMode="spinner"
+                        android:id="@+id/datePickerEdit"
+                        android:calendarViewShown="false"
+                        />
+
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relLayoutTaskDeadlineEdit"
+                    android:layout_centerHorizontal="true"
+                    >
+
+                    <Button
+                        android:id="@+id/btnCancelUpdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_alignParentStart="true"
+                        android:backgroundTint="#8F6372"
+                        android:text="Cancel" />
+
+
+
+                </RelativeLayout>
+
+
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="140dp"
-                android:animateLayoutChanges="true"
-                >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Task Deadline"
-                    android:textStyle="italic"
-                    android:id="@+id/txtTaskDeadline"
-                    />
-                <DatePicker
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtTaskDeadline"
-                    android:datePickerMode="spinner"
-                    android:id="@+id/datePickerEdit"
-                    android:calendarViewShown="false"
-                    />
-            </RelativeLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
-            <RelativeLayout
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-            >
-                <Button
-                    android:id="@+id/btnCancelUpdate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="500dp"
-                    android:layout_alignParentStart="true"
-                    android:backgroundTint="#8F6372"
-                    android:text="Cancel"
-                    />
 
-            </RelativeLayout>
 
-        </RelativeLayout>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+
+
 </RelativeLayout>
