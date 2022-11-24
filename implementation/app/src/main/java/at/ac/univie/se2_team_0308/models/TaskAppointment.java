@@ -5,8 +5,9 @@ public class TaskAppointment extends ATask {
 
     private Date deadline;
 
-    public TaskAppointment(String taskName, String description){
-        super(taskName, description);
+    public TaskAppointment(String taskName, String description, EPriority priority, EStatus status, ECategory category, Date deadline){
+        super(taskName, description, priority, status, category);
+        this.deadline = deadline;
     }
 
     public Date getDeadline(){

@@ -9,23 +9,22 @@ public abstract class ATask {
     private int id;
     private String taskName;
     private String description;
-//    private PriorityEnum priority;
-//    private StatusEnum status;
+    private EPriority priority;
+    private EStatus status;
     private boolean isSelected = false;
-    //private CategoryEnum categoryEnum;
+    private ECategory category;
 
-  //  @TypeConverters(DateConverter.class)
+   // @TypeConverters(DateConverter.class)
     private Date creationDate;
 
     public static final String TAG ="Task";
 
-    //StatusEnum status, CategoryEnum categoryEnum, PriorityEnum priority
-    public ATask(String taskName, String description) {
+    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category) {
         this.taskName = taskName;
         this.description = description;
-//        this.priority = priority;
-//        this.status = status;
-//        this.categoryEnum = categoryEnum;
+        this.priority = priority;
+        this.status = status;
+        this.category = category;
         this.creationDate = Calendar.getInstance().getTime();
     }
 
@@ -61,29 +60,29 @@ public abstract class ATask {
         this.description = description;
     }
 
-//    public PriorityEnum getPriority() {
-//        return priority;
-//    }
-//
-//    public void setPriority(PriorityEnum priority) {
-//        this.priority = priority;
-//    }
+    public EPriority getPriority() {
+        return priority;
+    }
 
-//    public StatusEnum getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(StatusEnum status) {
-//        this.status = status;
-//    }
-//
-//    public CategoryEnum getCategoryEnum() {
-//        return categoryEnum;
-//    }
-//
-//    public void setCategoryEnum(CategoryEnum categoryEnum) {
-//        this.categoryEnum = categoryEnum;
-//    }
+    public void setPriority(EPriority priority) {
+        this.priority = priority;
+    }
+
+    public EStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EStatus status) {
+        this.status = status;
+    }
+
+    public ECategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ECategory category) {
+        this.category = category;
+    }
 
     public Date getCreationDate() {
         return creationDate;
