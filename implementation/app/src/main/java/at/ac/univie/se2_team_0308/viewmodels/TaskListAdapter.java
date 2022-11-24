@@ -24,6 +24,7 @@ import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
+import at.ac.univie.se2_team_0308.views.TaskActivity;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
