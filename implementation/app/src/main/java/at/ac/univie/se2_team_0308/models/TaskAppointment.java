@@ -4,9 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.room.Entity;
+import androidx.room.TypeConverters;
+
+import at.ac.univie.se2_team_0308.utils.DateConverter;
 
 @Entity(tableName = "task_appointments")
 public class TaskAppointment extends ATask implements Parcelable {
+
+    @TypeConverters(DateConverter.class)
     private Date deadline;
 
     public TaskAppointment(String taskName, String description, EPriority priority, EStatus status, ECategory category, Date deadline){

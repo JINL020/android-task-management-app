@@ -25,6 +25,6 @@ public interface TaskChecklistDao {
     @Delete
     void delete(TaskChecklist task);
 
-    @Query("SELECT id, taskName, description, priority, status, categoryEnum, isSelected, creationDate FROM task_checklists")
+    @Query("SELECT id, taskName, description, priority, status, category, isSelected, creationDate FROM task_checklists")
     LiveData<List<TaskChecklist>> getAllTasks();
 }

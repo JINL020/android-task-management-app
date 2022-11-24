@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:name="at.ac.univie.se2_team_0308.AddTaskFragment"
+        android:name="at.ac.univie.se2_team_0308.views.AddTaskFragment"
         tools:layout="@layout/add_task_dialog_fragment"
         android:visibility="gone"
         />

@@ -24,6 +24,6 @@ public interface TaskAppointmentDao {
     @Delete
     void delete(TaskAppointment task);
 
-    @Query("SELECT id, taskName, description, priority, status, categoryEnum, isSelected, deadline, creationDate FROM task_appointments")
+    @Query("SELECT id, taskName, description, priority, status, category, isSelected, deadline, creationDate FROM task_appointments")
     LiveData<List<TaskAppointment>> getAllTasks();
 }

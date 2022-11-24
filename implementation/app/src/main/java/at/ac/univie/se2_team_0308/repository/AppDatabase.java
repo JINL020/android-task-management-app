@@ -1,6 +1,11 @@
 package at.ac.univie.se2_team_0308.repository;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
+import at.ac.univie.se2_team_0308.utils.DateConverter;
+import at.ac.univie.se2_team_0308.utils.ECategoryTypeConverter;
+import at.ac.univie.se2_team_0308.utils.EPriorityTypeConverter;
+import at.ac.univie.se2_team_0308.utils.EStatusTypeConverter;
+import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,12 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {TaskAppointment.class, TaskChecklist.class}, version = 1, exportSchema = false)
+@TypeConverters({EPriorityTypeConverter.class, EStatusTypeConverter.class, ECategoryTypeConverter.class, SubtasksConverter.class, DateConverter.class} )
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TaskAppointmentDao taskAppointmentDao();
     public abstract TaskChecklistDao taskChecklistDao();

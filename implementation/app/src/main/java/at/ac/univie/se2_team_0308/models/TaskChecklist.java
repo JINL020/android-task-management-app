@@ -13,7 +13,7 @@ import androidx.room.Entity;
 @Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
-    ArrayList<String> subtasks;
+    List<String> subtasks;
 
     public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, ArrayList<String> subtasks){
         super(taskName, description, priority, status, category);
@@ -67,7 +67,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         return subtasks;
     }
 
-    public void setSubtasks(ArrayList<String> subtasks) {
+    public void setSubtasks(List<String> subtasks) {
         this.subtasks = subtasks;
     }
 
