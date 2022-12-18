@@ -51,5 +51,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
     // XStream
-    implementation 'com.thoughtworks.xstream:xstream:1.4.7'
+    implementation ('com.thoughtworks.xstream:xstream:1.4.7') {
+        exclude group: 'xmlpull', module: 'xmlpull'
+    }
 }
