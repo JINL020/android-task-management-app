@@ -113,7 +113,7 @@ public class TaskActivity extends AppCompatActivity {
                 case "IN_PROGRESS":
                     editTaskStatus.setSelection(1);
                     break;
-                case "COMPLETE":
+                case "COMPLETED":
                     editTaskStatus.setSelection(2);
                     break;
                 default:
@@ -172,7 +172,7 @@ public class TaskActivity extends AppCompatActivity {
                     case "IN_PROGRESS":
                         newStatus = EStatus.IN_PROGRESS;
                         break;
-                    case "COMPLETE":
+                    case "COMPLETED":
                         newStatus = EStatus.COMPLETED;
                         break;
                     default:

@@ -96,6 +96,24 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 break;
         }
 
+        switch (tasks.get(position).getStatus().toString()) {
+            case "IN_PROGRESS":
+                holder.taskImageProgressNotStarted.setVisibility(View.GONE);
+                holder.taskImageProgressInProgress.setVisibility(View.VISIBLE);
+                holder.taskImageProgressCompleted.setVisibility(View.GONE);
+                break;
+            case "COMPLETED":
+                holder.taskImageProgressNotStarted.setVisibility(View.GONE);
+                holder.taskImageProgressInProgress.setVisibility(View.GONE);
+                holder.taskImageProgressCompleted.setVisibility(View.VISIBLE);
+                break;
+            default:
+                holder.taskImageProgressNotStarted.setVisibility(View.VISIBLE);
+                holder.taskImageProgressInProgress.setVisibility(View.GONE);
+                holder.taskImageProgressCompleted.setVisibility(View.GONE);
+                break;
+        }
+
         holder.buttonSelect.setChecked(false);
         holder.buttonSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +162,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         private ImageView taskTypeImageAppointment;
         private ImageView taskTypeImageChecklist;
         private ImageView dragButton;
+        private ImageView taskImageProgressNotStarted;
+        private ImageView taskImageProgressInProgress;
+        private ImageView taskImageProgressCompleted;
         private MaterialCardView parent;
         private RelativeLayout lowPriorityRelLayout;
         private RelativeLayout mediumPriorityRelLayout;
@@ -157,6 +178,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             taskTypeImageAppointment = itemView.findViewById(R.id.taskTypeImageAppointment);
             taskTypeImageChecklist = itemView.findViewById(R.id.taskTypeImageChecklist);
             dragButton = itemView.findViewById(R.id.taskDragButton);
+            taskImageProgressNotStarted = itemView.findViewById(R.id.taskImageProgressNotStarted);
+            taskImageProgressInProgress = itemView.findViewById(R.id.taskImageProgressInProgress);
+            taskImageProgressCompleted = itemView.findViewById(R.id.taskImageProgressCompleted);
             parent = itemView.findViewById(R.id.parent_card);
             lowPriorityRelLayout = itemView.findViewById(R.id.relLayoutLowPriority);
             mediumPriorityRelLayout = itemView.findViewById(R.id.relLayoutMediumPriority);

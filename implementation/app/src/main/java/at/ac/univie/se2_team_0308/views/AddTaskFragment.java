@@ -130,7 +130,7 @@ public class AddTaskFragment extends DialogFragment {
                     case "IN_PROGRESS":
                         statusEnum = EStatus.IN_PROGRESS;
                         break;
-                    case "COMPLETE":
+                    case "COMPLETED":
                         statusEnum = EStatus.COMPLETED;
                         break;
                     default:

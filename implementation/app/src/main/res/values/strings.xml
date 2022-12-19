@@ -17,6 +17,6 @@
     <string-array name="statuses">
         <item>NOT_STARTED</item>
         <item>IN_PROGRESS</item>
-        <item>COMPLETE</item>
+        <item>COMPLETED</item>
     </string-array>
 </resources>

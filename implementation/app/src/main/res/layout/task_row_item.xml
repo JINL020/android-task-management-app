@@ -140,6 +140,37 @@
             android:visibility="gone"
             />
 
+
+        <ImageView
+            android:id="@+id/taskImageProgressNotStarted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:layout_toLeftOf="@+id/taskDragButton"
+            android:visibility="gone"
+            android:src="@drawable/ic_task_not_started" />
+
+        <ImageView
+            android:id="@+id/taskImageProgressInProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:layout_toLeftOf="@+id/taskDragButton"
+            android:visibility="gone"
+            android:src="@drawable/ic_task_in_progress" />
+
+        <ImageView
+            android:id="@+id/taskImageProgressCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:visibility="gone"
+            android:layout_toLeftOf="@+id/taskDragButton"
+            android:src="@drawable/ic_task_completed" />
+
         <ImageView
             android:id="@+id/taskDragButton"
             android:layout_width="wrap_content"
