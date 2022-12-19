@@ -54,12 +54,11 @@
         app:layout_constraintVertical_bias="0.983"
         tools:listitem="@layout/task_row_item" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/layoutSelect"
-        android:layout_width="330dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginEnd="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
         android:layout_marginBottom="19dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -71,14 +70,19 @@
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/deleteTasks" />
+            android:layout_marginEnd="5dp"
+            android:text="@string/deleteTasks"
+            >
+
+        </Button>
 
         <Button
             android:id="@+id/btnHide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toRightOf="@+id/btnDelete"
             android:text="@string/hideTasks" />
 
 
@@ -86,9 +90,18 @@
             android:id="@+id/btnExport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toRightOf="@+id/btnHide"
             android:text="@string/export" />
-    </LinearLayout>
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_toRightOf="@+id/btnExport"
+            android:text="@string/update" />
+    </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
@@ -102,6 +115,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recViewTasks"
+        android:visibility="gone"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

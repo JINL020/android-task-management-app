@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
@@ -45,10 +45,11 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
 
     private Button btnSelect;
     private boolean selectedPressed;
-    private LinearLayout layoutSelected;
+    private RelativeLayout layoutSelected;
     private Button btnDelete;
     private Button btnHide;
     private Button btnExport;
+    private Button btnUpdate;
 
     private static ATaskFactory taskFactory;
 
@@ -81,6 +82,24 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 else {
                     fabAdd.setVisibility(View.VISIBLE);
                     layoutSelected.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
+                    viewModel.deleteAllSelectedTasks(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist());
+                }
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
+                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
                 }
             }
         });
@@ -127,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnDelete = findViewById(R.id.btnDelete);
         btnHide = findViewById(R.id.btnHide);
         btnExport = findViewById(R.id.btnExport);
+        btnUpdate = findViewById(R.id.btnUpdate);
     }
 
     @Override

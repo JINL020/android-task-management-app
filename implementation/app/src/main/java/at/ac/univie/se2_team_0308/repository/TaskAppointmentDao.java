@@ -1,5 +1,4 @@
 package at.ac.univie.se2_team_0308.repository;
-import at.ac.univie.se2_team_0308.models.TaskAppointment;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -9,6 +8,9 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
+
+import at.ac.univie.se2_team_0308.models.EPriority;
+import at.ac.univie.se2_team_0308.models.TaskAppointment;
 
 @Dao
 public interface TaskAppointmentDao {
@@ -21,8 +23,14 @@ public interface TaskAppointmentDao {
     @Update
     void update(TaskAppointment task);
 
+    @Query("UPDATE task_appointments SET priority = :priorityEnum WHERE id in (:idList)")
+    void updateTaskPriority(List<Integer> idList, EPriority priorityEnum);
+
     @Delete
     void delete(TaskAppointment task);
+
+    @Query("DELETE FROM task_appointments WHERE id in (:idList)")
+    void deleteTasksById(List<Integer> idList);
 
     @Query("SELECT id, taskName, description, priority, status, category, isSelected, deadline, creationDate FROM task_appointments")
     LiveData<List<TaskAppointment>> getAllTasks();

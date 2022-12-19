@@ -6,6 +6,7 @@
     <string name="deleteTasks">Delete</string>
     <string name="hideTasks">Hide</string>
     <string name="export">Export</string>
+    <string name="update">Update</string>
 
     <string-array name="priorities">
         <item>LOW</item>

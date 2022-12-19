@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.ATask;
+import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.repository.TaskRepository;
@@ -58,6 +59,22 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void selectTaskChecklist(ATask taskModel) {
         selectedTasksChecklist.add(taskModel.getId());
+    }
+
+    public List<Integer> getSelectedTasksAppointment() {
+        return selectedTasksAppointment;
+    }
+
+    public List<Integer> getSelectedTasksChecklist() {
+        return selectedTasksChecklist;
+    }
+
+    public void deleteAllSelectedTasks(List<Integer> selectedItemsAppointment, List<Integer> selectedItemsChecklist) {
+        repository.deleteSelectedTasks(selectedItemsAppointment, selectedItemsChecklist);
+    }
+
+    public void updateAllSelectedTasksPriorities(List<Integer> selectedItemsAppointment, List<Integer> selectedItemsChecklist, EPriority priorityEnum) {
+        repository.updateSelectedTasksPriority(selectedItemsAppointment, selectedItemsChecklist, priorityEnum);
     }
 
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllLiveTasks() {
