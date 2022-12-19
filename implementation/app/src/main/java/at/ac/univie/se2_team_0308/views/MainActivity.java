@@ -1,26 +1,24 @@
 package at.ac.univie.se2_team_0308.views;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
@@ -42,6 +40,13 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private TaskListAdapter adapter;
     private TaskViewModel viewModel;
 
+    private Button btnSelect;
+    private boolean selectedPressed;
+    private LinearLayout layoutSelected;
+    private Button btnDelete;
+    private Button btnHide;
+    private Button btnExport;
+
     private static ATaskFactory taskFactory;
 
     @Override
@@ -60,6 +65,23 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 fragment.show(getSupportFragmentManager(), "addtask");
             }
         });
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                selectedPressed = !selectedPressed;
+
+                if(selectedPressed){
+                    fabAdd.setVisibility(View.GONE);
+                    layoutSelected.setVisibility(View.VISIBLE);
+                }
+                else {
+                    fabAdd.setVisibility(View.VISIBLE);
+                    layoutSelected.setVisibility(View.GONE);
+                }
+            }
+        });
+
     }
 
     private void initViewModel() {
@@ -83,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private void initViews() {
         fabAdd = findViewById(R.id.fabAdd);
         recViewTasks = findViewById(R.id.recViewTasks);
+        btnSelect = findViewById(R.id.btnSelect);
+        layoutSelected = findViewById(R.id.layoutSelect);
+        layoutSelected.setVisibility(View.GONE);
+        btnDelete = findViewById(R.id.btnDelete);
+        btnHide = findViewById(R.id.btnHide);
+        btnExport = findViewById(R.id.btnExport);
     }
 
     @Override
