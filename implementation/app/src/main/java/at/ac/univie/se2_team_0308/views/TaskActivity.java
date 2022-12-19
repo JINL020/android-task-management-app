@@ -22,6 +22,8 @@ import java.util.Date;
 
 import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.ECategory;
+import at.ac.univie.se2_team_0308.models.EPriority;
+import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.DisplayClass;
@@ -148,6 +150,68 @@ public class TaskActivity extends AppCompatActivity {
                 }
                 break;
         }
+
+        btnUpdateTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EPriority newPriority;
+                switch (editTaskPriority.getSelectedItem().toString()) {
+                    case "MEDIUM":
+                        newPriority = EPriority.MEDIUM;
+                        break;
+                    case "HIGH":
+                        newPriority = EPriority.HIGH;
+                        break;
+                    default:
+                        newPriority = EPriority.LOW;
+                        break;
+                }
+
+                EStatus newStatus;
+                switch (editTaskStatus.getSelectedItem().toString()) {
+                    case "IN_PROGRESS":
+                        newStatus = EStatus.IN_PROGRESS;
+                        break;
+                    case "COMPLETE":
+                        newStatus = EStatus.COMPLETED;
+                        break;
+                    default:
+                        newStatus = EStatus.NOT_STARTED;
+                        break;
+                }
+                incomingTask.setTaskName(editTaskName.getText().toString());
+                incomingTask.setDescription(editTaskDescription.getText().toString());
+                incomingTask.setPriority(newPriority);
+                incomingTask.setStatus(newStatus);
+
+                if (incomingTask.getCategoryEnum() == ECategory.APPOINTMENT) {
+                    incomingAppointment.setTaskName(incomingTask.getTaskName());
+                    incomingAppointment.setDescription(incomingTask.getDescription());
+                    incomingAppointment.setPriority(incomingTask.getPriority());
+                    incomingAppointment.setStatus(incomingTask.getStatus());
+
+                    int day = deadlineSpinnerPicker.getDayOfMonth();
+                    int month = deadlineSpinnerPicker.getMonth();
+                    int year = deadlineSpinnerPicker.getYear();
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day);
+                    incomingTask.setDeadline(new Date(calendar.getTimeInMillis()));
+
+                    incomingAppointment.setDeadline(incomingTask.getDeadline());
+                    viewModel.updateAppointment(incomingAppointment);
+                }
+                if (incomingTask.getCategoryEnum() == ECategory.CHECKLIST){
+                    incomingChecklist.setTaskName(incomingTask.getTaskName());
+                    incomingChecklist.setDescription(incomingTask.getDescription());
+                    incomingChecklist.setPriority(incomingTask.getPriority());
+                    incomingChecklist.setStatus(incomingTask.getStatus());
+                    viewModel.updateChecklist(incomingChecklist);
+                }
+                Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
+                startActivity(intentBack);
+            }
+        });
     }
 
     private void initViewModel() {
