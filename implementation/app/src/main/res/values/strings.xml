@@ -6,4 +6,16 @@
     <string name="deleteTasks">Delete</string>
     <string name="hideTasks">Hide</string>
     <string name="export">Export</string>
+
+    <string-array name="priorities">
+        <item>LOW</item>
+        <item>MEDIUM</item>
+        <item>HIGH</item>
+    </string-array>
+
+    <string-array name="statuses">
+        <item>NOT_STARTED</item>
+        <item>IN_PROGRESS</item>
+        <item>COMPLETE</item>
+    </string-array>
 </resources>

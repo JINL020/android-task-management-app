@@ -60,11 +60,91 @@
 
                 </RelativeLayout>
 
-
                 <RelativeLayout
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/relLayoutTaskTitleEdit"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/relLayoutTaskDescriptionEdit"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Task Description"
+                        android:textStyle="italic"
+                        android:id="@+id/txtTaskDescription"
+
+                        />
+
+                    <EditText
+                        android:layout_below="@+id/txtTaskDescription"
+                        android:hint="Enter Task Description"
+                        android:id="@+id/updateTaskDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relLayoutTaskDescriptionEdit"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/relLayoutTaskPriorityEdit"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Task Priority"
+                        android:textStyle="italic"
+                        android:id="@+id/txtTaskPriority"
+
+                        />
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtTaskPriority"
+                        android:id="@+id/spinnerUpdateTaskPriority"
+                        android:entries="@array/priorities"
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relLayoutTaskPriorityEdit"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/relLayoutTaskStatusEdit"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Task Status"
+                        android:textStyle="italic"
+                        android:id="@+id/txtTaskStatus"
+
+                        />
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtTaskStatus"
+                        android:id="@+id/spinnerUpdateTaskStatus"
+                        android:entries="@array/statuses"
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relLayoutTaskStatusEdit"
                     android:layout_centerHorizontal="true"
                     android:id="@+id/relLayoutTaskDeadlineEdit"
                     android:layout_marginTop="20dp"
@@ -86,6 +166,7 @@
                         android:layout_below="@+id/txtTaskDeadline"
                         android:datePickerMode="spinner"
                         android:id="@+id/datePickerEdit"
+                        android:entries="@array/statuses"
                         android:calendarViewShown="false"
                         />
 
@@ -96,7 +177,7 @@
                 <RelativeLayout
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/relLayoutTaskDeadlineEdit"
+                    android:layout_below="@+id/subtasks"
                     android:layout_centerHorizontal="true"
                     >
 
@@ -109,7 +190,52 @@
                         android:backgroundTint="#8F6372"
                         android:text="Cancel" />
 
+                    <Button
+                        android:id="@+id/btnUpdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_toRightOf="@+id/btnCancelUpdate"
+                        android:backgroundTint="#8F6372"
+                        android:text="Update Task" />
 
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/subtasks"
+                    android:visibility="gone"
+                    android:layout_marginStart="20dp"
+                    android:layout_below="@+id/relLayoutTaskDeadlineEdit"
+                    android:layout_centerHorizontal="true"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Subtasks"
+                        android:textStyle="italic"
+                        android:id="@+id/txtSubtasks"
+                        />
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtSubtasks"
+                        android:id="@+id/scrollViewSubtasks">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/subtasksListTaskActivity"/>
+
+                    </androidx.core.widget.NestedScrollView>
 
                 </RelativeLayout>
 

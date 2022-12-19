@@ -63,6 +63,33 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayoutTaskTitle"
                 android:layout_centerHorizontal="true"
+                android:id="@+id/relLayoutTaskDescription"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Task Description"
+                    android:textStyle="italic"
+                    android:id="@+id/txtTaskDescription"
+
+                    />
+
+                <EditText
+                    android:layout_below="@+id/txtTaskDescription"
+                    android:hint="Enter Task Description"
+                    android:id="@+id/editTaskDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayoutTaskDescription"
+                android:layout_centerHorizontal="true"
                 android:id="@+id/relLayoutTaskType"
                 android:layout_marginTop="20dp">
 
@@ -132,10 +159,79 @@
                     android:layout_below="@+id/txtTaskDeadline"
                     android:datePickerMode="spinner"
                     android:id="@+id/spinnerDatePicker"
+                    android:entries="@array/statuses"
                     android:calendarViewShown="false"
                     />
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayoutChooseDeadline"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/relLayoutTaskPriority"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Task Priority"
+                    android:textStyle="italic"
+                    android:id="@+id/txtTaskPriority"
+
+                    />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtTaskPriority"
+                    android:id="@+id/spinnerTaskPriority"
+                    android:entries="@array/priorities"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayoutTaskPriority"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/relLayoutTaskStatus"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Task Status"
+                    android:textStyle="italic"
+                    android:id="@+id/txtTaskStatus"
+
+                    />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtTaskStatus"
+                    android:id="@+id/spinnerTaskStatus"
+                    android:entries="@array/statuses"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relLayoutTaskStatus"
+                android:layout_centerHorizontal="true"
+                >
+
+
+
+            </RelativeLayout>
+
+
+
 
 
         </RelativeLayout>
@@ -144,3 +240,6 @@
 
 
 </com.google.android.material.card.MaterialCardView>
+
+
+

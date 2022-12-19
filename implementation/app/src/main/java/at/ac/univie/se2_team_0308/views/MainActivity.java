@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
         } else if (isSelectedChecklist) {
             taskFactory = new TaskChecklistFactory();
-//            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
         }
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }

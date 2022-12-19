@@ -37,6 +37,10 @@ public class TaskViewModel extends AndroidViewModel {
         repository.insertTaskAppointment(task);
     }
 
+    public void insertChecklist(TaskChecklist task) {
+        repository.insertTaskChecklist(task);
+    }
+
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllLiveTasks() {
         return allTasks;
     }

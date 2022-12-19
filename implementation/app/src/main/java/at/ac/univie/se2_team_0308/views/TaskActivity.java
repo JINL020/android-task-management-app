@@ -3,9 +3,6 @@ package at.ac.univie.se2_team_0308.views;
 import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_CATEGORY;
 import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_KEY;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +11,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -34,6 +32,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private DisplayClass incomingTask;
     private TaskAppointment incomingAppointment;
+    private TaskChecklist incomingChecklist;
     private ECategory incomingCategory;
 
     private RelativeLayout deadlineRelLayout;
@@ -56,6 +55,11 @@ public class TaskActivity extends AppCompatActivity {
             if (incomingCategory == ECategory.APPOINTMENT) {
                 incomingAppointment = intent.getParcelableExtra(TASK_ITEM_KEY);
                 incomingTask = new DisplayClass(incomingAppointment);
+                setViews(incomingTask);
+            }
+            if (incomingCategory == ECategory.CHECKLIST) {
+                incomingChecklist = intent.getParcelableExtra(TASK_ITEM_KEY);
+                incomingTask = new DisplayClass(incomingChecklist);
                 setViews(incomingTask);
             }
         }
@@ -95,6 +99,8 @@ public class TaskActivity extends AppCompatActivity {
             case "CHECKLIST":
                 Log.d(TAG, "onCreate: ischecklist");
                 deadlineRelLayout.setVisibility(View.GONE);
+
+                //TODO
                 break;
         }
     }

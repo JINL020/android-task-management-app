@@ -37,13 +37,98 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/taskNameText"
+            android:layout_toRightOf="@+id/radioButtonSelect"
+            android:visibility="gone"
+            android:id="@+id/relLayoutLowPriority">
+
+            <ImageView
+                android:id="@+id/lowPriority"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_task_priority_low" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/taskNameText"
+            android:layout_toRightOf="@+id/radioButtonSelect"
+            android:id="@+id/relLayoutMediumPriority"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/mediumPriorityFirst"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_task_priority_medium"
+                />
+
+            <ImageView
+                android:id="@+id/mediumPrioritySecond"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_toRightOf="@+id/mediumPriorityFirst"
+                android:src="@drawable/ic_task_priority_medium"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/taskNameText"
+            android:layout_toRightOf="@+id/radioButtonSelect"
+            android:id="@+id/relLayoutHighPriority"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/highPriorityFirst"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+
+
+                android:src="@drawable/ic_task_priority_high"
+
+                />
+
+            <ImageView
+                android:id="@+id/highPrioritySecond"
+                android:layout_width="15dp"
+
+                android:layout_height="15dp"
+                android:layout_toRightOf="@+id/highPriorityFirst"
+                android:src="@drawable/ic_task_priority_high"
+
+                />
+
+
+            <ImageView
+                android:id="@+id/highPriorityThird"
+                android:layout_width="15dp"
+
+                android:layout_height="15dp"
+                android:layout_toRightOf="@+id/highPrioritySecond"
+                android:src="@drawable/ic_task_priority_high"
+
+                />
+
+        </RelativeLayout>
+
+
         <ImageView
             android:id="@+id/taskTypeImageAppointment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_toRightOf="@+id/taskNameText"
-            android:src="@drawable/ic_task_type_appointment" />
+            android:src="@drawable/ic_task_type_appointment"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/taskTypeImageChecklist"
