@@ -21,7 +21,9 @@ import java.util.Date;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
+import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
+import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
@@ -97,7 +99,21 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     }
 
     private void initRecyclerViews() {
-        adapter = new TaskListAdapter(this, viewModel.getAllTasks());
+        adapter = new TaskListAdapter(this, viewModel.getAllTasks(), new TaskListAdapter.onSelectItemListener() {
+            @Override
+            public void onItemSelected(ATask taskModel) {
+                if (taskModel.isSelected()) {
+                    if (taskModel.getCategory() == ECategory.APPOINTMENT) {
+                        viewModel.selectTaskAppointment(taskModel);
+                    } else {
+                        viewModel.selectTaskChecklist(taskModel);
+                    }
+                    Log.d(TAG, "onItemSelected: item is selected");
+                } else {
+                    Log.d(TAG, "onItemSelected: item is deselected");
+                }
+            }
+        });
         recViewTasks.setAdapter(adapter);
         recViewTasks.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }

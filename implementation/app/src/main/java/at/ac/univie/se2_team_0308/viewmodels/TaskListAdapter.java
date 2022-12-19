@@ -29,9 +29,9 @@ import at.ac.univie.se2_team_0308.views.TaskActivity;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
-//    public interface onSelectItemListener {
-//        void onItemSelected(ATask taskModel);
-//    }
+    public interface onSelectItemListener {
+        void onItemSelected(ATask taskModel);
+    }
 
     public static final String TAG = "";
     public static final String TASK_ITEM_KEY = "clicked_task";
@@ -39,12 +39,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
     private List<ATask> tasks = new ArrayList<ATask>();
     private Context context;
-   //private onSelectItemListener onSelectItemListener;
+    private onSelectItemListener onSelectItemListener;
 
-    public TaskListAdapter(Context context, List<ATask> tasks) {
+    public TaskListAdapter(Context context, List<ATask> tasks, onSelectItemListener onSelectItemListener) {
         this.context = context;
         this.tasks = tasks;
-        //this.onSelectItemListener = onSelectItemListener;
+        this.onSelectItemListener = onSelectItemListener;
     }
 
     @NonNull
@@ -109,7 +109,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                     tasks.get(holder.getAdapterPosition()).setSelected(true);
                     holder.buttonSelect.setChecked(true);
                 }
-                //onSelectItemListener.onItemSelected(tasks.get(holder.getAdapterPosition()));
+                onSelectItemListener.onItemSelected(tasks.get(holder.getAdapterPosition()));
             }
         });
 

@@ -20,6 +20,9 @@ public class TaskViewModel extends AndroidViewModel {
     private TaskRepository repository;
     private LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> allTasks;
 
+    private List<Integer> selectedTasksAppointment = new ArrayList<>();
+    private List<Integer> selectedTasksChecklist = new ArrayList<>();
+
     public static final String TAG = "TaskViewModel";
 
     public TaskViewModel(Application application){
@@ -41,12 +44,20 @@ public class TaskViewModel extends AndroidViewModel {
         repository.updateTaskAppointment(task);
     }
 
+    public void selectTaskAppointment(ATask taskModel) {
+        selectedTasksAppointment.add(taskModel.getId());
+    }
+
     public void insertChecklist(TaskChecklist task) {
         repository.insertTaskChecklist(task);
     }
 
     public void updateChecklist(TaskChecklist task) {
         repository.updateTaskChecklist(task);
+    }
+
+    public void selectTaskChecklist(ATask taskModel) {
+        selectedTasksChecklist.add(taskModel.getId());
     }
 
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllLiveTasks() {
