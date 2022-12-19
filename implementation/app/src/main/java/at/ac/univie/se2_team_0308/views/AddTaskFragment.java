@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,9 @@ public class AddTaskFragment extends DialogFragment {
     }
 
     private EditText editTaskName;
+    private EditText editTaskDescription;
+    private Spinner editTaskPriority;
+    private Spinner editTaskStatus;
     private RadioButton radioBtnAppointment;
     private RadioButton radioBtnChecklist;
 
@@ -108,6 +112,32 @@ public class AddTaskFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String taskName = editTaskName.getText().toString();
+                String taskDescription = editTaskDescription.getText().toString();
+                EPriority priorityEnum;
+                switch (editTaskPriority.getSelectedItem().toString()) {
+                    case "MEDIUM":
+                        priorityEnum = EPriority.MEDIUM;
+                        break;
+                    case "HIGH":
+                        priorityEnum = EPriority.HIGH;
+                        break;
+                    default:
+                        priorityEnum = EPriority.LOW;
+                        break;
+                }
+                EStatus statusEnum;
+                switch (editTaskStatus.getSelectedItem().toString()) {
+                    case "IN_PROGRESS":
+                        statusEnum = EStatus.IN_PROGRESS;
+                        break;
+                    case "COMPLETE":
+                        statusEnum = EStatus.COMPLETED;
+                        break;
+                    default:
+                        statusEnum = EStatus.NOT_STARTED;
+                        break;
+                }
+
                 Date deadline = Calendar.getInstance().getTime();
 
                 if(isSelectedAppointment) {
@@ -128,9 +158,9 @@ public class AddTaskFragment extends DialogFragment {
 
                 inputListener.sendDataResult(
                         taskName,
-                        "" ,
-                        EPriority.LOW,
-                        EStatus.NOT_STARTED,
+                        taskDescription ,
+                        priorityEnum,
+                        statusEnum,
                         deadline,
                         isSelectedAppointment,
                         isSelectedChecklist
@@ -164,6 +194,9 @@ public class AddTaskFragment extends DialogFragment {
 
     private void initViews(View view) {
         editTaskName = view.findViewById(R.id.editTaskName);
+        editTaskDescription = view.findViewById(R.id.editTaskDescription);
+        editTaskPriority = view.findViewById(R.id.spinnerTaskPriority);
+        editTaskStatus = view.findViewById(R.id.spinnerTaskStatus);
         radioBtnAppointment = view.findViewById(R.id.radioButtonAppointment);
         radioBtnAppointment.setChecked(false);
         radioBtnChecklist = view.findViewById(R.id.radioButtonChecklist);

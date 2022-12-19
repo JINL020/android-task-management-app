@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,6 +30,11 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 public class TaskActivity extends AppCompatActivity {
 
     private EditText editTaskName;
+    private EditText editTaskDescription;
+    private Spinner editTaskPriority;
+    private Spinner editTaskStatus;
+
+    private Button btnUpdateTask;
     private Button btnCancelUpdate;
 
     private DisplayClass incomingTask;
@@ -35,10 +42,12 @@ public class TaskActivity extends AppCompatActivity {
     private TaskChecklist incomingChecklist;
     private ECategory incomingCategory;
 
+    private RelativeLayout subtasksView;
     private RelativeLayout deadlineRelLayout;
     private DatePicker deadlineSpinnerPicker;
 
     private TaskViewModel viewModel;
+    private TextView subtasksList;
 
     public static final String TAG = "TaskActivity";
 
@@ -79,10 +88,42 @@ public class TaskActivity extends AppCompatActivity {
             editTaskName.setText(incomingTask.getTaskName());
         }
 
+        if (incomingTask.getDescription() != null) {
+            editTaskDescription.setText(incomingTask.getDescription());
+        }
+
+        if (incomingTask.getPriority() != null) {
+            switch (incomingTask.getPriority().toString()) {
+                case "MEDIUM":
+                    editTaskPriority.setSelection(1);
+                    break;
+                case "HIGH":
+                    editTaskPriority.setSelection(2);
+                    break;
+                default:
+                    editTaskPriority.setSelection(0);
+                    break;
+            }
+        }
+
+        if (incomingTask.getStatus() != null) {
+            switch (incomingTask.getStatus().toString()) {
+                case "IN_PROGRESS":
+                    editTaskStatus.setSelection(1);
+                    break;
+                case "COMPLETE":
+                    editTaskStatus.setSelection(2);
+                    break;
+                default:
+                    editTaskStatus.setSelection(0);
+                    break;
+            }
+        }
+
         switch (incomingTask.getCategoryEnum().toString()) {
             case "APPOINTMENT":
                 Log.d(TAG, "onCreate: isappointment");
-
+                subtasksView.setVisibility(View.GONE);
                 deadlineRelLayout.setVisibility(View.VISIBLE);
 
                 Date incomingDate = incomingTask.getDeadline();
@@ -97,10 +138,14 @@ public class TaskActivity extends AppCompatActivity {
                 deadlineSpinnerPicker.updateDate(year, month, day);
                 break;
             case "CHECKLIST":
-                Log.d(TAG, "onCreate: ischecklist");
-                deadlineRelLayout.setVisibility(View.GONE);
-
                 //TODO
+                subtasksView.setVisibility(View.VISIBLE);
+                deadlineRelLayout.setVisibility(View.GONE);
+                Log.d(TAG, "onBindViewHolder: the subtasks is not null");
+                if (incomingTask.getSubtasks() != null && !incomingTask.getSubtasks().isEmpty()) {
+                    //TODO this is just for testing
+                    subtasksList.setText(incomingTask.getSubtasks().get(0));
+                }
                 break;
         }
     }
@@ -112,6 +157,12 @@ public class TaskActivity extends AppCompatActivity {
 
     private void initViews() {
         editTaskName = findViewById(R.id.updateTaskName);
+        editTaskDescription = findViewById(R.id.updateTaskDescription);
+        editTaskPriority = findViewById(R.id.spinnerUpdateTaskPriority);
+        editTaskStatus = findViewById(R.id.spinnerUpdateTaskStatus);
+        btnUpdateTask = findViewById(R.id.btnUpdate);
+        subtasksView = findViewById(R.id.subtasks);
+        subtasksList = findViewById(R.id.subtasksListTaskActivity);
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);
         deadlineRelLayout = findViewById(R.id.relLayoutTaskDeadlineEdit);
         deadlineSpinnerPicker = findViewById(R.id.datePickerEdit);
