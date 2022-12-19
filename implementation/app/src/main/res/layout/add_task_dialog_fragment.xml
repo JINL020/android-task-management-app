@@ -95,6 +95,16 @@
 
                 </RadioGroup>
 
+                <TextView
+                    android:id="@+id/taskTypeValidation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#F44336"
+                    android:textStyle="italic"
+                    android:layout_below="@+id/editTaskRadioGroupTaskType"
+                    android:text="Please Select Task Type"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
             <RelativeLayout

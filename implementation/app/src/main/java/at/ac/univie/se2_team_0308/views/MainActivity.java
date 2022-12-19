@@ -1,5 +1,11 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.fragment.app.DialogFragment;
@@ -7,12 +13,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -30,8 +30,9 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
+import at.ac.univie.se2_team_0308.views.AddTaskFragment.SendDataFromAddDialog;
 
-public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog{
+public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, SendDataFromAddDialog{
 
     public static final String TAG = "main act";
 
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 }
             }
         });
-
     }
 
     private void initViewModel() {
@@ -114,19 +114,21 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialogFragment) {
-        //Toast.makeText(this, "Clicked on Add" , Toast.LENGTH_SHORT).show();
-        dialogFragment.dismiss();
+    public void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
+        if (wantToCloseDialog) {
+            dialogFragment.dismiss();
+        }
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialogFragment) {
-        //Toast.makeText(this, "Clicked on Cancel", Toast.LENGTH_SHORT).show();
-        dialogFragment.dismiss();
+    public void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
+        if (wantToCloseDialog) {
+            dialogFragment.dismiss();
+        }
     }
 
     @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment) {
+    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
         Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
         Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         if (isSelectedAppointment) {
             taskFactory = new TaskAppointmentFactory();
             viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
-        } else {
+        } else if (isSelectedChecklist) {
             taskFactory = new TaskChecklistFactory();
 //            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
         }

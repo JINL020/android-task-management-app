@@ -11,7 +11,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,12 +32,12 @@ public class AddTaskFragment extends DialogFragment {
     public static final String TAG = "addtaskfragment";
 
     public interface SendDataFromAddDialog {
-        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment);
+        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
     }
 
     public interface AddTaskDialogListener {
-        void onDialogPositiveClick(DialogFragment dialogFragment);
-        void onDialogNegativeClick(DialogFragment dialogFragment);
+        void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
+        void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
     }
 
     private EditText editTaskName;
@@ -50,6 +50,10 @@ public class AddTaskFragment extends DialogFragment {
 
     private RelativeLayout relLayoutCard;
     private RelativeLayout relLayoutChooseDeadline;
+    private TextView taskTypeValidation;
+    Boolean isSelectedAppointment = false;
+    Boolean isSelectedChecklist = false;
+    Boolean wantToCloseDialog = false;
 
     private TaskViewModel viewModel;
 
@@ -57,12 +61,15 @@ public class AddTaskFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_task_dialog_fragment, null);
+        View view = inflater.inflate(R.layout.add_task_dialog_fragment, null, false);
         initViews(view);
 
         radioBtnAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                taskTypeValidation.setVisibility(View.GONE);
+                isSelectedAppointment = true;
+                isSelectedChecklist = false;
                 if(relLayoutChooseDeadline.getVisibility() == View.GONE) {
                     relLayoutChooseDeadline.setVisibility(View.VISIBLE);
                 }
@@ -72,6 +79,9 @@ public class AddTaskFragment extends DialogFragment {
         radioBtnChecklist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                taskTypeValidation.setVisibility(View.GONE);
+                isSelectedChecklist = true;
+                isSelectedAppointment = false;
                 relLayoutChooseDeadline.setVisibility(View.GONE);
             }
         });
@@ -82,40 +92,63 @@ public class AddTaskFragment extends DialogFragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String taskName = editTaskName.getText().toString();
-                        Date deadline = Calendar.getInstance().getTime();
-                        Boolean isSelectedAppointment = false;
-
-                        if(radioBtnAppointment.isChecked()) {
-                            isSelectedAppointment = true;
-                            int day = spinnerDatePicker.getDayOfMonth();
-                            int month = spinnerDatePicker.getMonth();
-                            int year = spinnerDatePicker.getYear();
-
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.set(year, month, day);
-                            deadline = new Date(calendar.getTimeInMillis());
-                        }
-
-                        Log.d(TAG, "onClick: task Name " + taskName);
-                        inputListener.sendDataResult(
-                                taskName,
-                                "" ,
-                                EPriority.LOW,
-                                EStatus.NOT_STARTED,
-                                deadline,
-                                isSelectedAppointment
-                        );
-                        listener.onDialogPositiveClick(AddTaskFragment.this);
+                        // nothing, we override it later
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.onDialogNegativeClick(AddTaskFragment.this);
+                        listener.onDialogNegativeClick(AddTaskFragment.this, true);
                     }
                 });
-        return builder.create();
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String taskName = editTaskName.getText().toString();
+                Date deadline = Calendar.getInstance().getTime();
+
+                if(isSelectedAppointment) {
+                    int day = spinnerDatePicker.getDayOfMonth();
+                    int month = spinnerDatePicker.getMonth();
+                    int year = spinnerDatePicker.getYear();
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day);
+                    deadline = new Date(calendar.getTimeInMillis());
+                }
+
+                if(isSelectedChecklist) {
+                    // TODO whatever it is to be done with checklist
+                }
+
+                Log.d(TAG, "onClick: task Name " + taskName);
+
+                inputListener.sendDataResult(
+                        taskName,
+                        "" ,
+                        EPriority.LOW,
+                        EStatus.NOT_STARTED,
+                        deadline,
+                        isSelectedAppointment,
+                        isSelectedChecklist
+                );
+
+                if (!isSelectedAppointment && !isSelectedChecklist) {
+                    taskTypeValidation.setVisibility(View.VISIBLE);
+                    wantToCloseDialog = false;
+                    return;
+                } else {
+                    taskTypeValidation.setVisibility(View.GONE);
+                    wantToCloseDialog = true;
+                }
+
+                listener.onDialogPositiveClick(AddTaskFragment.this, wantToCloseDialog);
+            }
+        });
+        return dialog;
     }
 
     @Override
@@ -131,16 +164,13 @@ public class AddTaskFragment extends DialogFragment {
 
     private void initViews(View view) {
         editTaskName = view.findViewById(R.id.editTaskName);
-
         radioBtnAppointment = view.findViewById(R.id.radioButtonAppointment);
         radioBtnAppointment.setChecked(false);
-
         radioBtnChecklist = view.findViewById(R.id.radioButtonChecklist);
         radioBtnChecklist.setChecked(false);
-
         spinnerDatePicker = view.findViewById(R.id.spinnerDatePicker);
-
         relLayoutChooseDeadline = view.findViewById(R.id.relLayoutChooseDeadline);
+        taskTypeValidation = view.findViewById(R.id.taskTypeValidation);
     }
 
     @Override
