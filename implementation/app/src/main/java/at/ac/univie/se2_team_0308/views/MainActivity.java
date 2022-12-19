@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private TaskListAdapter adapter;
     private TaskViewModel viewModel;
 
-    private Button btnSelected;
+    private Button btnSelect;
     private boolean selectedPressed;
     private LinearLayout layoutSelected;
     private Button btnDelete;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             }
         });
 
-        btnSelected.setOnClickListener(new View.OnClickListener() {
+        btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 selectedPressed = !selectedPressed;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private void initViews() {
         fabAdd = findViewById(R.id.fabAdd);
         recViewTasks = findViewById(R.id.recViewTasks);
-        btnSelected = findViewById(R.id.btnSelected);
+        btnSelect = findViewById(R.id.btnSelect);
         layoutSelected = findViewById(R.id.layoutSelect);
         layoutSelected.setVisibility(View.GONE);
         btnDelete = findViewById(R.id.btnDelete);
