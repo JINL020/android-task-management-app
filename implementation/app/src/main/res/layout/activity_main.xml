@@ -17,7 +17,7 @@
         android:layout_marginEnd="9dp"
         android:layout_marginBottom="578dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/layoutSelected"
+        app:layout_constraintBottom_toTopOf="@+id/layoutSelect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -55,7 +55,7 @@
         tools:listitem="@layout/task_row_item" />
 
     <LinearLayout
-        android:id="@+id/layoutSelected"
+        android:id="@+id/layoutSelect"
         android:layout_width="330dp"
         android:layout_height="44dp"
         android:layout_marginStart="26dp"
@@ -81,12 +81,13 @@
             android:layout_weight="1"
             android:text="@string/hideTasks" />
 
-        <Spinner
-            android:id="@+id/spinnerOptions"
+
+        <Button
+            android:id="@+id/btnExport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
+            android:layout_weight="1"
+            android:text="@string/export" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

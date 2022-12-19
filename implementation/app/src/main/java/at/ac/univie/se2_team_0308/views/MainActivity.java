@@ -11,10 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private LinearLayout layoutSelected;
     private Button btnDelete;
     private Button btnHide;
-    private Spinner spinnerOptions;
+    private Button btnExport;
 
     private static ATaskFactory taskFactory;
 
@@ -108,19 +106,11 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         fabAdd = findViewById(R.id.fabAdd);
         recViewTasks = findViewById(R.id.recViewTasks);
         btnSelected = findViewById(R.id.btnSelected);
-        layoutSelected = findViewById(R.id.layoutSelected);
+        layoutSelected = findViewById(R.id.layoutSelect);
         layoutSelected.setVisibility(View.GONE);
         btnDelete = findViewById(R.id.btnDelete);
         btnHide = findViewById(R.id.btnHide);
-
-        /// Code taken from https://developer.android.com/develop/ui/views/components/spinner#:~:text=Spinners%20provide%20a%20quick%20way,layout%20with%20the%20Spinner%20object.
-        spinnerOptions = findViewById(R.id.spinnerOptions);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.arrayOptions, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinnerOptions.setAdapter(adapter);
+        btnExport = findViewById(R.id.btnExport);
     }
 
     @Override

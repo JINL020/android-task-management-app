@@ -5,8 +5,5 @@
     <string name="select">Select</string>
     <string name="deleteTasks">Delete</string>
     <string name="hideTasks">Hide</string>
-    <string-array name="arrayOptions">
-        <item>Export</item>
-    </string-array>
-
+    <string name="export">Export</string>
 </resources>
