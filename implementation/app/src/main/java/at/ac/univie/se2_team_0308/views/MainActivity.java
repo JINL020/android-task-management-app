@@ -73,13 +73,16 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
+
                 selectedPressed = !selectedPressed;
 
                 if(selectedPressed){
+                    adapter.setSelectModeOn(true);
                     fabAdd.setVisibility(View.GONE);
                     layoutSelected.setVisibility(View.VISIBLE);
                 }
                 else {
+                    adapter.setSelectModeOn(false);
                     fabAdd.setVisibility(View.VISIBLE);
                     layoutSelected.setVisibility(View.GONE);
                 }
