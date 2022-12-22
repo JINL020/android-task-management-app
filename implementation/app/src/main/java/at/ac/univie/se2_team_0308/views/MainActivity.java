@@ -51,6 +51,10 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private Button btnExport;
     private Button btnUpdate;
 
+    private RelativeLayout layoutExport;
+    private Button btnExportJson;
+    private Button btnExportXml;
+
     private static ATaskFactory taskFactory;
 
     @Override
@@ -69,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 fragment.show(getSupportFragmentManager(), "addtask");
             }
         });
+
+
 
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,12 +101,48 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             }
         });
 
+
+        // TODO add logger
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutSelected.setVisibility(View.GONE);
+                layoutExport.setVisibility(View.VISIBLE);
+//                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
+//
+//                }
+
+
+            }
+        });
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
                     viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
                 }
+            }
+        });
+
+
+        btnExportJson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedPressed = false;
+                layoutExport.setVisibility(View.GONE);
+                fabAdd.setVisibility(View.VISIBLE);
+                // TODO add notification
+            }
+        });
+
+        btnExportXml.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedPressed = false;
+                layoutExport.setVisibility(View.GONE);
+                fabAdd.setVisibility(View.VISIBLE);
+                // TODO add notification
             }
         });
     }
@@ -142,11 +184,15 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         recViewTasks = findViewById(R.id.recViewTasks);
         btnSelect = findViewById(R.id.btnSelect);
         layoutSelected = findViewById(R.id.layoutSelect);
-        layoutSelected.setVisibility(View.GONE);
+        layoutSelected.setVisibility(View.GONE); // TODO move this
         btnDelete = findViewById(R.id.btnDelete);
         btnHide = findViewById(R.id.btnHide);
         btnExport = findViewById(R.id.btnExport);
         btnUpdate = findViewById(R.id.btnUpdate);
+
+        layoutExport = findViewById(R.id.layoutExport);
+        btnExportJson = findViewById(R.id.btnExportJson);
+        btnExportXml = findViewById(R.id.btnExportXml);
     }
 
     @Override

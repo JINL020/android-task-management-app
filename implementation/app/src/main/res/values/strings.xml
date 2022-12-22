@@ -7,6 +7,8 @@
     <string name="hideTasks">Hide</string>
     <string name="export">Export</string>
     <string name="update">Update</string>
+    <string name="exportJson">Export JSON</string>
+    <string name="exportXml">Export XML</string>
 
     <string-array name="priorities">
         <item>LOW</item>
