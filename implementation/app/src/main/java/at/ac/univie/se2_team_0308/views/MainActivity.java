@@ -1,29 +1,29 @@
 package at.ac.univie.se2_team_0308.views;
 
-import androidx.annotation.NonNull;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.R;
+import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
+import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
@@ -32,8 +32,9 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
+import at.ac.univie.se2_team_0308.views.AddTaskFragment.SendDataFromAddDialog;
 
-public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog{
+public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, SendDataFromAddDialog{
 
     public static final String TAG = "main act";
 
@@ -41,6 +42,14 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private FloatingActionButton fabAdd;
     private TaskListAdapter adapter;
     private TaskViewModel viewModel;
+
+    private Button btnSelect;
+    private boolean selectedPressed;
+    private RelativeLayout layoutSelected;
+    private Button btnDelete;
+    private Button btnHide;
+    private Button btnExport;
+    private Button btnUpdate;
 
     private static ATaskFactory taskFactory;
 
@@ -60,6 +69,40 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 fragment.show(getSupportFragmentManager(), "addtask");
             }
         });
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                selectedPressed = !selectedPressed;
+
+                if(selectedPressed){
+                    fabAdd.setVisibility(View.GONE);
+                    layoutSelected.setVisibility(View.VISIBLE);
+                }
+                else {
+                    fabAdd.setVisibility(View.VISIBLE);
+                    layoutSelected.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
+                    viewModel.deleteAllSelectedTasks(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist());
+                }
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
+                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
+                }
+            }
+        });
     }
 
     private void initViewModel() {
@@ -75,7 +118,21 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     }
 
     private void initRecyclerViews() {
-        adapter = new TaskListAdapter(this, viewModel.getAllTasks());
+        adapter = new TaskListAdapter(this, viewModel.getAllTasks(), new TaskListAdapter.onSelectItemListener() {
+            @Override
+            public void onItemSelected(ATask taskModel) {
+                if (taskModel.isSelected()) {
+                    if (taskModel.getCategory() == ECategory.APPOINTMENT) {
+                        viewModel.selectTaskAppointment(taskModel);
+                    } else {
+                        viewModel.selectTaskChecklist(taskModel);
+                    }
+                    Log.d(TAG, "onItemSelected: item is selected");
+                } else {
+                    Log.d(TAG, "onItemSelected: item is deselected");
+                }
+            }
+        });
         recViewTasks.setAdapter(adapter);
         recViewTasks.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
@@ -83,22 +140,31 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private void initViews() {
         fabAdd = findViewById(R.id.fabAdd);
         recViewTasks = findViewById(R.id.recViewTasks);
+        btnSelect = findViewById(R.id.btnSelect);
+        layoutSelected = findViewById(R.id.layoutSelect);
+        layoutSelected.setVisibility(View.GONE);
+        btnDelete = findViewById(R.id.btnDelete);
+        btnHide = findViewById(R.id.btnHide);
+        btnExport = findViewById(R.id.btnExport);
+        btnUpdate = findViewById(R.id.btnUpdate);
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialogFragment) {
-        //Toast.makeText(this, "Clicked on Add" , Toast.LENGTH_SHORT).show();
-        dialogFragment.dismiss();
+    public void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
+        if (wantToCloseDialog) {
+            dialogFragment.dismiss();
+        }
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialogFragment) {
-        //Toast.makeText(this, "Clicked on Cancel", Toast.LENGTH_SHORT).show();
-        dialogFragment.dismiss();
+    public void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
+        if (wantToCloseDialog) {
+            dialogFragment.dismiss();
+        }
     }
 
     @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment) {
+    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
         Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
         Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
@@ -107,9 +173,9 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         if (isSelectedAppointment) {
             taskFactory = new TaskAppointmentFactory();
             viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
-        } else {
+        } else if (isSelectedChecklist) {
             taskFactory = new TaskChecklistFactory();
-//            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
         }
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }

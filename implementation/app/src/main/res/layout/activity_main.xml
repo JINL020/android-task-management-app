@@ -4,40 +4,118 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.MainActivity"
+    android:clipToPadding="false"
     android:padding="10dp"
-    android:clipToPadding="false">
+    tools:context=".views.MainActivity">
 
+    <LinearLayout
+        android:id="@+id/layoutTop"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="578dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/layoutSelect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select"
+            tools:layout_editor_absoluteX="94dp" />
+
+    </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/addTaskFragment"
+        android:name="at.ac.univie.se2_team_0308.views.AddTaskFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:name="at.ac.univie.se2_team_0308.views.AddTaskFragment"
-        tools:layout="@layout/add_task_dialog_fragment"
-        android:visibility="gone"
-        />
+        tools:layout="@layout/add_task_dialog_fragment" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recViewTasks"
-        tools:listitem="@layout/task_row_item"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="355dp"
+        android:layout_height="510dp"
+        android:layout_marginBottom="121dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/fabAdd"
+        app:layout_constraintVertical_bias="0.983"
+        tools:listitem="@layout/task_row_item" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <RelativeLayout
+        android:id="@+id/layoutSelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
+        android:layout_marginBottom="19dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recViewTasks">
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="@string/deleteTasks"
+            >
+
+        </Button>
+
+        <Button
+            android:id="@+id/btnHide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toRightOf="@+id/btnDelete"
+            android:text="@string/hideTasks" />
+
+
+        <Button
+            android:id="@+id/btnExport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toRightOf="@+id/btnHide"
+            android:text="@string/export" />
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_toRightOf="@+id/btnExport"
+            android:text="@string/update" />
+    </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#C5C4C4"
         android:src="@drawable/ic_task_add"
-        android:backgroundTint="#C5C4C4"/>
+        tools:layout_editor_absoluteX="315dp"
+        tools:layout_editor_absoluteY="673dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recViewTasks"
+        android:visibility="gone"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

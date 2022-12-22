@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.ATask;
+import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.repository.TaskRepository;
@@ -19,6 +20,9 @@ import at.ac.univie.se2_team_0308.repository.TaskRepository;
 public class TaskViewModel extends AndroidViewModel {
     private TaskRepository repository;
     private LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> allTasks;
+
+    private List<Integer> selectedTasksAppointment = new ArrayList<>();
+    private List<Integer> selectedTasksChecklist = new ArrayList<>();
 
     public static final String TAG = "TaskViewModel";
 
@@ -35,6 +39,42 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void insertAppointment(TaskAppointment task){
         repository.insertTaskAppointment(task);
+    }
+
+    public void updateAppointment(TaskAppointment task) {
+        repository.updateTaskAppointment(task);
+    }
+
+    public void selectTaskAppointment(ATask taskModel) {
+        selectedTasksAppointment.add(taskModel.getId());
+    }
+
+    public void insertChecklist(TaskChecklist task) {
+        repository.insertTaskChecklist(task);
+    }
+
+    public void updateChecklist(TaskChecklist task) {
+        repository.updateTaskChecklist(task);
+    }
+
+    public void selectTaskChecklist(ATask taskModel) {
+        selectedTasksChecklist.add(taskModel.getId());
+    }
+
+    public List<Integer> getSelectedTasksAppointment() {
+        return selectedTasksAppointment;
+    }
+
+    public List<Integer> getSelectedTasksChecklist() {
+        return selectedTasksChecklist;
+    }
+
+    public void deleteAllSelectedTasks(List<Integer> selectedItemsAppointment, List<Integer> selectedItemsChecklist) {
+        repository.deleteSelectedTasks(selectedItemsAppointment, selectedItemsChecklist);
+    }
+
+    public void updateAllSelectedTasksPriorities(List<Integer> selectedItemsAppointment, List<Integer> selectedItemsChecklist, EPriority priorityEnum) {
+        repository.updateSelectedTasksPriority(selectedItemsAppointment, selectedItemsChecklist, priorityEnum);
     }
 
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllLiveTasks() {

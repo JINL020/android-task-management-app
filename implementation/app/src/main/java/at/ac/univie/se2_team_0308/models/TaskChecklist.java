@@ -1,14 +1,16 @@
 package at.ac.univie.se2_team_0308.models;
-import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.TypeConverters;
 import androidx.room.Entity;
+import androidx.room.TypeConverters;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 
 @Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {
@@ -19,7 +21,6 @@ public class TaskChecklist extends ATask implements Parcelable {
         super(taskName, description, priority, status, category);
         this.subtasks = subtasks;
     }
-
 
     protected TaskChecklist(Parcel in) {
         super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST);

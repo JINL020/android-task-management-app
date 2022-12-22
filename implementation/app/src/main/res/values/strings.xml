@@ -2,4 +2,21 @@
     <string name="app_name">SE2_Team_0308</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select">Select</string>
+    <string name="deleteTasks">Delete</string>
+    <string name="hideTasks">Hide</string>
+    <string name="export">Export</string>
+    <string name="update">Update</string>
+
+    <string-array name="priorities">
+        <item>LOW</item>
+        <item>MEDIUM</item>
+        <item>HIGH</item>
+    </string-array>
+
+    <string-array name="statuses">
+        <item>NOT_STARTED</item>
+        <item>IN_PROGRESS</item>
+        <item>COMPLETED</item>
+    </string-array>
 </resources>
