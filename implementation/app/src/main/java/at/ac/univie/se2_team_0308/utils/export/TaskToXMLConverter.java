@@ -2,7 +2,6 @@ package at.ac.univie.se2_team_0308.utils.export;
 
 import com.thoughtworks.xstream.XStream;
 
-import java.util.Date;
 import java.util.List;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ECategory;
@@ -13,7 +12,11 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 public class TaskToXMLConverter implements ITaskConverter{
     @Override
-    public String convertTaskAppointment(List<TaskAppointment> tasks, EFormat format) {
+    public String convertTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists) {
+        return null;
+    }
+
+    private String convertTaskAppointment(List<TaskAppointment> tasks) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<AllTasks>");
         for(ATask eachTask : tasks){
@@ -36,10 +39,7 @@ public class TaskToXMLConverter implements ITaskConverter{
         return xml;
     }
 
-
-
-    @Override
-    public String convertTaskChecklist(List<TaskChecklist> tasks, EFormat format) {
+    public String convertTaskChecklist(List<TaskChecklist> tasks) {
         return null;
     }
 }

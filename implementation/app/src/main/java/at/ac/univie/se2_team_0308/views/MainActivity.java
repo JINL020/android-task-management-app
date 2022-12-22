@@ -30,6 +30,8 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
+import at.ac.univie.se2_team_0308.utils.export.EFormat;
+import at.ac.univie.se2_team_0308.utils.export.Exporter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 import at.ac.univie.se2_team_0308.views.AddTaskFragment.SendDataFromAddDialog;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private RelativeLayout layoutExport;
     private Button btnExportJson;
     private Button btnExportXml;
+    private Exporter exporter = new Exporter(); //TODO should I move this somewhere else
 
     private static ATaskFactory taskFactory;
 
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 selectedPressed = false;
                 layoutExport.setVisibility(View.GONE);
                 fabAdd.setVisibility(View.VISIBLE);
+                exporter.exportTasks(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EFormat.JSON);
                 // TODO add notification
             }
         });
