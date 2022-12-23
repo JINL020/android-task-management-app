@@ -21,4 +21,8 @@
         <item>IN_PROGRESS</item>
         <item>COMPLETED</item>
     </string-array>
+
+    <string-array name="properties">
+        <item>PRIORITY TO HIGH</item>
+    </string-array>
 </resources>

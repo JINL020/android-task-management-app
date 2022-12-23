@@ -37,7 +37,7 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 import at.ac.univie.se2_team_0308.views.AddTaskFragment.SendDataFromAddDialog;
 
-public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, SendDataFromAddDialog{
+public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, SendDataFromAddDialog, PropertyToBeUpdated.SelectPropertyToUpdateDialogListener, PropertyToBeUpdated.SendDataFromSelectPropertyUpdateDialog {
 
     public static final String TAG = "main act";
 
@@ -83,13 +83,16 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
+
                 selectedPressed = !selectedPressed;
 
                 if(selectedPressed){
+                    adapter.setSelectModeOn(true);
                     fabAdd.setVisibility(View.GONE);
                     layoutSelected.setVisibility(View.VISIBLE);
                 }
                 else {
+                    adapter.setSelectModeOn(false);
                     fabAdd.setVisibility(View.VISIBLE);
                     layoutSelected.setVisibility(View.GONE);
                 }
@@ -118,9 +121,15 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
-                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
-                }
+//                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+//                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+//                }
+
+                DialogFragment fragment = new PropertyToBeUpdated();
+                fragment.show(getSupportFragmentManager(), "update_property");
+                /*if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
+                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
+                }*/
             }
         });
 
@@ -249,4 +258,10 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }
 
+    @Override
+    public void sendDataResult(String propertyName) {
+        if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+            viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+        }
+    }
 }

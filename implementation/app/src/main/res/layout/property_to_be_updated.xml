@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:backgroundTint="#FFFFFF"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="10dp"
+    >
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/relLayoutCard"
+            android:padding="30sp"
+            >
+
+            <TextView
+                android:id="@+id/SelectPropertyToUpdateTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Which Property Do You Want To Update?"
+                android:textColor="#FF8F6372"
+                android:layout_centerHorizontal="true"
+                android:textSize="30sp"
+                android:textStyle="bold"/>
+
+
+
+            <RelativeLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/SelectPropertyToUpdateTitle"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/relLayoutSelectPropertySpinner"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Property"
+                    android:textStyle="italic"
+                    android:id="@+id/txtSelectPropertySpinner"
+
+                    />
+
+                <Spinner
+                    android:layout_below="@+id/txtSelectPropertySpinner"
+                    android:id="@+id/selectPropertyToUpdateSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/properties"
+                    />
+
+            </RelativeLayout>
+
+
+
+
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</com.google.android.material.card.MaterialCardView>
+
+
+

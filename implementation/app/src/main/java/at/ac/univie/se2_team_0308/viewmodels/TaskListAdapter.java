@@ -38,6 +38,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     public static final String TASK_ITEM_CATEGORY = "clicked_task_category";
 
     private List<ATask> tasks = new ArrayList<ATask>();
+    private boolean selectModeOn = false;
     private Context context;
     private onSelectItemListener onSelectItemListener;
 
@@ -114,22 +115,27 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 break;
         }
 
-        holder.buttonSelect.setChecked(false);
-        holder.buttonSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (tasks.get(holder.getAdapterPosition()).isSelected()) {
-                    Log.d(TAG, "onItemSelected: item is deselected");
-                    tasks.get(holder.getAdapterPosition()).setSelected(false);
-                    holder.buttonSelect.setChecked(false);
-                } else {
-                    Log.d(TAG, "onItemSelected: item is selected");
-                    tasks.get(holder.getAdapterPosition()).setSelected(true);
-                    holder.buttonSelect.setChecked(true);
+        if (this.selectModeOn) {
+            holder.buttonSelect.setVisibility(View.VISIBLE);
+            holder.buttonSelect.setChecked(false);
+            holder.buttonSelect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (tasks.get(holder.getAdapterPosition()).isSelected()) {
+                        Log.d(TAG, "onItemSelected: item is deselected");
+                        tasks.get(holder.getAdapterPosition()).setSelected(false);
+                        holder.buttonSelect.setChecked(false);
+                    } else {
+                        Log.d(TAG, "onItemSelected: item is selected");
+                        tasks.get(holder.getAdapterPosition()).setSelected(true);
+                        holder.buttonSelect.setChecked(true);
+                    }
+                    onSelectItemListener.onItemSelected(tasks.get(holder.getAdapterPosition()));
                 }
-                onSelectItemListener.onItemSelected(tasks.get(holder.getAdapterPosition()));
-            }
-        });
+            });
+        } else {
+            holder.buttonSelect.setVisibility(View.GONE);
+        }
 
         if (tasks.get(holder.getAdapterPosition()).getCategory() == ECategory.APPOINTMENT) {
             holder.taskTypeImageAppointment.setVisibility(View.VISIBLE);
@@ -152,6 +158,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
     public void setTasks(List<ATask> tasks) {
         this.tasks = tasks;
+        notifyDataSetChanged();
+    }
+
+    public void setSelectModeOn(boolean mode) {
+        this.selectModeOn = mode;
         notifyDataSetChanged();
     }
 
