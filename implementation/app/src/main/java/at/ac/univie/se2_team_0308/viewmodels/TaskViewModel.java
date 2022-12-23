@@ -1,6 +1,9 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.app.Application;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -9,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.EPriority;
@@ -69,12 +73,33 @@ public class TaskViewModel extends AndroidViewModel {
         return selectedTasksChecklist;
     }
 
-    public LiveData<List<TaskAppointment>> getSelectedTaskAppointment(){
+    public LiveData<List<TaskAppointment>> getLiveSelectedTaskAppointment(){
         return repository.getSelectedTaskAppointment(selectedTasksAppointment);
     }
 
-    public LiveData<List<TaskChecklist>> getSelectedTaskChecklist(){
+    public LiveData<List<TaskChecklist>> getLiveSelectedTaskChecklist(){
         return repository.getSelectedTaskChecklist(selectedTasksChecklist);
+    }
+
+
+    public List<TaskChecklist> getSelectedTaskChecklistNotLiveData(List<Integer> selectedItemsChecklist){
+        List<TaskChecklist> taskChecklist = new ArrayList<>();
+        for(TaskChecklist eachTaskChecklist: allTasks.getValue().second){
+            if(selectedItemsChecklist.contains(eachTaskChecklist.getId())){
+                taskChecklist.add(eachTaskChecklist);
+            }
+        }
+        return taskChecklist;
+    }
+
+    public List<TaskAppointment> getSelectedTaskAppointmentNotLiveData(List<Integer> selectedItemsAppointment){
+        List<TaskAppointment> taskAppointment = new ArrayList<>();
+        for(TaskAppointment eachTaskAppointment: allTasks.getValue().first){
+            if(selectedItemsAppointment.contains(eachTaskAppointment.getId())){
+                taskAppointment.add(eachTaskAppointment);
+            }
+        }
+        return taskAppointment;
     }
 
     public void deleteAllSelectedTasks(List<Integer> selectedItemsAppointment, List<Integer> selectedItemsChecklist) {
@@ -88,6 +113,7 @@ public class TaskViewModel extends AndroidViewModel {
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllLiveTasks() {
         return allTasks;
     }
+
 
     public List<ATask> getAllTasks(){
         List<ATask> tasks = new ArrayList<>();

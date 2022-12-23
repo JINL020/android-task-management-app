@@ -1,5 +1,6 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -111,11 +112,6 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             public void onClick(View view) {
                 layoutSelected.setVisibility(View.GONE);
                 layoutExport.setVisibility(View.VISIBLE);
-//                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-//
-//                }
-
-
             }
         });
 
@@ -132,17 +128,24 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnExportJson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+
                 selectedPressed = false;
                 layoutExport.setVisibility(View.GONE);
                 fabAdd.setVisibility(View.VISIBLE);
+
                 try {
-                    exporter.exportTasks(viewModel.getSelectedTaskAppointment().getValue(), viewModel.getSelectedTaskChecklist().getValue(), EFormat.JSON);
+                    Context applicationContext = getApplicationContext();
+                    List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
+                    List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
+                    exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON, applicationContext);
                 }
                 catch (Exception e){
                     Log.d(TAG, e.toString());
                 }
 
                 // TODO add pop-up that notifies success
+                }
             }
         });
 
@@ -152,6 +155,16 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 selectedPressed = false;
                 layoutExport.setVisibility(View.GONE);
                 fabAdd.setVisibility(View.VISIBLE);
+
+                try {
+                    Context applicationContext = getApplicationContext();
+                    List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
+                    List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
+                    exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML, applicationContext);
+                }
+                catch (Exception e){
+                    Log.d(TAG, e.toString());
+                }
                 // TODO add pop-up that notifies success
             }
         });

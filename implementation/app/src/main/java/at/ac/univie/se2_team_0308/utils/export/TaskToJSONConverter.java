@@ -12,37 +12,25 @@ public class TaskToJSONConverter implements ITaskConverter {
         Gson gson = new Gson();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{\"AllTasks\": {");
+        stringBuilder.append(System.getProperty("line.separator"));
 
-        for(TaskAppointment eachTask : taskAppointment){
-//            String json = convertTaskAppointment(eachTask);
-            String json = gson.toJson(eachTask);
-            stringBuilder.append(json);
+        if(taskAppointment != null){
+            for(TaskAppointment eachTask : taskAppointment){
+                String json = gson.toJson(eachTask);
+                stringBuilder.append(json);
+                stringBuilder.append(System.getProperty("line.separator"));
+            }
         }
-
-        for(TaskChecklist eachTask : taskChecklists){
-//            String json = convertTaskChecklist(eachTask);
-            String json = gson.toJson(eachTask);
-            stringBuilder.append(json);
+        if(taskChecklists != null){
+            for(TaskChecklist eachTask : taskChecklists){
+                String json = gson.toJson(eachTask);
+                stringBuilder.append(json);
+                stringBuilder.append(System.getProperty("line.separator"));
+            }
         }
 
         stringBuilder.append("}");
         return stringBuilder.toString();
     }
-
-    // TODO check if it would work with ATask
-//    private String convertTaskChecklist(TaskChecklist task){
-//        Gson gson = new Gson();
-//        String json = gson.toJson(task);
-//
-//        return json;
-//    }
-//
-//    private String convertTaskAppointment(TaskAppointment task){
-//        Gson gson = new Gson();
-//        String json = gson.toJson(task);
-//
-//        return json;
-//    }
-
 
 }

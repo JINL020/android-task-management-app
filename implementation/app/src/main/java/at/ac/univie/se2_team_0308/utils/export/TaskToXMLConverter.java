@@ -13,33 +13,35 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 public class TaskToXMLConverter implements ITaskConverter{
     @Override
     public String convertTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists) {
-        return null;
-    }
-
-    private String convertTaskAppointment(List<TaskAppointment> tasks) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<AllTasks>");
-        for(ATask eachTask : tasks){
-            String xml = convertTask(eachTask);
+        for(TaskAppointment eachTask : taskAppointment){
+            String xml = convertTaskAppointment(eachTask);
             stringBuilder.append(xml);
         }
-        stringBuilder.append("<AllTasks>");
+        for(TaskChecklist eachTask : taskChecklists){
+            String xml = convertTaskChecklist(eachTask);
+            stringBuilder.append(xml);
+        }
+        stringBuilder.append("</AllTasks>");
         return stringBuilder.toString();
     }
-    private String convertTask(ATask task){
+
+    private String convertTaskAppointment(TaskAppointment task) {
         XStream xstream = new XStream();
-//        xstream.alias("attachment", Attachment.class);
         xstream.alias("category", ECategory.class);
-//        xstream.alias("date", Date);
         xstream.alias("status", EStatus.class);
         xstream.alias("priority", EPriority.class);
-//        xstream.alias("notificationService", NotificationService.class);
-//        xstream.alias();
         String xml = xstream.toXML(task);
         return xml;
     }
 
-    public String convertTaskChecklist(List<TaskChecklist> tasks) {
-        return null;
+    private String convertTaskChecklist(TaskChecklist task){
+        XStream xstream = new XStream();
+        xstream.alias("category", ECategory.class);
+        xstream.alias("status", EStatus.class);
+        xstream.alias("priority", EPriority.class);
+        String xml = xstream.toXML(task);
+        return xml;
     }
 }

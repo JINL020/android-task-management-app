@@ -36,5 +36,5 @@ public interface TaskAppointmentDao {
     LiveData<List<TaskAppointment>> getAllTasks();
 
     @Query("SELECT id, taskName, description, priority, status, category, isSelected, deadline, creationDate FROM task_appointments WHERE id in (:idList)")
-    LiveData<List<TaskAppointment>> getTasksWithId(List<Integer> idList);
+    LiveData<List<TaskAppointment>> getTasksById(List<Integer> idList);
 }
