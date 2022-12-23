@@ -61,12 +61,20 @@ public class TaskViewModel extends AndroidViewModel {
         selectedTasksChecklist.add(taskModel.getId());
     }
 
-    public List<Integer> getSelectedTasksAppointment() {
+    public List<Integer> getSelectedTaskAppointmentIds() {
         return selectedTasksAppointment;
     }
 
-    public List<Integer> getSelectedTasksChecklist() {
+    public List<Integer> getSelectedTaskChecklistIds() {
         return selectedTasksChecklist;
+    }
+
+    public LiveData<List<TaskAppointment>> getSelectedTaskAppointment(){
+        return repository.getSelectedTaskAppointment(selectedTasksAppointment);
+    }
+
+    public LiveData<List<TaskChecklist>> getSelectedTaskChecklist(){
+        return repository.getSelectedTaskChecklist(selectedTasksChecklist);
     }
 
     public void deleteAllSelectedTasks(List<Integer> selectedItemsAppointment, List<Integer> selectedItemsChecklist) {

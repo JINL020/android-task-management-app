@@ -98,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-                    viewModel.deleteAllSelectedTasks(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist());
+                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+                    viewModel.deleteAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds());
                 }
             }
         });
@@ -122,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
+                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
                 }
             }
         });
@@ -135,8 +135,14 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 selectedPressed = false;
                 layoutExport.setVisibility(View.GONE);
                 fabAdd.setVisibility(View.VISIBLE);
-                exporter.exportTasks(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EFormat.JSON);
-                // TODO add notification
+                try {
+                    exporter.exportTasks(viewModel.getSelectedTaskAppointment().getValue(), viewModel.getSelectedTaskChecklist().getValue(), EFormat.JSON);
+                }
+                catch (Exception e){
+                    Log.d(TAG, e.toString());
+                }
+
+                // TODO add pop-up that notifies success
             }
         });
 
@@ -146,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 selectedPressed = false;
                 layoutExport.setVisibility(View.GONE);
                 fabAdd.setVisibility(View.VISIBLE);
-                // TODO add notification
+                // TODO add pop-up that notifies success
             }
         });
     }

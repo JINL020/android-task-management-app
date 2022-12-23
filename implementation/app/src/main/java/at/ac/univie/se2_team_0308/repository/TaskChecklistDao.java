@@ -10,6 +10,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.EPriority;
+import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 @Dao
@@ -34,4 +35,7 @@ public interface TaskChecklistDao {
 
     @Query("SELECT id, taskName, description, priority, status, category, isSelected, creationDate FROM task_checklists")
     LiveData<List<TaskChecklist>> getAllTasks();
+
+    @Query("SELECT id, taskName, description, priority, status, category, isSelected, deadline, creationDate FROM task_appointments WHERE id in (:idList)")
+    LiveData<List<TaskChecklist>> getTasksWithId(List<Integer> idList);
 }

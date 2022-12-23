@@ -13,7 +13,7 @@ public class Exporter {
     // TODO: add path
     private static final String PATH = "";
 
-    public void exportTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists, EFormat format, Context context){
+    public void exportTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists, EFormat format){
         ITaskConverter taskConverter;
         if(format == EFormat.XML){
             taskConverter = new TaskToXMLConverter();
@@ -24,8 +24,8 @@ public class Exporter {
             // TODO: assert this if it's not JSON
         }
 
-        String convertedFile = taskConverter.convertTasks(taskAppointment, taskChecklists);
-        writeToFile(convertedFile, context);
+//        String convertedFile = taskConverter.convertTasks(taskAppointment, taskChecklists);
+//        writeToFile(convertedFile, context);
     }
 
     // Following code snippet was taken from this URL
