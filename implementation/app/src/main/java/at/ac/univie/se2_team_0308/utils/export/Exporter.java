@@ -12,9 +12,7 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 public class Exporter {
-    // TODO: add path
     private static final String TAG = "Exporter";
-    private static final String PATH = "";
     private static int currVersion = 0;
 
     public void exportTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists, EFormat format, Context context){
@@ -45,7 +43,7 @@ public class Exporter {
         StringBuilder fileNameBuilder = new StringBuilder();
         fileNameBuilder.append("tasks");
         fileNameBuilder.append("_");
-        fileNameBuilder.append(String.valueOf(currVersion));
+        fileNameBuilder.append(String.valueOf(currVersion++));
         fileNameBuilder.append(".");
         fileNameBuilder.append(extension);
 
