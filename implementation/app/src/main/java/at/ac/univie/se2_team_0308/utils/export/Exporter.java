@@ -40,6 +40,8 @@ public class Exporter {
     }
 
     private String composeName(String extension){
+        Log.d(TAG, "Compose file name");
+
         StringBuilder fileNameBuilder = new StringBuilder();
         fileNameBuilder.append("tasks");
         fileNameBuilder.append("_");
@@ -47,6 +49,7 @@ public class Exporter {
         fileNameBuilder.append(".");
         fileNameBuilder.append(extension);
 
+        Log.d(TAG, "File name is " + fileNameBuilder.toString());
         return fileNameBuilder.toString();
     }
 
@@ -54,7 +57,7 @@ public class Exporter {
     // https://stackoverflow.com/questions/14376807/read-write-string-from-to-a-file-in-android
     private void writeToFile(String convertedFile, String fileName, Context context){
         try {
-           OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE));
             outputStreamWriter.write(convertedFile);
             outputStreamWriter.close();
 
@@ -63,6 +66,5 @@ public class Exporter {
         catch (IOException e) {
             Log.e(TAG, "File write failed: " + e.toString());
         }
-
     }
 }
