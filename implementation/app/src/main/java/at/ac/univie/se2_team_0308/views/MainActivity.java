@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private RelativeLayout layoutExport;
     private Button btnExportJson;
     private Button btnExportXml;
-    private Exporter exporter = new Exporter(); //TODO should I move this somewhere else
+    private Exporter exporter = new Exporter();
 
     private static ATaskFactory taskFactory;
 
@@ -79,22 +80,16 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         });
 
 
-
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-
                 selectedPressed = !selectedPressed;
 
                 if(selectedPressed){
-                    adapter.setSelectModeOn(true);
-                    fabAdd.setVisibility(View.GONE);
-                    layoutSelected.setVisibility(View.VISIBLE);
+                    showLayout(ELayout.SELECTED);
                 }
                 else {
-                    adapter.setSelectModeOn(false);
-                    fabAdd.setVisibility(View.VISIBLE);
-                    layoutSelected.setVisibility(View.GONE);
+                    showLayout(ELayout.ADD);
                 }
             }
         });
@@ -108,13 +103,11 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             }
         });
 
-
-        // TODO add logger
         btnExport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                layoutSelected.setVisibility(View.GONE);
-                layoutExport.setVisibility(View.VISIBLE);
+                showLayout(ELayout.EXPORT);
+                Log.d(TAG, "Export tasks");
             }
         });
 
@@ -138,22 +131,20 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             @Override
             public void onClick(View view) {
                 if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+                    showLayout(ELayout.ADD);
+                    try {
+                        List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
+                        List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
 
-                selectedPressed = false;
-                layoutExport.setVisibility(View.GONE);
-                fabAdd.setVisibility(View.VISIBLE);
-
-                try {
-                    Context applicationContext = getApplicationContext();
-                    List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
-                    List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
-                    exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON, applicationContext);
-                }
-                catch (Exception e){
-                    Log.d(TAG, e.toString());
-                }
-
-                // TODO add pop-up that notifies success
+                        if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                            Context applicationContext = getApplicationContext();
+                            exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON, applicationContext);
+                            showToast("Tasks exported");
+                        }
+                    }
+                    catch (Exception e){
+                        Log.e(TAG, e.toString());
+                    }
                 }
             }
         });
@@ -161,20 +152,19 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnExportXml.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedPressed = false;
-                layoutExport.setVisibility(View.GONE);
-                fabAdd.setVisibility(View.VISIBLE);
-
+                showLayout(ELayout.ADD);
                 try {
-                    Context applicationContext = getApplicationContext();
                     List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
                     List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
-                    exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML, applicationContext);
+                    if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                        Context applicationContext = getApplicationContext();
+                        exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML, applicationContext);
+                        showToast("Tasks exported");
+                    }
                 }
                 catch (Exception e){
                     Log.d(TAG, e.toString());
                 }
-                // TODO add pop-up that notifies success
             }
         });
     }
@@ -216,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         recViewTasks = findViewById(R.id.recViewTasks);
         btnSelect = findViewById(R.id.btnSelect);
         layoutSelected = findViewById(R.id.layoutSelect);
-        layoutSelected.setVisibility(View.GONE); // TODO move this
         btnDelete = findViewById(R.id.btnDelete);
         btnHide = findViewById(R.id.btnHide);
         btnExport = findViewById(R.id.btnExport);
@@ -225,6 +214,39 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         layoutExport = findViewById(R.id.layoutExport);
         btnExportJson = findViewById(R.id.btnExportJson);
         btnExportXml = findViewById(R.id.btnExportXml);
+    }
+
+    // Choose which view elements/layouts to make visible
+    private void showLayout(ELayout layout){
+        if(layout == ELayout.SELECTED){
+            adapter.setSelectModeOn(true);
+            fabAdd.setVisibility(View.GONE);
+            layoutExport.setVisibility(View.GONE);
+
+            layoutSelected.setVisibility(View.VISIBLE);
+        }
+        else if(layout == ELayout.EXPORT){
+            layoutSelected.setVisibility(View.GONE);
+            fabAdd.setVisibility(View.GONE);
+
+            layoutExport.setVisibility(View.VISIBLE);
+        }
+        else if(layout == ELayout.ADD){
+            selectedPressed = false;
+            adapter.setSelectModeOn(false);
+            layoutExport.setVisibility(View.GONE);
+            layoutSelected.setVisibility(View.GONE);
+
+            fabAdd.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showToast(CharSequence text){
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 
     @Override
