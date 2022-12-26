@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
 
     private static final int FILE_SELECT_CODE = 0;
     private Button btnImport;
-    ImporterFacade importerFacade;
+    private ImporterFacade importerFacade;
 
     private static ATaskFactory taskFactory;
 
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     }
 
     private void initUtils(){
-        importerFacade = new ImporterFacade(viewModel);
+        importerFacade = new ImporterFacade(viewModel, getContentResolver());
     }
 
     @Override
@@ -228,8 +229,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                     // Get the Uri of the selected file
                     Uri uri = data.getData();
                     Log.d(TAG, "File Uri: " + uri.toString());
-
-
+                    importerFacade.importTasks(uri);
                 }
                 break;
         }
