@@ -1,10 +1,14 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private TaskListAdapter adapter;
     private TaskViewModel viewModel;
 
+    // Variables influenced by the press of the "Select" button
     private Button btnSelect;
     private boolean selectedPressed;
     private RelativeLayout layoutSelected;
@@ -50,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private Button btnHide;
     private Button btnExport;
     private Button btnUpdate;
+
+    private static final int FILE_SELECT_CODE = 0;
+    private Button btnImport;
 
     private static ATaskFactory taskFactory;
 
@@ -62,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         initViewModel();
         initRecyclerViews();
 
+        // Add new task
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             }
         });
 
+        // Initiate selection
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
@@ -89,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             }
         });
 
+        // Delete selected tasks
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             }
         });
 
+        // Update selected tasks
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +118,13 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 /*if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
                     viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
                 }*/
+            }
+        });
+
+        btnImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
@@ -152,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnHide = findViewById(R.id.btnHide);
         btnExport = findViewById(R.id.btnExport);
         btnUpdate = findViewById(R.id.btnUpdate);
+        btnImport = findViewById(R.id.btnImport);
     }
 
     @Override
@@ -191,4 +211,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
         }
     }
+
+
+    
 }
