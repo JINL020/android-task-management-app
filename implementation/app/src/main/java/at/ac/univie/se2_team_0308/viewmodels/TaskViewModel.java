@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.models.ATask;
@@ -73,18 +74,10 @@ public class TaskViewModel extends AndroidViewModel {
         return selectedTasksChecklist;
     }
 
-    public LiveData<List<TaskAppointment>> getLiveSelectedTaskAppointment(){
-        return repository.getSelectedTaskAppointment(selectedTasksAppointment);
-    }
-
-    public LiveData<List<TaskChecklist>> getLiveSelectedTaskChecklist(){
-        return repository.getSelectedTaskChecklist(selectedTasksChecklist);
-    }
-
 
     public List<TaskChecklist> getSelectedTaskChecklistNotLiveData(List<Integer> selectedItemsChecklist){
         List<TaskChecklist> taskChecklist = new ArrayList<>();
-        for(TaskChecklist eachTaskChecklist: allTasks.getValue().second){
+        for(TaskChecklist eachTaskChecklist: Objects.requireNonNull(allTasks.getValue()).second){
             if(selectedItemsChecklist.contains(eachTaskChecklist.getId())){
                 taskChecklist.add(eachTaskChecklist);
             }
@@ -94,7 +87,7 @@ public class TaskViewModel extends AndroidViewModel {
 
     public List<TaskAppointment> getSelectedTaskAppointmentNotLiveData(List<Integer> selectedItemsAppointment){
         List<TaskAppointment> taskAppointment = new ArrayList<>();
-        for(TaskAppointment eachTaskAppointment: allTasks.getValue().first){
+        for(TaskAppointment eachTaskAppointment: Objects.requireNonNull(allTasks.getValue()).first){
             if(selectedItemsAppointment.contains(eachTaskAppointment.getId())){
                 taskAppointment.add(eachTaskAppointment);
             }

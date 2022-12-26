@@ -34,7 +34,4 @@ public interface TaskChecklistDao {
 
     @Query("SELECT id, taskName, description, priority, status, category, isSelected, creationDate FROM task_checklists")
     LiveData<List<TaskChecklist>> getAllTasks();
-
-    @Query("SELECT id, taskName, description, priority, status, category, isSelected, deadline, creationDate FROM task_appointments WHERE id in (:idList)")
-    LiveData<List<TaskChecklist>> getTasksById(List<Integer> idList);
 }
