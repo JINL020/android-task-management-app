@@ -13,34 +13,57 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 public class Exporter {
     // TODO: add path
+    private static final String TAG = "Exporter";
     private static final String PATH = "";
+    private static int currVersion = 0;
 
     public void exportTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists, EFormat format, Context context){
+        Log.d(TAG, "Export tasks");
+
         ITaskConverter taskConverter;
+        String fileName;
+
         if(format == EFormat.XML){
+            Log.d(TAG, "Format is XML");
             taskConverter = new TaskToXMLConverter();
+            fileName = composeName("xml");
         }
         else{
-            taskConverter = new TaskToJSONConverter();
+            assert format == EFormat.JSON;
 
-            // TODO: assert this if it's not JSON
+            Log.d(TAG, "Format is JSON");
+            taskConverter = new TaskToJSONConverter();
+            fileName = composeName("json");
         }
 
         String convertedFile = taskConverter.convertTasks(taskAppointment, taskChecklists);
-        Log.d(Exporter.class.getName(), convertedFile);
-        writeToFile(convertedFile, context);
+        Log.d(TAG, "Content of converted file: " + convertedFile);
+        writeToFile(convertedFile, fileName, context);
+    }
+
+    private String composeName(String extension){
+        StringBuilder fileNameBuilder = new StringBuilder();
+        fileNameBuilder.append("tasks");
+        fileNameBuilder.append("_");
+        fileNameBuilder.append(String.valueOf(currVersion));
+        fileNameBuilder.append(".");
+        fileNameBuilder.append(extension);
+
+        return fileNameBuilder.toString();
     }
 
     // Following code snippet was taken from this URL
     // https://stackoverflow.com/questions/14376807/read-write-string-from-to-a-file-in-android
-    private void writeToFile(String convertedFile, Context context){
+    private void writeToFile(String convertedFile, String fileName, Context context){
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("tasks.json", Context.MODE_PRIVATE));
+           OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE));
             outputStreamWriter.write(convertedFile);
             outputStreamWriter.close();
+
+            Log.d(TAG, "File written to system");
         }
         catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
+            Log.e(TAG, "File write failed: " + e.toString());
         }
 
     }
