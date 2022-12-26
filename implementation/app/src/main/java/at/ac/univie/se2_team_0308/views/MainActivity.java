@@ -162,8 +162,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                         List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
 
                         if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
-                            Context applicationContext = getApplicationContext();
-                            exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON, applicationContext);
+                            exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON);
                             showToast("Tasks exported");
                         }
                     }
@@ -182,8 +181,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                     List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
                     List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
                     if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
-                        Context applicationContext = getApplicationContext();
-                        exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML, applicationContext);
+                        exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
                         showToast("Tasks exported");
                     }
                 }
