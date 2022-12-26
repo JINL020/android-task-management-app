@@ -34,6 +34,7 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
+import at.ac.univie.se2_team_0308.utils.import_tasks.ImporterFacade;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 import at.ac.univie.se2_team_0308.views.AddTaskFragment.SendDataFromAddDialog;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
 
     private static final int FILE_SELECT_CODE = 0;
     private Button btnImport;
+    ImporterFacade importerFacade;
 
     private static ATaskFactory taskFactory;
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         initViews();
         initViewModel();
         initRecyclerViews();
+        initUtils();
 
         // Add new task
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +177,10 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnImport = findViewById(R.id.btnImport);
     }
 
+    private void initUtils(){
+        importerFacade = new ImporterFacade(viewModel);
+    }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
         if (wantToCloseDialog) {
@@ -212,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         }
     }
 
-
+    // TODO don't forget to add source
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -221,7 +228,8 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                     // Get the Uri of the selected file
                     Uri uri = data.getData();
                     Log.d(TAG, "File Uri: " + uri.toString());
-                    
+
+
                 }
                 break;
         }
