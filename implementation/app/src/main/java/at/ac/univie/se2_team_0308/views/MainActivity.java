@@ -2,6 +2,7 @@ package at.ac.univie.se2_team_0308.views;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.FileUtils;
 import android.util.Log;
@@ -36,6 +37,8 @@ import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
 import at.ac.univie.se2_team_0308.utils.import_tasks.ImporterFacade;
+import at.ac.univie.se2_team_0308.utils.export.EFormat;
+import at.ac.univie.se2_team_0308.utils.export.Exporter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 import at.ac.univie.se2_team_0308.views.AddTaskFragment.SendDataFromAddDialog;
@@ -62,6 +65,12 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private Button btnImport;
     private ImporterFacade importerFacade;
 
+    private RelativeLayout layoutExport;
+    private Button btnExportJson;
+    private Button btnExportXml;
+    private Exporter exporter = new Exporter();
+
+
     private static ATaskFactory taskFactory;
 
     @Override
@@ -83,22 +92,18 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             }
         });
 
+
         // Initiate selection
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-
                 selectedPressed = !selectedPressed;
 
                 if(selectedPressed){
-                    adapter.setSelectModeOn(true);
-                    fabAdd.setVisibility(View.GONE);
-                    layoutSelected.setVisibility(View.VISIBLE);
+                    showLayout(ELayout.SELECTED);
                 }
                 else {
-                    adapter.setSelectModeOn(false);
-                    fabAdd.setVisibility(View.VISIBLE);
-                    layoutSelected.setVisibility(View.GONE);
+                    showLayout(ELayout.ADD);
                 }
             }
         });
@@ -107,9 +112,19 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-                    viewModel.deleteAllSelectedTasks(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist());
+                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+                    viewModel.deleteAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds());
                 }
+            }
+        });
+
+
+
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLayout(ELayout.EXPORT);
+                Log.d(TAG, "Export tasks");
             }
         });
 
@@ -117,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+//                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+//                }
+
                 DialogFragment fragment = new PropertyToBeUpdated();
                 fragment.show(getSupportFragmentManager(), "update_property");
                 /*if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
@@ -125,10 +144,52 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             }
         });
 
+
         btnImport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 chooseFile();
+            }
+        });
+
+        btnExportJson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+                    showLayout(ELayout.ADD);
+                    try {
+                        List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
+                        List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
+
+                        if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                            Context applicationContext = getApplicationContext();
+                            exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON, applicationContext);
+                            showToast("Tasks exported");
+                        }
+                    }
+                    catch (Exception e){
+                        Log.e(TAG, e.toString());
+                    }
+                }
+            }
+        });
+
+        btnExportXml.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLayout(ELayout.ADD);
+                try {
+                    List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
+                    List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
+                    if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                        Context applicationContext = getApplicationContext();
+                        exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML, applicationContext);
+                        showToast("Tasks exported");
+                    }
+                }
+                catch (Exception e){
+                    Log.d(TAG, e.toString());
+                }
             }
         });
     }
@@ -170,16 +231,51 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
         recViewTasks = findViewById(R.id.recViewTasks);
         btnSelect = findViewById(R.id.btnSelect);
         layoutSelected = findViewById(R.id.layoutSelect);
-        layoutSelected.setVisibility(View.GONE);
         btnDelete = findViewById(R.id.btnDelete);
         btnHide = findViewById(R.id.btnHide);
         btnExport = findViewById(R.id.btnExport);
         btnUpdate = findViewById(R.id.btnUpdate);
         btnImport = findViewById(R.id.btnImport);
+        layoutExport = findViewById(R.id.layoutExport);
+        btnExportJson = findViewById(R.id.btnExportJson);
+        btnExportXml = findViewById(R.id.btnExportXml);
     }
 
     private void initUtils(){
         importerFacade = new ImporterFacade(viewModel, getContentResolver());
+    }
+
+    // Choose which view elements/layouts to make visible
+    private void showLayout(ELayout layout){
+        if(layout == ELayout.SELECTED){
+            adapter.setSelectModeOn(true);
+            fabAdd.setVisibility(View.GONE);
+            layoutExport.setVisibility(View.GONE);
+
+            layoutSelected.setVisibility(View.VISIBLE);
+        }
+        else if(layout == ELayout.EXPORT){
+            layoutSelected.setVisibility(View.GONE);
+            fabAdd.setVisibility(View.GONE);
+
+            layoutExport.setVisibility(View.VISIBLE);
+        }
+        else if(layout == ELayout.ADD){
+            selectedPressed = false;
+            adapter.setSelectModeOn(false);
+            layoutExport.setVisibility(View.GONE);
+            layoutSelected.setVisibility(View.GONE);
+
+            fabAdd.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showToast(CharSequence text){
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 
     @Override
@@ -215,8 +311,8 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
 
     @Override
     public void sendDataResult(String propertyName) {
-        if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-            viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
+        if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+            viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
         }
     }
 

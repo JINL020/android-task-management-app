@@ -69,6 +69,7 @@
 
         android:layout_marginBottom="19dp"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +107,35 @@
 
             android:layout_toRightOf="@+id/btnExport"
             android:text="@string/update" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutExport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="19dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recViewTasks">
+
+        <Button
+            android:id="@+id/btnExportJson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/exportJson" />
+
+        <Button
+            android:id="@+id/btnExportXml"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/btnExportJson"
+            android:text="@string/exportXml" />
+
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

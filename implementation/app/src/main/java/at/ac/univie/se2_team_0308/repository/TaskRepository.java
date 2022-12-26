@@ -29,6 +29,8 @@ public class TaskRepository {
         return allTasks;
     }
 
+
+
     public void insertTaskAppointment(TaskAppointment taskAppointment) {
         AppDatabase.databaseWriteExecutor.execute( () -> taskAppointmentDao.insert(taskAppointment));
     }
@@ -49,6 +51,7 @@ public class TaskRepository {
         deleteTasksByIdAppointment(taskIdsAppointment);
         deleteTasksByIdChecklist(taskIdsChecklist);
     }
+
 
     public void deleteTasksByIdAppointment(List<Integer> taskIds) {
         AppDatabase.databaseWriteExecutor.execute( () -> taskAppointmentDao.deleteTasksById(taskIds));
