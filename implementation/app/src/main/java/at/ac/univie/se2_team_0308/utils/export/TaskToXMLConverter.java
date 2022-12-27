@@ -3,7 +3,6 @@ package at.ac.univie.se2_team_0308.utils.export;
 import com.thoughtworks.xstream.XStream;
 
 import java.util.List;
-import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
@@ -18,6 +17,7 @@ public class TaskToXMLConverter implements ITaskConverter{
         for(TaskAppointment eachTask : taskAppointment){
             String xml = convertTaskAppointment(eachTask);
             stringBuilder.append(xml);
+            stringBuilder.append(System.getProperty("line.separator"));
         }
 
         stringBuilder.append(System.getProperty("line.separator"));
@@ -25,6 +25,7 @@ public class TaskToXMLConverter implements ITaskConverter{
         for(TaskChecklist eachTask : taskChecklists){
             String xml = convertTaskChecklist(eachTask);
             stringBuilder.append(xml);
+            stringBuilder.append(System.getProperty("line.separator"));
         }
         stringBuilder.append("</AllTasks>");
         return stringBuilder.toString();
