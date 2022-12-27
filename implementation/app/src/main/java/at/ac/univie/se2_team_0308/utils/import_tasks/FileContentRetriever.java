@@ -17,15 +17,15 @@ public class FileContentRetriever {
     public FileContentRetriever(ContentResolver contentResolver){
         this.contentResolver = contentResolver;
     }
-
+    //TODO: add exception file not supported
     public String getFile(Uri uri) throws Exception {
         InputStream inputStream;
         String result = "";
         try {
             inputStream = contentResolver.openInputStream(uri);
-            String ret = convertStreamToString(inputStream);
+            result = convertStreamToString(inputStream);
 
-            Log.d(TAG, ret);
+            Log.d(TAG, result);
             inputStream.close();
 
         } catch (FileNotFoundException e) {
@@ -35,7 +35,6 @@ public class FileContentRetriever {
         return result;
     }
 // Taken from https://stackoverflow.com/questions/12910503/read-file-as-string
-
     public String convertStreamToString(InputStream is) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -44,6 +43,7 @@ public class FileContentRetriever {
             sb.append(line).append("\n");
         }
         reader.close();
+
         return sb.toString();
     }
 

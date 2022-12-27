@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import java.util.List;
 
+// TODO: fix tasks of the same type being matched together
 public class XmlTaskRetriever {
     private static final String TAG = "XmlTaskRetriever";
     private String fileContent;

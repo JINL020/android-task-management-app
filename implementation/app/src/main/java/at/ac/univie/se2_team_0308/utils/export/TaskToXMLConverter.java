@@ -31,6 +31,7 @@ public class TaskToXMLConverter implements ITaskConverter{
         return stringBuilder.toString();
     }
 
+    // TODO: remove repetitive code
     private String convertTaskAppointment(TaskAppointment task) {
         XStream xstream = new XStream();
         xstream.alias("category", ECategory.class);

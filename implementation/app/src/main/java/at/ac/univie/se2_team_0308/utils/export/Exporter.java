@@ -54,6 +54,7 @@ public class Exporter {
         return fileNameBuilder.toString();
     }
 
+    // TODO: fix this so that I can create new files with the same name
     private void writeToFile(String convertedFile, String fileName){
         try {
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);

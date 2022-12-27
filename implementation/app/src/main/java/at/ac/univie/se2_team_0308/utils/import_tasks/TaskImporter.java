@@ -5,6 +5,7 @@ import android.util.Pair;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -12,5 +13,5 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 public interface TaskImporter {
-    public Pair<TaskAppointment, TaskChecklist> importTasks() throws IOException, ParserConfigurationException, SAXException;
+    public Pair<List<TaskAppointment>, List<TaskChecklist>> importTasks() throws IOException, ParserConfigurationException, SAXException;
 }
