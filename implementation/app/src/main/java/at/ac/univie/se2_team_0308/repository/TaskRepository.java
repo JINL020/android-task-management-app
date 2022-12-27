@@ -29,8 +29,6 @@ public class TaskRepository {
         return allTasks;
     }
 
-
-
     public void insertTaskAppointment(TaskAppointment taskAppointment) {
         AppDatabase.databaseWriteExecutor.execute( () -> taskAppointmentDao.insert(taskAppointment));
     }

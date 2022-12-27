@@ -40,14 +40,17 @@ public class ImporterFacade {
                 Log.d(TAG, "Importing xml");
                 XmlTaskRetriever xmlTaskRetriever = new XmlTaskRetriever(fileContent);
                 importer = new XmlImporter(xmlTaskRetriever);
-                importedTasks = importer.importTasks();
             }
             else if(fileName.contains("json")){
                 Log.d(TAG, "Importing json");
                 JsonTaskRetriever jsonTaskRetriever = new JsonTaskRetriever(fileContent);
                 importer = new JsonImporter(jsonTaskRetriever);
-                importedTasks = importer.importTasks();
+
             }
+            importedTasks = importer.importTasks();
+
+            TaskSynchronizer taskSynchronizer = new TaskSynchronizer();
+            taskSynchronizer.synchronizeTasks(taskViewModel, importedTasks.first, importedTasks.second);
         }
         catch (Exception e){
             Log.e(TAG, e.toString());

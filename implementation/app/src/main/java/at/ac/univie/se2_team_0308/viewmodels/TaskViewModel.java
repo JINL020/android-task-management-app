@@ -1,9 +1,7 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.app.Application;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -13,7 +11,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.EPriority;
@@ -75,7 +72,7 @@ public class TaskViewModel extends AndroidViewModel {
     }
 
 
-    public List<TaskChecklist> getSelectedTaskChecklistNotLiveData(List<Integer> selectedItemsChecklist){
+    public List<TaskChecklist> getSelectedTaskChecklist(List<Integer> selectedItemsChecklist){
         List<TaskChecklist> taskChecklist = new ArrayList<>();
         for(TaskChecklist eachTaskChecklist: Objects.requireNonNull(allTasks.getValue()).second){
             if(selectedItemsChecklist.contains(eachTaskChecklist.getId())){
@@ -85,7 +82,7 @@ public class TaskViewModel extends AndroidViewModel {
         return taskChecklist;
     }
 
-    public List<TaskAppointment> getSelectedTaskAppointmentNotLiveData(List<Integer> selectedItemsAppointment){
+    public List<TaskAppointment> getSelectedTaskAppointment(List<Integer> selectedItemsAppointment){
         List<TaskAppointment> taskAppointment = new ArrayList<>();
         for(TaskAppointment eachTaskAppointment: Objects.requireNonNull(allTasks.getValue()).first){
             if(selectedItemsAppointment.contains(eachTaskAppointment.getId())){

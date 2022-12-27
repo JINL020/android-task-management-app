@@ -68,4 +68,6 @@ public class TaskAppointment extends ATask implements Parcelable {
     public void setDeadline(Date deadline){
         this.deadline = deadline;
     }
+
+
 }

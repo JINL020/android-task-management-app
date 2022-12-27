@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -158,8 +156,8 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                 if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
                     showLayout(ELayout.ADD);
                     try {
-                        List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
-                        List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
+                        List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
+                        List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
 
                         if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
                             exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON);
@@ -178,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             public void onClick(View view) {
                 showLayout(ELayout.ADD);
                 try {
-                    List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklistNotLiveData(viewModel.getSelectedTaskChecklistIds());
-                    List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointmentNotLiveData(viewModel.getSelectedTaskAppointmentIds());
+                    List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
+                    List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
                     if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
                         exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
                         showToast("Tasks exported");
