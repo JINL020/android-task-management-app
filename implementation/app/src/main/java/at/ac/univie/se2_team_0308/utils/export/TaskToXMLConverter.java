@@ -19,6 +19,9 @@ public class TaskToXMLConverter implements ITaskConverter{
             String xml = convertTaskAppointment(eachTask);
             stringBuilder.append(xml);
         }
+
+        stringBuilder.append(System.getProperty("line.separator"));
+
         for(TaskChecklist eachTask : taskChecklists){
             String xml = convertTaskChecklist(eachTask);
             stringBuilder.append(xml);
