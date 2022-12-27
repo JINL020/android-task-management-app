@@ -9,9 +9,17 @@ import java.util.regex.Pattern;
 
 public class MatchRetriever {
     private static final String TAG = "MatchRetriever";
-    public static List<String> retrieveTasks(String regex, String fileContent){
+    public static List<String> retrieveTasks(String regex, String fileContent, boolean dotall){
         List<String> matches = new ArrayList<>();
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern;
+
+        if(dotall){
+            pattern = Pattern.compile(regex, Pattern.DOTALL);
+        }
+        else{
+            pattern = Pattern.compile(regex);
+        }
+
         Matcher matcher = pattern.matcher(fileContent);
 
         while (matcher.find()){
@@ -19,6 +27,8 @@ public class MatchRetriever {
             matches.add(match);
             Log.d(TAG, match);
         }
+
+        Log.d(TAG, "No more matches found");
 
         return matches;
     }

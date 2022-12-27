@@ -12,12 +12,13 @@ public class JsonTaskRetriever {
         this.fileContent = fileContent;
     }
     public Pair<List<String>, List<String>> getTasks(){
-        Log.d(TAG, "Retrieve individual strings containing tasks");
+        Log.d(TAG, "Retrieve individual strings containing tasks from json file");
         String regexAppointment = "\\{.*\"category\":\"APPOINTMENT\".*\\}";
         String regexChecklist = "\\{.*\"category\":\"CHECKLIST\".*\\}";
 
-        List<String> taskAppointmentStrings = MatchRetriever.retrieveTasks(regexAppointment, fileContent);
-        List<String> taskChecklistStrings = MatchRetriever.retrieveTasks(regexChecklist, fileContent);
+        boolean dotall = false;
+        List<String> taskAppointmentStrings = MatchRetriever.retrieveTasks(regexAppointment, fileContent, dotall);
+        List<String> taskChecklistStrings = MatchRetriever.retrieveTasks(regexChecklist, fileContent, dotall);
 
         return new Pair<>(taskAppointmentStrings, taskChecklistStrings);
     }
