@@ -92,6 +92,17 @@ public abstract class ATask {
         this.creationDate = creationDate;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "ATask{" +
+                "id=" + id +
+                ", taskName='" + taskName + '\'' +
+                ", description='" + description + '\'' +
+                ", priority=" + priority +
+                ", status=" + status +
+                ", isSelected=" + isSelected +
+                ", category=" + category +
+                ", creationDate=" + creationDate +
+                '}';
+    }
 }

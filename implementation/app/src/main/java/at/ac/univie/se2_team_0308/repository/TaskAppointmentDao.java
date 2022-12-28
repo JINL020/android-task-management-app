@@ -34,4 +34,7 @@ public interface TaskAppointmentDao {
 
     @Query("SELECT id, taskName, description, priority, status, category, isSelected, deadline, creationDate FROM task_appointments")
     LiveData<List<TaskAppointment>> getAllTasks();
+
+    @Query("SELECT * FROM task_appointments")
+    List<TaskAppointment> getAllTasksList();
 }
