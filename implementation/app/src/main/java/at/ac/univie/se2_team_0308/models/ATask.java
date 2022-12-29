@@ -2,6 +2,7 @@ package at.ac.univie.se2_team_0308.models;
 import androidx.room.PrimaryKey;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public abstract class ATask {
 
@@ -104,5 +105,18 @@ public abstract class ATask {
                 ", category=" + category +
                 ", creationDate=" + creationDate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ATask task = (ATask) o;
+        return id == task.id && isSelected == task.isSelected && Objects.equals(taskName, task.taskName) && Objects.equals(description, task.description) && priority == task.priority && status == task.status && category == task.category && Objects.equals(creationDate, task.creationDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, taskName, description, priority, status, isSelected, category, creationDate);
     }
 }

@@ -8,6 +8,7 @@ import androidx.room.TypeConverters;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 
@@ -79,4 +80,16 @@ public class TaskChecklist extends ATask implements Parcelable {
         this.subtasks = subtasks;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskChecklist that = (TaskChecklist) o;
+        return Objects.equals(subtasks, that.subtasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(subtasks);
+    }
 }
