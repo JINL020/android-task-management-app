@@ -88,6 +88,18 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             }
         });
 
+        // Initiate selection
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedPressed = !selectedPressed;
+                if (selectedPressed) {
+                    showLayout(ELayout.SELECTED);
+                } else {
+                    showLayout(ELayout.ADD);
+                }
+            }
+        });
 
         return root;
     }
@@ -183,5 +195,18 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }
 
-
+    // Choose which view elements/layouts to make visible
+    private void showLayout(ELayout layout) {
+        if (layout == ELayout.SELECTED) {
+            adapter.setSelectModeOn(true);
+            fabAdd.setVisibility(View.GONE);
+            layoutSelected.setVisibility(View.VISIBLE);
+        }
+        if (layout == ELayout.ADD) {
+            adapter.setSelectModeOn(false);
+            fabAdd.setVisibility(View.VISIBLE);
+            layoutSelected.setVisibility(View.GONE);
+            selectedPressed = false;
+        }
+    }
 }
