@@ -25,4 +25,9 @@
     <string-array name="properties">
         <item>PRIORITY TO HIGH</item>
     </string-array>
+
+    <string name="title_list">List</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_activity_main2">MainActivity2</string>
 </resources>
