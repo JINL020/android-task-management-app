@@ -24,7 +24,7 @@ public class TaskSynchronizer {
             }
 
             if(taskExists){
-                Log.d(TAG, "Task already exists");
+                Log.d(TAG, "Task appointment with Id " + eachTask.getId() + "already exists");
                 Log.d(TAG, "Update task appointment");
                 viewModel.updateAppointment(eachTask);
             }
@@ -45,7 +45,7 @@ public class TaskSynchronizer {
             }
 
             if(taskExists){
-                Log.d(TAG, "Task already exists");
+                Log.d(TAG, "Task checklist with Id " + eachTask.getId() + "already exists");
                 Log.d(TAG, "Update task checklist");
                 viewModel.updateChecklist(eachTask);
             }

@@ -25,7 +25,6 @@ public class ImporterFacade {
         this.contentResolver = contentResolver;
     }
 
-    // TODO: add task synchrnozier & implement task synchronzier
     public void importTasks(Uri uri){
         Log.d(TAG, "Importing tasks");
         FileContentRetriever contentRetriever = new FileContentRetriever(contentResolver);

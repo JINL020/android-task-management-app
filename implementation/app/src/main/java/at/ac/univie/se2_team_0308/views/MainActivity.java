@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     private RelativeLayout layoutExport;
     private Button btnExportJson;
     private Button btnExportXml;
-    private Exporter exporter = new Exporter();
+    private Exporter exporter;
 
 
     private static ATaskFactory taskFactory;
@@ -244,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
 
     private void initUtils(){
         importerFacade = new ImporterFacade(viewModel, getContentResolver());
+        exporter = new Exporter();
     }
 
     // Choose which view elements/layouts to make visible

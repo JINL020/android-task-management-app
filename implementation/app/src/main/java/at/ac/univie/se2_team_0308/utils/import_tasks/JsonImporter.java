@@ -33,10 +33,16 @@ public class JsonImporter implements TaskImporter{
         }
 
         for(String eachChecklistString: tasks.second){
-            TaskChecklist taskChecklist = gson.fromJson(eachChecklistString, TaskChecklist.class);
-            importedTasks.second.add(taskChecklist);
-            Log.d(TAG, taskChecklist.toString());
+            try{
+                TaskChecklist taskChecklist = gson.fromJson(eachChecklistString, TaskChecklist.class);
+                importedTasks.second.add(taskChecklist);
+                // Log.d(TAG, taskChecklist.toString());
+            }
+            catch(Exception e){
+                Log.e(TAG, e.toString());
+            }
         }
+        Log.d(TAG, "size of checklist is " + importedTasks.second.size());
 
         return importedTasks;
     }
