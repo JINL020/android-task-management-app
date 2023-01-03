@@ -29,17 +29,7 @@ import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class AddTaskFragment extends DialogFragment {
-
     public static final String TAG = "addtaskfragment";
-
-    public interface SendDataFromAddDialog {
-        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
-    }
-
-    public interface AddTaskDialogListener {
-        void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
-        void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
-    }
 
     private EditText editTaskName;
     private EditText editTaskDescription;
@@ -61,6 +51,25 @@ public class AddTaskFragment extends DialogFragment {
 
     private TaskViewModel viewModel;
 
+    public AddTaskFragment(ListFragment listFragment) {
+        try {
+            listener = (AddTaskDialogListener) listFragment;
+            inputListener = (SendDataFromAddDialog) listFragment;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString());
+        }
+    }
+
+    public interface SendDataFromAddDialog {
+        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
+    }
+
+    public interface AddTaskDialogListener {
+        void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
+        void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
+    }
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -74,7 +83,7 @@ public class AddTaskFragment extends DialogFragment {
                 taskTypeValidation.setVisibility(View.GONE);
                 isSelectedAppointment = true;
                 isSelectedChecklist = false;
-                if(relLayoutChooseDeadline.getVisibility() == View.GONE) {
+                if (relLayoutChooseDeadline.getVisibility() == View.GONE) {
                     relLayoutChooseDeadline.setVisibility(View.VISIBLE);
                 }
             }
@@ -92,19 +101,17 @@ public class AddTaskFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setView(view)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // nothing, we override it later
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.onDialogNegativeClick(AddTaskFragment.this, true);
-                    }
-                });
+        builder.setView(view).setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // nothing, we override it later
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                listener.onDialogNegativeClick(AddTaskFragment.this, true);
+            }
+        });
 
         final AlertDialog dialog = builder.create();
         dialog.show();
@@ -140,7 +147,7 @@ public class AddTaskFragment extends DialogFragment {
 
                 Date deadline = Calendar.getInstance().getTime();
 
-                if(isSelectedAppointment) {
+                if (isSelectedAppointment) {
                     int day = spinnerDatePicker.getDayOfMonth();
                     int month = spinnerDatePicker.getMonth();
                     int year = spinnerDatePicker.getYear();
@@ -150,21 +157,13 @@ public class AddTaskFragment extends DialogFragment {
                     deadline = new Date(calendar.getTimeInMillis());
                 }
 
-                if(isSelectedChecklist) {
+                if (isSelectedChecklist) {
                     // TODO whatever it is to be done with checklist
                 }
 
                 Log.d(TAG, "onClick: task Name " + taskName);
 
-                inputListener.sendDataResult(
-                        taskName,
-                        taskDescription ,
-                        priorityEnum,
-                        statusEnum,
-                        deadline,
-                        isSelectedAppointment,
-                        isSelectedChecklist
-                );
+                inputListener.sendDataResult(taskName, taskDescription, priorityEnum, statusEnum, deadline, isSelectedAppointment, isSelectedChecklist);
 
                 if (!isSelectedAppointment && !isSelectedChecklist) {
                     taskTypeValidation.setVisibility(View.VISIBLE);
@@ -179,17 +178,6 @@ public class AddTaskFragment extends DialogFragment {
             }
         });
         return dialog;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            listener = (AddTaskDialogListener) context;
-            inputListener = (SendDataFromAddDialog) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString());
-        }
     }
 
     private void initViews(View view) {
