@@ -21,6 +21,15 @@ public class PropertyToBeUpdated extends DialogFragment {
 
     public static final String TAG = "select_property_to_update_fragment";
 
+    public PropertyToBeUpdated(ListFragment listFragment) {
+        try {
+            listener = (SelectPropertyToUpdateDialogListener) listFragment;
+            inputListener = (SendDataFromSelectPropertyUpdateDialog) listFragment;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString());
+        }
+    }
+
     public interface SendDataFromSelectPropertyUpdateDialog {
         void sendDataResult(String propertyName);
     }
@@ -78,17 +87,6 @@ public class PropertyToBeUpdated extends DialogFragment {
             }
         });
         return dialog;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            listener = (SelectPropertyToUpdateDialogListener) context;
-            inputListener = (SendDataFromSelectPropertyUpdateDialog) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString());
-        }
     }
 
     private void initViews(View view) {

@@ -39,7 +39,7 @@ import at.ac.univie.se2_team_0308.utils.import_tasks.ImporterFacade;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
-public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog {
+public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog, PropertyToBeUpdated.SelectPropertyToUpdateDialogListener, PropertyToBeUpdated.SendDataFromSelectPropertyUpdateDialog {
     private FragmentListBinding binding;
 
     public static final String TAG = "main act";
@@ -110,6 +110,22 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                 }
             }
         });
+
+        // Update selected tasks
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+//                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+//                }
+                PropertyToBeUpdated fragment = new PropertyToBeUpdated(ListFragment.this);
+                fragment.show(getChildFragmentManager(), "update_property");
+                /*if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
+                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
+                }*/
+            }
+        });
+
 
 
         return root;
@@ -220,4 +236,14 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             selectedPressed = false;
         }
     }
+
+    @Override
+    public void sendDataResult(String propertyName) {
+        if ((viewModel.getSelectedTaskAppointmentIds() != null)  && (viewModel.getSelectedTaskChecklistIds() != null) ) {
+            if(!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
+                viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+            }
+        }
+    }
+
 }
