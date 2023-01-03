@@ -1,5 +1,6 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -34,6 +36,7 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
+import at.ac.univie.se2_team_0308.utils.export.EFormat;
 import at.ac.univie.se2_team_0308.utils.export.Exporter;
 import at.ac.univie.se2_team_0308.utils.import_tasks.ImporterFacade;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
@@ -135,6 +138,28 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             }
         });
 
+        btnExportJson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+                    showLayout(ELayout.ADD);
+                    try {
+                        List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
+                        List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
+
+                        if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                            exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON);
+                            showToast("Tasks exported");
+                        }
+                    }
+                    catch (Exception e){
+                        Log.e(TAG, e.toString());
+                    }
+                }
+            }
+        });
+
+
         return root;
     }
 
@@ -156,6 +181,8 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         layoutSelected.setVisibility(View.GONE);
         layoutExport = binding.layoutExport;
         layoutExport.setVisibility(View.GONE);
+        btnExportJson = binding.btnExportJson;
+        btnExportXml = binding.btnExportXml;
 
     }
 
@@ -262,5 +289,14 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             }
         }
     }
+
+    private void showToast(CharSequence text){
+        Context context = getActivity().getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
 
 }
