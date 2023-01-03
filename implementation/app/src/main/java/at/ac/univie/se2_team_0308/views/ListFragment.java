@@ -2,6 +2,7 @@ package at.ac.univie.se2_team_0308.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
@@ -142,7 +146,8 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         btnImport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chooseFile();
+                // TODO add exception if not xml/json
+                mGetContent.launch( "*/*");
             }
         });
 
@@ -323,40 +328,12 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         toast.show();
     }
 
-    private void chooseFile() {
-        try {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
-                    "*/*"
-            });
-
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    FILE_SELECT_CODE);
-        } catch (android.content.ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
-            Toast.makeText(getActivity(), "Please install a File Manager.",
-                    Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-        }
-    }
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case FILE_SELECT_CODE:
-                if (resultCode == RESULT_OK) {
-                    // Get the Uri of the selected file
-                    Uri uri = data.getData();
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
                     Log.d(TAG, "File Uri: " + uri.toString());
                     importerFacade.importTasks(uri);
                 }
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
-
+            });
 }
