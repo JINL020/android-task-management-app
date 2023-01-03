@@ -2,7 +2,6 @@ package at.ac.univie.se2_team_0308.views;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -109,10 +108,9 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         btnExport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedPressed) {
-                    showLayout(ELayout.EXPORT);
-                    Log.d(TAG, "Export tasks");
-                }
+                showLayout(ELayout.EXPORT);
+                Log.d(TAG, "Export tasks");
+
             }
         });
 
@@ -325,11 +323,11 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         toast.show();
     }
 
-    private void chooseFile(){
+    private void chooseFile() {
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
                     "*/*"
             });
 
@@ -341,8 +339,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             // Potentially direct the user to the Market with a Dialog
             Toast.makeText(getActivity(), "Please install a File Manager.",
                     Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
     }
