@@ -224,7 +224,7 @@ public class TaskActivity extends AppCompatActivity {
         editTaskDescription = findViewById(R.id.updateTaskDescription);
         editTaskPriority = findViewById(R.id.spinnerUpdateTaskPriority);
         editTaskStatus = findViewById(R.id.spinnerUpdateTaskStatus);
-        btnUpdateTask = findViewById(R.id.btnUpdate);
+        btnUpdateTask = findViewById(R.id.btnUpdateTaskInfo);
         subtasksView = findViewById(R.id.subtasks);
         subtasksList = findViewById(R.id.subtasksListTaskActivity);
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);

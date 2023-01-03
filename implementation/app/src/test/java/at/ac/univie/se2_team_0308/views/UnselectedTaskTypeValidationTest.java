@@ -41,7 +41,10 @@ public class UnselectedTaskTypeValidationTest {
             MainActivity activity = controller.get();
 
             activity.findViewById(R.id.fabAdd).performClick();
-            DialogFragment dialogFragment = new AddTaskFragment();
+
+            ListFragment listFragment = new ListFragment();
+
+            DialogFragment dialogFragment = new AddTaskFragment(listFragment);
             dialogFragment.show(activity.getSupportFragmentManager(), AddTaskFragment.TAG);
 
             getInstrumentation().waitForIdleSync();
@@ -58,7 +61,10 @@ public class UnselectedTaskTypeValidationTest {
             // END https://stackoverflow.com/questions/11864092/junit-testing-in-android-dialogfragment
 
             activity.findViewById(R.id.fabAdd).performClick();
-            DialogFragment dialogFragment = new AddTaskFragment();
+
+            ListFragment listFragment = new ListFragment();
+
+            DialogFragment dialogFragment = new AddTaskFragment(listFragment);
             dialogFragment.show(activity.getSupportFragmentManager(), AddTaskFragment.TAG);
 
             getInstrumentation().waitForIdleSync();

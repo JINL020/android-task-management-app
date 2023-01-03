@@ -96,7 +96,7 @@ public class SelectDeselectTest {
             //shadowOf(Looper.getMainLooper()).idle();
             getInstrumentation().waitForIdleSync();
 
-            assertNotNull((TextView) activity.findViewById(R.id.btnUpdate));
+            assertNotNull((TextView) activity.findViewById(R.id.btnUpdateCommonProperties));
 
             LayoutInflater inflater = (LayoutInflater) RuntimeEnvironment.application.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View listItemView = inflater.inflate(R.layout.task_row_item, null, false);
@@ -144,9 +144,9 @@ public class SelectDeselectTest {
             //shadowOf(Looper.getMainLooper()).idle();
             getInstrumentation().waitForIdleSync();
 
-            assertNotNull((TextView) activity.findViewById(R.id.btnUpdate));
+            assertNotNull((TextView) activity.findViewById(R.id.btnUpdateCommonProperties));
 
-            activity.findViewById(R.id.btnUpdate).setOnClickListener(new View.OnClickListener() {
+            activity.findViewById(R.id.btnUpdateCommonProperties).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if ((selectedTasksAppointment != null)  && (selectedTasksChecklist != null) ) {
@@ -182,7 +182,7 @@ public class SelectDeselectTest {
             Mockito.verify(viewModel, Mockito.times(1)).selectTaskAppointment(firstTask);
             Assert.assertEquals(1, selectedTasksAppointment.size());
 
-            activity.findViewById(R.id.btnUpdate).performClick();
+            activity.findViewById(R.id.btnUpdateCommonProperties).performClick();
 
             Mockito.verify(viewModel, Mockito.times(1)).updateAllSelectedTasksPriorities(selectedTasksAppointment, selectedTasksChecklist, EPriority.HIGH);
 
@@ -201,9 +201,9 @@ public class SelectDeselectTest {
             //shadowOf(Looper.getMainLooper()).idle();
             getInstrumentation().waitForIdleSync();
 
-            assertNotNull((TextView) activity.findViewById(R.id.btnUpdate));
+            assertNotNull((TextView) activity.findViewById(R.id.btnUpdateCommonProperties));
 
-            activity.findViewById(R.id.btnUpdate).setOnClickListener(new View.OnClickListener() {
+            activity.findViewById(R.id.btnUpdateCommonProperties).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if ((selectedTasksAppointment != null)  && (selectedTasksChecklist != null) ) {
@@ -245,7 +245,7 @@ public class SelectDeselectTest {
             Mockito.verify(viewModel, Mockito.times(1)).deselectTaskAppointment(firstTask);
             Assert.assertEquals(0, selectedTasksAppointment.size());
 
-            activity.findViewById(R.id.btnUpdate).performClick();
+            activity.findViewById(R.id.btnUpdateCommonProperties).performClick();
 
             Mockito.verify(viewModel, Mockito.times(0)).updateAllSelectedTasksPriorities(selectedTasksAppointment, selectedTasksChecklist, EPriority.HIGH);
 

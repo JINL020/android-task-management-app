@@ -1,7 +1,6 @@
 package at.ac.univie.se2_team_0308.views;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -205,7 +204,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         btnDelete = binding.btnDelete;
         btnHide = binding.btnHide;
         btnExport = binding.btnExport;
-        btnUpdate = binding.btnUpdate;
+        btnUpdate = binding.btnUpdateCommonProperties;
         layoutSelected = binding.layoutSelect;
         layoutSelected.setVisibility(View.GONE);
         layoutExport = binding.layoutExport;

@@ -22,7 +22,7 @@ public class PressSelectButtonTest {
             MainActivity activity = controller.get();
 
             activity.findViewById(R.id.btnSelect).performClick();
-            assertNotNull((TextView) activity.findViewById(R.id.btnUpdate));
+            assertNotNull((TextView) activity.findViewById(R.id.btnUpdateCommonProperties));
             //assertEquals(((TextView) activity.findViewById(R.id.btnUpdate)).getText(), "Update");
         }
     }
