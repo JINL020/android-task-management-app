@@ -10,8 +10,17 @@
         android:id="@+id/btnSelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:text="@string/select"
+        app:layout_constraintEnd_toStartOf="@+id/btnExport"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnExport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/export"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,16 +80,14 @@
             android:layout_height="wrap_content"
             android:text="@string/update"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnExport"
+            app:layout_constraintEnd_toStartOf="@+id/btnImport"
             app:layout_constraintStart_toEndOf="@+id/btnHide" />
 
-
         <Button
-            android:id="@+id/btnExport"
+            android:id="@+id/btnImport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/btnHide"
-            android:text="@string/export"
+            android:text="Import"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnUpdate" />
@@ -91,6 +98,7 @@
         android:id="@+id/layoutExport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent">

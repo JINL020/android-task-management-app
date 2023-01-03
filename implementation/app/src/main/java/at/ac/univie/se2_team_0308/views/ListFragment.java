@@ -1,13 +1,13 @@
 package at.ac.univie.se2_team_0308.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -105,6 +105,16 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             }
         });
 
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedPressed) {
+                    showLayout(ELayout.EXPORT);
+                    Log.d(TAG, "Export tasks");
+                }
+            }
+        });
+
         // Delete selected tasks
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,13 +140,13 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             }
         });
 
-        btnExport.setOnClickListener(new View.OnClickListener() {
+        btnImport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLayout(ELayout.EXPORT);
-                Log.d(TAG, "Export tasks");
+                chooseFile();
             }
         });
+
 
         btnExportJson.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,12 +157,11 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                         List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
                         List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
 
-                        if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                        if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
                             exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON);
                             showToast("Tasks exported");
                         }
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         Log.e(TAG, e.toString());
                     }
                 }
@@ -166,12 +175,11 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                 try {
                     List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
                     List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
-                    if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                    if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
                         exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
                         showToast("Tasks exported");
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     Log.d(TAG, e.toString());
                 }
             }
@@ -200,6 +208,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         layoutExport.setVisibility(View.GONE);
         btnExportJson = binding.btnExportJson;
         btnExportXml = binding.btnExportXml;
+        btnImport = binding.btnImport;
 
     }
 
@@ -300,14 +309,14 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
 
     @Override
     public void sendDataResult(String propertyName) {
-        if ((viewModel.getSelectedTaskAppointmentIds() != null)  && (viewModel.getSelectedTaskChecklistIds() != null) ) {
-            if(!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
+        if ((viewModel.getSelectedTaskAppointmentIds() != null) && (viewModel.getSelectedTaskChecklistIds() != null)) {
+            if (!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
                 viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
             }
         }
     }
 
-    private void showToast(CharSequence text){
+    private void showToast(CharSequence text) {
         Context context = getActivity().getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
 
@@ -315,5 +324,27 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         toast.show();
     }
 
+    private void chooseFile(){
+        try {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {
+                    "*/*"
+            });
+
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(getActivity(), "Please install a File Manager.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+
+    }
 
 }
