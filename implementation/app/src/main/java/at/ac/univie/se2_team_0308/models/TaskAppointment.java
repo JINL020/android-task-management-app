@@ -80,6 +80,7 @@ public class TaskAppointment extends ATask implements Parcelable {
         this.deadline = deadline;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,4 +93,5 @@ public class TaskAppointment extends ATask implements Parcelable {
     public int hashCode() {
         return Objects.hash(deadline);
     }
+
 }

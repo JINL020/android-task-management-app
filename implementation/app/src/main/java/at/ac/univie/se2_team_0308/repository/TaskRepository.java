@@ -50,6 +50,7 @@ public class TaskRepository {
         deleteTasksByIdChecklist(taskIdsChecklist);
     }
 
+
     public void deleteTasksByIdAppointment(List<Integer> taskIds) {
         AppDatabase.databaseWriteExecutor.execute( () -> taskAppointmentDao.deleteTasksById(taskIds));
     }
