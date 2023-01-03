@@ -51,6 +51,16 @@ public class TaskViewModel extends AndroidViewModel {
         selectedTasksAppointment.add(taskModel.getId());
     }
 
+    public void deselectTaskAppointment(ATask taskModel) {
+        List<Integer> selectedTasksAppointmentNew = new ArrayList<>();
+        for(int taskId: selectedTasksAppointment) {
+            if (taskId != taskModel.getId()) {
+                selectedTasksAppointmentNew.add(taskId);
+            }
+        }
+        selectedTasksAppointment = new ArrayList<>(selectedTasksAppointmentNew);
+    }
+
     public void insertChecklist(TaskChecklist task) {
         repository.insertTaskChecklist(task);
     }
@@ -65,6 +75,16 @@ public class TaskViewModel extends AndroidViewModel {
 
     public List<Integer> getSelectedTaskAppointmentIds() {
         return selectedTasksAppointment;
+    }
+
+    public void deselectTaskChecklist(ATask taskModel) {
+        List<Integer> selectedTasksChecklistNew = new ArrayList<>();
+        for(int taskId: selectedTasksChecklist) {
+            if (taskId != taskModel.getId()) {
+                selectedTasksChecklistNew.add(taskId);
+            }
+        }
+        selectedTasksChecklist = new ArrayList<>(selectedTasksChecklistNew);
     }
 
     public List<Integer> getSelectedTaskChecklistIds() {

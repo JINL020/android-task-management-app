@@ -214,6 +214,11 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                     }
                     Log.d(TAG, "onItemSelected: item is selected");
                 } else {
+                    if (taskModel.getCategory() == ECategory.APPOINTMENT) {
+                        viewModel.deselectTaskAppointment(taskModel);
+                    } else {
+                        viewModel.deselectTaskChecklist(taskModel);
+                    }
                     Log.d(TAG, "onItemSelected: item is deselected");
                 }
             }
@@ -307,8 +312,10 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
 
     @Override
     public void sendDataResult(String propertyName) {
-        if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
-            viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+        if ((viewModel.getSelectedTaskAppointmentIds() != null)  && (viewModel.getSelectedTaskChecklistIds() != null) ) {
+            if(!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
+                viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+            }
         }
     }
 
@@ -329,9 +336,6 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     }
 
     private void chooseFile(){
-
-
-
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
