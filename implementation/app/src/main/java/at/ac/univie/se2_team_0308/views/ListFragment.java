@@ -159,6 +159,23 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             }
         });
 
+        btnExportXml.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLayout(ELayout.ADD);
+                try {
+                    List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
+                    List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
+                    if(!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                        exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
+                        showToast("Tasks exported");
+                    }
+                }
+                catch (Exception e){
+                    Log.d(TAG, e.toString());
+                }
+            }
+        });
 
         return root;
     }
