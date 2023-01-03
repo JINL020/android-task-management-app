@@ -52,6 +52,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
     // Variables influenced by the press of the "Select" button
     private Button btnSelect;
     private boolean selectedPressed;
+
     private ConstraintLayout layoutSelected;
     private Button btnDelete;
     private Button btnHide;
@@ -62,7 +63,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
     private Button btnImport;
     private ImporterFacade importerFacade;
 
-    private RelativeLayout layoutExport;
+    private ConstraintLayout layoutExport;
     private Button btnExportJson;
     private Button btnExportXml;
     private Exporter exporter;
@@ -126,7 +127,13 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             }
         });
 
-
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLayout(ELayout.EXPORT);
+                Log.d(TAG, "Export tasks");
+            }
+        });
 
         return root;
     }
@@ -141,12 +148,15 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         fabAdd = binding.fabAdd;
         recViewTasks = binding.recViewTasks;
         btnSelect = binding.btnSelect;
-        layoutSelected = binding.layoutSelect;
-        layoutSelected.setVisibility(View.GONE);
         btnDelete = binding.btnDelete;
         btnHide = binding.btnHide;
         btnExport = binding.btnExport;
         btnUpdate = binding.btnUpdate;
+        layoutSelected = binding.layoutSelect;
+        layoutSelected.setVisibility(View.GONE);
+        layoutExport = binding.layoutExport;
+        layoutExport.setVisibility(View.GONE);
+
     }
 
     private void initViewModel() {
@@ -226,14 +236,21 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
     private void showLayout(ELayout layout) {
         if (layout == ELayout.SELECTED) {
             adapter.setSelectModeOn(true);
-            fabAdd.setVisibility(View.GONE);
             layoutSelected.setVisibility(View.VISIBLE);
+            fabAdd.setVisibility(View.GONE);
+            layoutExport.setVisibility(View.GONE);
         }
         if (layout == ELayout.ADD) {
+            selectedPressed = false;
             adapter.setSelectModeOn(false);
             fabAdd.setVisibility(View.VISIBLE);
             layoutSelected.setVisibility(View.GONE);
-            selectedPressed = false;
+            layoutExport.setVisibility(View.GONE);
+        }
+        if (layout == ELayout.EXPORT) {
+            layoutExport.setVisibility(View.VISIBLE);
+            layoutSelected.setVisibility(View.GONE);
+            fabAdd.setVisibility(View.GONE);
         }
     }
 
