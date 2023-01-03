@@ -14,7 +14,16 @@ public class TaskSynchronizer {
     public void synchronizeTasks(TaskViewModel viewModel, List<TaskAppointment> taskAppointments, List<TaskChecklist> taskChecklists){
         List<ATask> allTasks = viewModel.getAllTasks();
         for(TaskAppointment eachTask: taskAppointments){
-            if(allTasks.contains(eachTask)){
+            boolean taskExists = false;
+
+            for(ATask existingTask : allTasks){
+                if(existingTask.getId() == eachTask.getId()){
+                    taskExists = true;
+                    break;
+                }
+            }
+
+            if(taskExists){
                 Log.d(TAG, "Task already exists");
                 Log.d(TAG, "Update task appointment");
                 viewModel.updateAppointment(eachTask);
@@ -26,7 +35,16 @@ public class TaskSynchronizer {
         }
 
         for(TaskChecklist eachTask: taskChecklists){
-            if(allTasks.contains(eachTask)){
+            boolean taskExists = false;
+
+            for(ATask existingTask : allTasks){
+                if(existingTask.getId() == eachTask.getId()){
+                    taskExists = true;
+                    break;
+                }
+            }
+
+            if(taskExists){
                 Log.d(TAG, "Task already exists");
                 Log.d(TAG, "Update task checklist");
                 viewModel.updateChecklist(eachTask);

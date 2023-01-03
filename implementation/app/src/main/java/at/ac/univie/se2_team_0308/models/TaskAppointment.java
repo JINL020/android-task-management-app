@@ -1,10 +1,13 @@
 package at.ac.univie.se2_team_0308.models;
-import java.util.Date;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.room.Entity;
 import androidx.room.TypeConverters;
+
+import java.util.Date;
+import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.utils.DateConverter;
 
@@ -61,6 +64,14 @@ public class TaskAppointment extends ATask implements Parcelable {
         parcel.writeLong(getCreationDate().getTime());
     }
 
+    @Override
+    public String toString() {
+        return "TaskAppointment{" +
+                super.toString() +
+                "deadline=" + deadline +
+                '}';
+    }
+
     public Date getDeadline(){
         return deadline;
     }
@@ -69,5 +80,18 @@ public class TaskAppointment extends ATask implements Parcelable {
         this.deadline = deadline;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskAppointment that = (TaskAppointment) o;
+        return Objects.equals(deadline, that.deadline);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(deadline);
+    }
 
 }

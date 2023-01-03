@@ -6,9 +6,9 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.TypeConverters;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 
@@ -17,7 +17,7 @@ public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
     List<String> subtasks;
 
-    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, ArrayList<String> subtasks){
+    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<String> subtasks){
         super(taskName, description, priority, status, category);
         this.subtasks = subtasks;
     }
@@ -64,6 +64,14 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeStringList(subtasks);
     }
 
+    @Override
+    public String toString() {
+        return "TaskChecklist{" +
+                super.toString() +
+                "subtasks=" + subtasks.toString() +
+                '}';
+    }
+
     public List<String> getSubtasks() {
         return subtasks;
     }
@@ -72,4 +80,16 @@ public class TaskChecklist extends ATask implements Parcelable {
         this.subtasks = subtasks;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskChecklist that = (TaskChecklist) o;
+        return Objects.equals(subtasks, that.subtasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(subtasks);
+    }
 }

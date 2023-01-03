@@ -12,8 +12,15 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+    }
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 
     buildTypes {
@@ -40,18 +47,42 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
 
     // Gson
-
     implementation 'com.google.code.gson:gson:2.10'
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // TESTING
+
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+<<<<<<< HEAD
 
     // XStream
     implementation ('com.thoughtworks.xstream:xstream:1.4.7') {
         exclude group: 'xmlpull', module: 'xmlpull'
     }
+=======
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.0'
+    androidTestImplementation 'androidx.test:runner:1.5.1'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+
+    def fragment_version = "1.5.5"
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
+    // Robolectric environment
+    testImplementation "androidx.test:core:1.5.0"
+    // Mockito framework
+    testImplementation "org.mockito:mockito-core:4.10.0"
+    // Mockk framework
+    testImplementation "io.mockk:mockk:1.13.3"
+    androidTestImplementation 'androidx.test:runner:1.5.1'
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
+    testImplementation 'org.robolectric:robolectric:4.9.2'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+
+>>>>>>> f5e394d49a1bda6ad963434f2dcc738fef91b27d
 }

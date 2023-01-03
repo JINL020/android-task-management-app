@@ -93,16 +93,34 @@ public abstract class ATask {
         this.creationDate = creationDate;
     }
 
+    public String toString() {
+        return "ATask{" +
+                "id=" + id +
+                ", taskName='" + taskName + '\'' +
+                ", description='" + description + '\'' +
+                ", priority=" + priority +
+                ", status=" + status +
+                ", isSelected=" + isSelected +
+                ", category=" + category +
+                ", creationDate=" + creationDate +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ATask)) return false;
-        ATask aTask = (ATask) o;
-        return this.getClass().equals(o.getClass()) && id == aTask.id;
+        if (o == null || getClass() != o.getClass()) return false;
+        ATask task = (ATask) o;
+        return id == task.id
+                && isSelected == task.isSelected
+                && Objects.equals(taskName, task.taskName)
+                && Objects.equals(description, task.description)
+                && priority == task.priority && status == task.status && category == task.category
+                && Objects.equals(creationDate, task.creationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, taskName, description, priority, status, isSelected, category, creationDate);
     }
 }
