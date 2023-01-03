@@ -2,6 +2,7 @@ package at.ac.univie.se2_team_0308.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -344,7 +345,21 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         catch (Exception e){
             Log.e(TAG, e.toString());
         }
-
     }
+
+    /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+                    Log.d(TAG, "File Uri: " + uri.toString());
+                    importerFacade.importTasks(uri);
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }*/
 
 }
