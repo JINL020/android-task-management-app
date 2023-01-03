@@ -134,6 +134,11 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
                     }
                     Log.d(TAG, "onItemSelected: item is selected");
                 } else {
+                    if (taskModel.getCategory() == ECategory.APPOINTMENT) {
+                        viewModel.deselectTaskAppointment(taskModel);
+                    } else {
+                        viewModel.deselectTaskChecklist(taskModel);
+                    }
                     Log.d(TAG, "onItemSelected: item is deselected");
                 }
             }
@@ -187,8 +192,10 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
 
     @Override
     public void sendDataResult(String propertyName) {
-        if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-            viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
+        if ((viewModel.getSelectedTasksAppointment() != null)  && (viewModel.getSelectedTasksChecklist() != null) ) {
+            if(!viewModel.getSelectedTasksAppointment().isEmpty() || !viewModel.getSelectedTasksChecklist().isEmpty()) {
+                viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
+            }
         }
     }
 }
