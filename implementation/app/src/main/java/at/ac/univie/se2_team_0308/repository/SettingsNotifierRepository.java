@@ -2,14 +2,11 @@ package at.ac.univie.se2_team_0308.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import at.ac.univie.se2_team_0308.repository.notication.ISettingsNotifierDao;
-import at.ac.univie.se2_team_0308.repository.notication.ISettingsRepository;
 import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
 
 public class SettingsNotifierRepository implements ISettingsRepository {

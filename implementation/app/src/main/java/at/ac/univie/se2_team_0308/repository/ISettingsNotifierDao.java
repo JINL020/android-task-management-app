@@ -1,4 +1,4 @@
-package at.ac.univie.se2_team_0308.repository.notication;
+package at.ac.univie.se2_team_0308.repository;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
-import at.ac.univie.se2_team_0308.repository.notication.ENotificationEventTypeConverter;
-import at.ac.univie.se2_team_0308.repository.notication.IObserverTypeConverter;
+import at.ac.univie.se2_team_0308.utils.ENotificationEventTypeConverter;
+import at.ac.univie.se2_team_0308.utils.IObserverTypeConverter;
 
 @Entity(tableName = "settings_notifier")
 public class SettingsNotifier {
