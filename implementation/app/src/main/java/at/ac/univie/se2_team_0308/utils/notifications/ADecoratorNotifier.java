@@ -5,16 +5,16 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 
-public abstract class ADecoratorNotifier implements IObserver {
-    private IObserver wrapped;
+public abstract class ADecoratorNotifier implements INotifier {
+    private INotifier wrapped;
 
-    protected ADecoratorNotifier(IObserver wrapped) {
+    protected ADecoratorNotifier(INotifier wrapped) {
         this.wrapped = wrapped;
     }
 
     @Override
-    public void update(ENotificationEvent event, ATask... task) {
-        wrapped.update(event, task);
+    public void sendNotification(ENotificationEvent event, ATask... task) {
+        wrapped.sendNotification(event, task);
     }
 
     @Override

@@ -9,7 +9,7 @@ import at.ac.univie.se2_team_0308.utils.ECategoryTypeConverter;
 import at.ac.univie.se2_team_0308.utils.EPriorityTypeConverter;
 import at.ac.univie.se2_team_0308.utils.EStatusTypeConverter;
 import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
-import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
 
@@ -76,7 +76,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            IObserver defaultObserver = new LoggerCore();
+            INotifier defaultObserver = new LoggerCore();
             settingsNotifierDao.insert(new SettingsNotifier(ENotificationEvent.CREATE, defaultObserver));
             settingsNotifierDao.insert(new SettingsNotifier(ENotificationEvent.UPDATE, defaultObserver));
             settingsNotifierDao.insert(new SettingsNotifier(ENotificationEvent.DELETE, defaultObserver));

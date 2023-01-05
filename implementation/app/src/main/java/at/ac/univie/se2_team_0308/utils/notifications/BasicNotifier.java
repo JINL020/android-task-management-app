@@ -16,13 +16,13 @@ import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.views.MainActivity;
 
 public class BasicNotifier extends ADecoratorNotifier{
-    public BasicNotifier(IObserver wrapped) {
+    public BasicNotifier(INotifier wrapped) {
         super(wrapped);
     }
 
     @Override
-    public void update(ENotificationEvent event, ATask... task) {
-        super.update(event, task);
+    public void sendNotification(ENotificationEvent event, ATask... task) {
+        super.sendNotification(event, task);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);

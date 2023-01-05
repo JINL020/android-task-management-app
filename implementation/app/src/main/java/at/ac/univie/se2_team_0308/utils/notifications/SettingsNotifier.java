@@ -15,9 +15,9 @@ public class SettingsNotifier {
     @PrimaryKey@NonNull
     private ENotificationEvent event;
     @TypeConverters(IObserverTypeConverter.class)
-    private IObserver notifier;
+    private INotifier notifier;
 
-    public SettingsNotifier(ENotificationEvent event, IObserver notifier) {
+    public SettingsNotifier(ENotificationEvent event, INotifier notifier) {
         this.event = event;
         this.notifier = notifier;
     }
@@ -30,11 +30,11 @@ public class SettingsNotifier {
         this.event = event;
     }
 
-    public IObserver getNotifier() {
+    public INotifier getNotifier() {
         return notifier;
     }
 
-    public void setNotifier(IObserver notifier) {
+    public void setNotifier(INotifier notifier) {
         this.notifier = notifier;
     }
 

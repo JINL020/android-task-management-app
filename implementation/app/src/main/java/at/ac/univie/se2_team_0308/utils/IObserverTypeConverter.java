@@ -12,13 +12,13 @@ import java.util.List;
 
 import at.ac.univie.se2_team_0308.utils.notifications.BasicNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.ENotifier;
-import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
 
 public class IObserverTypeConverter {
     @TypeConverter
-    public String fromIObserver(IObserver observer) {
+    public String fromIObserver(INotifier observer) {
         List<ENotifier> ret = observer.getNotifierType();
 
         Gson gson = new Gson();
@@ -29,7 +29,7 @@ public class IObserverTypeConverter {
     }
 
     @TypeConverter
-    public IObserver toIObserver(String json) {
+    public INotifier toIObserver(String json) {
         //Log.d("settings", "json");
         Type listType = new TypeToken<List<ENotifier>>() {
         }.getType();
@@ -37,7 +37,7 @@ public class IObserverTypeConverter {
         List<ENotifier> result = new Gson().fromJson(json, listType);
         Log.d("ddd", result.toString());
 
-        IObserver observer = new LoggerCore();
+        INotifier observer = new LoggerCore();
         if (result.contains(ENotifier.POPUP)) {
             observer = new PopupNotifier(observer);
         }

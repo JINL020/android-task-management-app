@@ -17,7 +17,7 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.databinding.FragmentSettingsBinding;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.utils.notifications.BasicNotifier;
-import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
@@ -153,26 +153,26 @@ public class SettingsFragment extends Fragment {
     private void updateOnCreateNotifier() {
         boolean onCreatePopup = onCreatePopupCheckBox.isChecked();
         boolean onCreateBasic = onCreateBasicCheckBox.isChecked();
-        IObserver onCreateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
+        INotifier onCreateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
         notifierViewModel.update(new SettingsNotifier(ENotificationEvent.CREATE, onCreateNotifier));
     }
 
     private void updateOnUpdateNotifier() {
         boolean onCreatePopup = onUpdatePopupCheckBox.isChecked();
         boolean onCreateBasic = onUpdateBasicCheckBox.isChecked();
-        IObserver onUpdateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
+        INotifier onUpdateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
         notifierViewModel.update(new SettingsNotifier(ENotificationEvent.UPDATE, onUpdateNotifier));
     }
 
     private void updateOnDeleteNotifier() {
         boolean onDeletePopup = onDeletePopupCheckBox.isChecked();
         boolean onDeleteBasic = onDeleteBasicCheckBox.isChecked();
-        IObserver onDeleteNotifier = buildNotifier(onDeletePopup, onDeleteBasic);
+        INotifier onDeleteNotifier = buildNotifier(onDeletePopup, onDeleteBasic);
         notifierViewModel.update(new SettingsNotifier(ENotificationEvent.DELETE, onDeleteNotifier));
     }
 
-    private IObserver buildNotifier(boolean popup, boolean basic) {
-        IObserver notifier = new LoggerCore();
+    private INotifier buildNotifier(boolean popup, boolean basic) {
+        INotifier notifier = new LoggerCore();
         if (popup) {
             notifier = new PopupNotifier(notifier);
         }

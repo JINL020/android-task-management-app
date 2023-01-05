@@ -43,10 +43,6 @@ import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
 import at.ac.univie.se2_team_0308.utils.export.EFormat;
 import at.ac.univie.se2_team_0308.utils.export.Exporter;
 import at.ac.univie.se2_team_0308.utils.import_tasks.ImporterFacade;
-import at.ac.univie.se2_team_0308.utils.notifications.BasicNotifier;
-import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
-import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
-import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
 import at.ac.univie.se2_team_0308.viewmodels.NotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
@@ -114,7 +110,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                     showLayout(ELayout.ADD);
                 }
                 TaskChecklist tc = new TaskChecklist("Hello","", EPriority.LOW, EStatus.COMPLETED, ECategory.CHECKLIST,null);
-                notifierViewModel.getOnCreateNotifier().update(ENotificationEvent.DELETE,tc);
+                notifierViewModel.getOnCreateNotifier().sendNotification(ENotificationEvent.DELETE,tc);
             }
         });
 

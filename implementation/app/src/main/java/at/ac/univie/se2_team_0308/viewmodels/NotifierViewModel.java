@@ -10,7 +10,7 @@ import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.repository.NotifierRepository;
-import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
 
@@ -18,7 +18,7 @@ public class NotifierViewModel extends AndroidViewModel {
     private NotifierRepository notifierRepository;
     private LiveData<List<SettingsNotifier>> settingNotifiers;
 
-    private IObserver onCreateNotifier;
+    private INotifier onCreateNotifier;
 
 
     public NotifierViewModel(@NonNull Application application) {
@@ -49,11 +49,11 @@ public class NotifierViewModel extends AndroidViewModel {
         return notifierRepository.getAllNotifiers();
     }
 
-    public IObserver getOnCreateNotifier() {
+    public INotifier getOnCreateNotifier() {
         return onCreateNotifier;
     }
 
-    public void setOnCreateNotifier(IObserver onCreateNotifier) {
+    public void setOnCreateNotifier(INotifier onCreateNotifier) {
         this.onCreateNotifier = onCreateNotifier;
     }
 

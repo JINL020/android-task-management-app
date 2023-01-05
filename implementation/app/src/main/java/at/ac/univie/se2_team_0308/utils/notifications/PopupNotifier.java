@@ -11,13 +11,13 @@ import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.views.MainActivity;
 
 public class PopupNotifier extends ADecoratorNotifier {
-    public PopupNotifier(IObserver wrapped) {
+    public PopupNotifier(INotifier wrapped) {
         super(wrapped);
     }
 
     @Override
-    public void update(ENotificationEvent event, ATask... task) {
-        super.update(event, task);
+    public void sendNotification(ENotificationEvent event, ATask... task) {
+        super.sendNotification(event, task);
 
         String message = "";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {

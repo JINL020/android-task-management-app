@@ -7,13 +7,13 @@ import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 
 public class NotificationSysytem {
-    private Map<ENotificationEvent, IObserver> observers;
+    private Map<ENotificationEvent, INotifier> observers;
 
     public NotificationSysytem() {
         this.observers = new HashMap<>();
     }
 
-    public void attach(ENotificationEvent event, IObserver observer) {
+    public void attach(ENotificationEvent event, INotifier observer) {
         observers.put(event, observer);
     }
 
@@ -22,7 +22,7 @@ public class NotificationSysytem {
     }
 
     public void notify(ENotificationEvent event, ATask task) {
-        observers.get(event).update(event, task);
+        observers.get(event).sendNotification(event, task);
     }
 
 }
