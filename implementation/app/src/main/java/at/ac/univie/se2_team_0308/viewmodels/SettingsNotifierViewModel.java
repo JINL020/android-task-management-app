@@ -24,9 +24,9 @@ public class SettingsNotifierViewModel extends AndroidViewModel {
         this.settingNotifiers = settingsNotifierRepository.getAllSettingsNotifier();
     }
 
-    public void insert(SettingsNotifier settingsNotifier){
+    /*public void insert(SettingsNotifier settingsNotifier){
         settingsNotifierRepository.insert(settingsNotifier);
-    }
+    }*/
 
     public void update(SettingsNotifier settingsNotifier){
         settingsNotifierRepository.update(settingsNotifier);

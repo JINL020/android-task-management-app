@@ -11,9 +11,8 @@ import at.ac.univie.se2_team_0308.repository.notication.IObserverTypeConverter;
 
 @Entity(tableName = "settings_notifier")
 public class SettingsNotifier {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
     @TypeConverters(ENotificationEventTypeConverter.class)
+    @PrimaryKey@NonNull
     private ENotificationEvent event;
     @TypeConverters(IObserverTypeConverter.class)
     private IObserver notifier;
@@ -21,14 +20,6 @@ public class SettingsNotifier {
     public SettingsNotifier(ENotificationEvent event, IObserver notifier) {
         this.event = event;
         this.notifier = notifier;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public ENotificationEvent getEvent() {
@@ -47,10 +38,18 @@ public class SettingsNotifier {
         this.notifier = notifier;
     }
 
+    public boolean isPopup(){
+        return notifier.getNotifierType().contains(ENotifier.POPUP);
+    }
+
+    public boolean isBasic(){
+        return notifier.getNotifierType().contains(ENotifier.BASIC);
+    }
+
     @NonNull
     @Override
     public String toString() {
-        String ret = event.name() + " " + notifier.getNotifierType().toString() +"\n";
+        String ret = event.name() + " " + notifier.getNotifierType().toString();
         return ret;
     }
 }

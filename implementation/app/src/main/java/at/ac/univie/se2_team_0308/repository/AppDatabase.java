@@ -28,7 +28,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {TaskAppointment.class, TaskChecklist.class, SettingsNotifier.class}, version = 2, exportSchema = false)
+@Database(entities = {TaskAppointment.class, TaskChecklist.class, SettingsNotifier.class}, version = 3, exportSchema = false)
 @TypeConverters({EPriorityTypeConverter.class, EStatusTypeConverter.class, ECategoryTypeConverter.class, SubtasksConverter.class, DateConverter.class, ENotificationEventTypeConverter.class, IObserverTypeConverter.class} )
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TaskAppointmentDao taskAppointmentDao();
