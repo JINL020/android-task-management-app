@@ -1,6 +1,5 @@
 package at.ac.univie.se2_team_0308.views;
 
-import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,11 +8,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -24,11 +22,11 @@ import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
-import at.ac.univie.se2_team_0308.viewmodels.SettingsNotifierViewModel;
+import at.ac.univie.se2_team_0308.viewmodels.NotifierViewModel;
 
 public class SettingsFragment extends Fragment {
     private FragmentSettingsBinding binding;
-    private SettingsNotifierViewModel settingsNotifierViewModel;
+    private NotifierViewModel notifierViewModel;
 
     private CheckBox onCreatePopupCheckBox;
     private CheckBox onCreateBasicCheckBox;
@@ -43,16 +41,19 @@ public class SettingsFragment extends Fragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        settingsNotifierViewModel = new ViewModelProvider(getActivity()).get(SettingsNotifierViewModel.class);
+        notifierViewModel = new ViewModelProvider(getActivity()).get(NotifierViewModel.class);
 
         initViews();
         initCheckboxListeners();
 
-        settingsNotifierViewModel.getAllSettingsNotifier().observe(getViewLifecycleOwner(), new Observer<List<SettingsNotifier>>() {
+        notifierViewModel.getAllNotifiers().observe(getViewLifecycleOwner(), new Observer<List<SettingsNotifier>>() {
             @Override
             public void onChanged(List<SettingsNotifier> settingsNotifiers) {
                 for (SettingsNotifier sn : settingsNotifiers) {
                     if (sn.getEvent() == ENotificationEvent.CREATE) {
+                        SettingsFragment.this.onCreateObserver = sn.getNotifier();
+                        //TaskChecklist tc = new TaskChecklist("Hello","", EPriority.LOW, EStatus.COMPLETED, ECategory.CHECKLIST,null);
+                        //sn.getNotifier().update(ENotificationEvent.CREATE, tc);
                         if (sn.isPopup()) {
                             onCreatePopupCheckBox.setChecked(true);
                         }
@@ -87,6 +88,12 @@ public class SettingsFragment extends Fragment {
         //Log.d("settings","helllo"+onCreateObserver.getNotifierType().toString());
 
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d("settings", "hello"+onCreateObserver.getNotifierType());
     }
 
     @Override
@@ -153,21 +160,21 @@ public class SettingsFragment extends Fragment {
         boolean onCreatePopup = onCreatePopupCheckBox.isChecked();
         boolean onCreateBasic = onCreateBasicCheckBox.isChecked();
         IObserver onCreateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
-        settingsNotifierViewModel.update(new SettingsNotifier(ENotificationEvent.CREATE, onCreateNotifier));
+        notifierViewModel.update(new SettingsNotifier(ENotificationEvent.CREATE, onCreateNotifier));
     }
 
     private void updateOnUpdateNotifier() {
         boolean onCreatePopup = onUpdatePopupCheckBox.isChecked();
         boolean onCreateBasic = onUpdateBasicCheckBox.isChecked();
         IObserver onUpdateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
-        settingsNotifierViewModel.update(new SettingsNotifier(ENotificationEvent.UPDATE, onUpdateNotifier));
+        notifierViewModel.update(new SettingsNotifier(ENotificationEvent.UPDATE, onUpdateNotifier));
     }
 
     private void updateOnDeleteNotifier() {
         boolean onDeletePopup = onDeletePopupCheckBox.isChecked();
         boolean onDeleteBasic = onDeleteBasicCheckBox.isChecked();
         IObserver onDeleteNotifier = buildNotifier(onDeletePopup, onDeleteBasic);
-        settingsNotifierViewModel.update(new SettingsNotifier(ENotificationEvent.DELETE, onDeleteNotifier));
+        notifierViewModel.update(new SettingsNotifier(ENotificationEvent.DELETE, onDeleteNotifier));
     }
 
     private IObserver buildNotifier(boolean popup, boolean basic) {

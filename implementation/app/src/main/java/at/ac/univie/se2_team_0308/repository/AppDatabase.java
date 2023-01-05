@@ -32,7 +32,7 @@ import java.util.concurrent.Executors;
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TaskAppointmentDao taskAppointmentDao();
     public abstract TaskChecklistDao taskChecklistDao();
-    public abstract ISettingsNotifierDao iSettingsNotifierDao();
+    public abstract INotifierDao notifierDao();
 
     //START https://developer.android.com/codelabs/android-room-with-a-view#7
     private static AppDatabase INSTANCE;
@@ -68,10 +68,10 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     private static class populateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private ISettingsNotifierDao settingsNotifierDao;
+        private INotifierDao settingsNotifierDao;
 
         public populateDbAsyncTask(AppDatabase db) {
-            this.settingsNotifierDao = db.iSettingsNotifierDao();
+            this.settingsNotifierDao = db.notifierDao();
         }
 
         @Override

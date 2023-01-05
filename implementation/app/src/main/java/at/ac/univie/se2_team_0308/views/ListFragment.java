@@ -33,6 +33,7 @@ import at.ac.univie.se2_team_0308.databinding.FragmentListBinding;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
 import at.ac.univie.se2_team_0308.models.ECategory;
+import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
@@ -42,6 +43,10 @@ import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
 import at.ac.univie.se2_team_0308.utils.export.EFormat;
 import at.ac.univie.se2_team_0308.utils.export.Exporter;
 import at.ac.univie.se2_team_0308.utils.import_tasks.ImporterFacade;
+import at.ac.univie.se2_team_0308.utils.notifications.BasicNotifier;
+import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
+import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
@@ -76,6 +81,8 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
 
     private static ATaskFactory taskFactory;
 
+    private IObserver myObserver = new BasicNotifier(new PopupNotifier(new LoggerCore()));;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentListBinding.inflate(inflater, container, false);
@@ -105,6 +112,8 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                 } else {
                     showLayout(ELayout.ADD);
                 }
+                TaskChecklist tc = new TaskChecklist("Hello","", EPriority.LOW, EStatus.COMPLETED, ECategory.CHECKLIST,null);
+                myObserver.update(ENotificationEvent.DELETE,tc);
             }
         });
 
