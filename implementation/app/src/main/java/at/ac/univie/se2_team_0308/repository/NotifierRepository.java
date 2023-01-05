@@ -21,22 +21,22 @@ public class NotifierRepository implements INotifierRepository {
 
     @Override
     public void insert(SettingsNotifier settingsNotifier) {
-        new insertNotifierAsyncTask(notifierDao).execute(settingsNotifier);
+        AppDatabase.databaseWriteExecutor.execute( () -> notifierDao.insert(settingsNotifier));
     }
 
     @Override
     public void update(SettingsNotifier settingsNotifier) {
-        new updateNotifierAsyncTask(notifierDao).execute(settingsNotifier);
+        AppDatabase.databaseWriteExecutor.execute( () -> notifierDao.update(settingsNotifier));
     }
 
     @Override
     public void delete(SettingsNotifier settingsNotifier) {
-        new deleteNotifierAsyncTask(notifierDao).execute(settingsNotifier);
+        AppDatabase.databaseWriteExecutor.execute( () -> notifierDao.delete(settingsNotifier));
     }
 
     @Override
     public void deleteAll(){
-        new deleteAllNotifiersAsyncTask(notifierDao).execute();
+        AppDatabase.databaseWriteExecutor.execute( () -> notifierDao.deleteAll());
     }
 
     @Override
@@ -44,59 +44,4 @@ public class NotifierRepository implements INotifierRepository {
         return notifiers;
     }
 
-    private static class insertNotifierAsyncTask extends AsyncTask<SettingsNotifier, Void, Void> {
-        private INotifierDao notifierDao;
-
-        public insertNotifierAsyncTask(INotifierDao settingsNotifierDao) {
-            this.notifierDao = settingsNotifierDao;
-        }
-
-        @Override
-        protected Void doInBackground(SettingsNotifier... settingsNotifiers) {
-            notifierDao.insert(settingsNotifiers[0]);
-            return null;
-        }
-    }
-
-    private static class updateNotifierAsyncTask extends AsyncTask<SettingsNotifier, Void, Void> {
-        private INotifierDao notifierDao;
-
-        public updateNotifierAsyncTask(INotifierDao settingsNotifierDao) {
-            this.notifierDao = settingsNotifierDao;
-        }
-
-        @Override
-        protected Void doInBackground(SettingsNotifier... settingsNotifiers) {
-            notifierDao.update(settingsNotifiers[0]);
-            return null;
-        }
-    }
-
-    private static class deleteNotifierAsyncTask extends AsyncTask<SettingsNotifier, Void, Void> {
-        private INotifierDao notifierDao;
-
-        public deleteNotifierAsyncTask(INotifierDao settingsNotifierDao) {
-            this.notifierDao = settingsNotifierDao;
-        }
-
-        @Override
-        protected Void doInBackground(SettingsNotifier... settingsNotifiers) {
-            notifierDao.delete(settingsNotifiers[0]);
-            return null;
-        }
-    }
-
-    private static class deleteAllNotifiersAsyncTask extends AsyncTask<Void, Void, Void> {
-        private INotifierDao notifierDao;
-
-        public deleteAllNotifiersAsyncTask(INotifierDao settingsNotifierDao) {
-            this.notifierDao = settingsNotifierDao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            notifierDao.deleteAll();
-            return null;
-        }
-    }
 }

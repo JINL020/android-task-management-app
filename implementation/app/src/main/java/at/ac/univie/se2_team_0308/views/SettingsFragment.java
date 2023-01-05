@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,6 +24,8 @@ import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
 import at.ac.univie.se2_team_0308.viewmodels.NotifierViewModel;
 
 public class SettingsFragment extends Fragment {
+    private static final String TAG = "SETTINGS";
+
     private FragmentSettingsBinding binding;
     private NotifierViewModel notifierViewModel;
 
@@ -34,8 +35,6 @@ public class SettingsFragment extends Fragment {
     private CheckBox onUpdateBasicCheckBox;
     private CheckBox onDeletePopupCheckBox;
     private CheckBox onDeleteBasicCheckBox;
-
-    private IObserver onCreateObserver = new LoggerCore();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
@@ -51,7 +50,6 @@ public class SettingsFragment extends Fragment {
             public void onChanged(List<SettingsNotifier> settingsNotifiers) {
                 for (SettingsNotifier sn : settingsNotifiers) {
                     if (sn.getEvent() == ENotificationEvent.CREATE) {
-                        SettingsFragment.this.onCreateObserver = sn.getNotifier();
                         //TaskChecklist tc = new TaskChecklist("Hello","", EPriority.LOW, EStatus.COMPLETED, ECategory.CHECKLIST,null);
                         //sn.getNotifier().update(ENotificationEvent.CREATE, tc);
                         if (sn.isPopup()) {
@@ -60,6 +58,7 @@ public class SettingsFragment extends Fragment {
                         if (sn.isBasic()) {
                             onCreateBasicCheckBox.setChecked(true);
                         }
+                        notifierViewModel.setOnCreateNotifier(sn.getNotifier());
                     }
                     if (sn.getEvent() == ENotificationEvent.UPDATE) {
                         if (sn.isPopup()) {
@@ -80,20 +79,15 @@ public class SettingsFragment extends Fragment {
                 }
 
                 for (SettingsNotifier notifier : settingsNotifiers) {
-                    Log.d("settings", settingsNotifiers.toString());
+                    Log.d("settings", "onChanged: " + settingsNotifiers.toString());
                 }
             }
         });
 
         //Log.d("settings","helllo"+onCreateObserver.getNotifierType().toString());
+        Log.d("settings", "hello"+ notifierViewModel.getOnCreateNotifier().getNotifierType());
 
         return root;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d("settings", "hello"+onCreateObserver.getNotifierType());
     }
 
     @Override

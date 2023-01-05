@@ -47,11 +47,14 @@ import at.ac.univie.se2_team_0308.utils.notifications.BasicNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
+import at.ac.univie.se2_team_0308.viewmodels.NotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog, PropertyToBeUpdated.SelectPropertyToUpdateDialogListener, PropertyToBeUpdated.SendDataFromSelectPropertyUpdateDialog {
     private FragmentListBinding binding;
+
+    private NotifierViewModel notifierViewModel;
 
     public static final String TAG = "main act";
 
@@ -80,8 +83,6 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
     private Exporter exporter;
 
     private static ATaskFactory taskFactory;
-
-    private IObserver myObserver = new BasicNotifier(new PopupNotifier(new LoggerCore()));;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +114,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                     showLayout(ELayout.ADD);
                 }
                 TaskChecklist tc = new TaskChecklist("Hello","", EPriority.LOW, EStatus.COMPLETED, ECategory.CHECKLIST,null);
-                myObserver.update(ENotificationEvent.DELETE,tc);
+                notifierViewModel.getOnCreateNotifier().update(ENotificationEvent.DELETE,tc);
             }
         });
 
@@ -225,6 +226,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
     }
 
     private void initViewModel() {
+        notifierViewModel = new ViewModelProvider(getActivity()).get(NotifierViewModel.class);
         viewModel = new ViewModelProvider(getActivity()).get(TaskViewModel.class);
         viewModel.init(getActivity().getApplication());// init does the same thing as the constructor, why init?
         viewModel.getAllLiveTasks().observe(getViewLifecycleOwner(), new Observer<Pair<List<TaskAppointment>, List<TaskChecklist>>>() {
