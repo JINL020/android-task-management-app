@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 
-public class LoggerCore implements IObserver{
+public class LoggerCore implements IObserver {
     @Override
     public void update(ENotificationEvent event, ATask... task) {
         String message = "";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            message = Arrays.stream(task).map(ATask::getTaskName) .collect(Collectors.joining("\n"));
+            message = Arrays.stream(task).map(ATask::getTaskName).collect(Collectors.joining("\n"));
         }
 
         Log.i(event.name(), ": " + message);

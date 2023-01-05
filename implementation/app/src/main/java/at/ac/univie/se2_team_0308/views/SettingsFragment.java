@@ -1,5 +1,6 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -34,6 +37,8 @@ public class SettingsFragment extends Fragment {
     private CheckBox onDeletePopupCheckBox;
     private CheckBox onDeleteBasicCheckBox;
 
+    private IObserver onCreateObserver = new LoggerCore();
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -41,28 +46,8 @@ public class SettingsFragment extends Fragment {
         settingsNotifierViewModel = new ViewModelProvider(getActivity()).get(SettingsNotifierViewModel.class);
 
         initViews();
-        initLayout();
         initCheckboxListeners();
 
-        return root;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
-    private void initViews() {
-        onCreatePopupCheckBox = binding.checkBoxOnCreatePopup;
-        onCreateBasicCheckBox = binding.checkBoxOnCreateBasic;
-        onUpdatePopupCheckBox = binding.checkBoxOnUpdatePopup;
-        onUpdateBasicCheckBox = binding.checkBoxOnUpdateBasic;
-        onDeletePopupCheckBox = binding.checkBoxOnDeletePopup;
-        onDeleteBasicCheckBox = binding.checkBoxOnDeleteBasic;
-    }
-
-    private void initLayout() {
         settingsNotifierViewModel.getAllSettingsNotifier().observe(getViewLifecycleOwner(), new Observer<List<SettingsNotifier>>() {
             @Override
             public void onChanged(List<SettingsNotifier> settingsNotifiers) {
@@ -98,6 +83,25 @@ public class SettingsFragment extends Fragment {
                 }
             }
         });
+
+        //Log.d("settings","helllo"+onCreateObserver.getNotifierType().toString());
+
+        return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    private void initViews() {
+        onCreatePopupCheckBox = binding.checkBoxOnCreatePopup;
+        onCreateBasicCheckBox = binding.checkBoxOnCreateBasic;
+        onUpdatePopupCheckBox = binding.checkBoxOnUpdatePopup;
+        onUpdateBasicCheckBox = binding.checkBoxOnUpdateBasic;
+        onDeletePopupCheckBox = binding.checkBoxOnDeletePopup;
+        onDeleteBasicCheckBox = binding.checkBoxOnDeleteBasic;
     }
 
     private void initCheckboxListeners(){
