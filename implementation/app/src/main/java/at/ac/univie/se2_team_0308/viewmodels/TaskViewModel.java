@@ -1,7 +1,6 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.app.Application;
-import android.os.Build;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,8 +15,8 @@ import java.util.Objects;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.EPriority;
-import at.ac.univie.se2_team_0308.models.IObserver;
-import at.ac.univie.se2_team_0308.models.ISubject;
+import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.utils.notifications.ISubject;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.repository.TaskRepository;

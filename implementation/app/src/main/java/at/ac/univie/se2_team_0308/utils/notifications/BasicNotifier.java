@@ -3,19 +3,20 @@ package at.ac.univie.se2_team_0308.utils.notifications;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.models.ENotifier;
 import at.ac.univie.se2_team_0308.views.MainActivity;
 
-public class BasicNotifier extends ADecoratorNotifier{
+public class BasicNotifier extends ADecoratorNotifier {
+    private static final String TAG = "BASIC_NOTIFIER";
+
     public BasicNotifier(INotifier wrapped) {
         super(wrapped);
     }
@@ -31,16 +32,13 @@ public class BasicNotifier extends ADecoratorNotifier{
         }
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.getAppContext(), "notifications");
-        notificationBuilder
-                .setSmallIcon(android.R.drawable.stat_notify_sync)
-                .setStyle(new NotificationCompat
-                        .BigTextStyle()
-                        .setBigContentTitle(event.name())
-                        .bigText(message));
+        notificationBuilder.setSmallIcon(android.R.drawable.stat_notify_sync).setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(event.name()).bigText(message));
 
-        Notification notification  = notificationBuilder.build();
+        Notification notification = notificationBuilder.build();
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(MainActivity.getAppContext());
         notificationManagerCompat.notify(1, notification);
+
+        Log.d(TAG, "send out notification: " + event.name() + message);
     }
 
     @Override

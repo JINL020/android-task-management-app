@@ -6,18 +6,20 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.models.ENotifier;
 import at.ac.univie.se2_team_0308.utils.ENotificationEventTypeConverter;
-import at.ac.univie.se2_team_0308.utils.IObserverTypeConverter;
+import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
 
-@Entity(tableName = "settings_notifier")
-public class SettingsNotifier {
+@Entity(tableName = "event_notifier")
+public class EventNotifier {
     @TypeConverters(ENotificationEventTypeConverter.class)
-    @PrimaryKey@NonNull
+    @PrimaryKey
+    @NonNull
     private ENotificationEvent event;
-    @TypeConverters(IObserverTypeConverter.class)
+    @TypeConverters(INotifierTypeConverter.class)
     private INotifier notifier;
 
-    public SettingsNotifier(ENotificationEvent event, INotifier notifier) {
+    public EventNotifier(ENotificationEvent event, INotifier notifier) {
         this.event = event;
         this.notifier = notifier;
     }
@@ -38,11 +40,11 @@ public class SettingsNotifier {
         this.notifier = notifier;
     }
 
-    public boolean isPopup(){
+    public boolean isPopup() {
         return notifier.getNotifierType().contains(ENotifier.POPUP);
     }
 
-    public boolean isBasic(){
+    public boolean isBasic() {
         return notifier.getNotifierType().contains(ENotifier.BASIC);
     }
 

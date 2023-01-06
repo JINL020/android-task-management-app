@@ -17,17 +17,17 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.databinding.FragmentSettingsBinding;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.utils.notifications.BasicNotifier;
+import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
-import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
-import at.ac.univie.se2_team_0308.viewmodels.NotifierViewModel;
+import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 
 public class SettingsFragment extends Fragment {
     private static final String TAG = "SETTINGS_FRAGMENT";
 
     private FragmentSettingsBinding binding;
-    private NotifierViewModel notifierViewModel;
+    private EventNotifierViewModel eventNotifierViewModel;
 
     private CheckBox onCreatePopupCheckBox;
     private CheckBox onCreateBasicCheckBox;
@@ -38,7 +38,7 @@ public class SettingsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        notifierViewModel = new ViewModelProvider(getActivity()).get(NotifierViewModel.class);
+        eventNotifierViewModel = new ViewModelProvider(getActivity()).get(EventNotifierViewModel.class);
 
         initViews();
         initCheckboxListeners();
@@ -113,10 +113,10 @@ public class SettingsFragment extends Fragment {
     }
 
     private void initCheckboxLayout() {
-        notifierViewModel.getAllNotifiers().observe(getViewLifecycleOwner(), new Observer<List<SettingsNotifier>>() {
+        eventNotifierViewModel.getAllNotifiers().observe(getViewLifecycleOwner(), new Observer<List<EventNotifier>>() {
             @Override
-            public void onChanged(List<SettingsNotifier> settingsNotifiers) {
-                for (SettingsNotifier notifier : settingsNotifiers) {
+            public void onChanged(List<EventNotifier> eventNotifiers) {
+                for (EventNotifier notifier : eventNotifiers) {
                     boolean isPopup = notifier.isPopup();
                     boolean isBasic = notifier.isBasic();
                     if (notifier.getEvent() == ENotificationEvent.CREATE) {
@@ -140,21 +140,21 @@ public class SettingsFragment extends Fragment {
         boolean onCreatePopup = onCreatePopupCheckBox.isChecked();
         boolean onCreateBasic = onCreateBasicCheckBox.isChecked();
         INotifier onCreateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
-        notifierViewModel.update(new SettingsNotifier(ENotificationEvent.CREATE, onCreateNotifier));
+        eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.CREATE, onCreateNotifier));
     }
 
     private void updateOnUpdateNotifier() {
         boolean onCreatePopup = onUpdatePopupCheckBox.isChecked();
         boolean onCreateBasic = onUpdateBasicCheckBox.isChecked();
         INotifier onUpdateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
-        notifierViewModel.update(new SettingsNotifier(ENotificationEvent.UPDATE, onUpdateNotifier));
+        eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.UPDATE, onUpdateNotifier));
     }
 
     private void updateOnDeleteNotifier() {
         boolean onDeletePopup = onDeletePopupCheckBox.isChecked();
         boolean onDeleteBasic = onDeleteBasicCheckBox.isChecked();
         INotifier onDeleteNotifier = buildNotifier(onDeletePopup, onDeleteBasic);
-        notifierViewModel.update(new SettingsNotifier(ENotificationEvent.DELETE, onDeleteNotifier));
+        eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.DELETE, onDeleteNotifier));
     }
 
     private INotifier buildNotifier(boolean popup, boolean basic) {

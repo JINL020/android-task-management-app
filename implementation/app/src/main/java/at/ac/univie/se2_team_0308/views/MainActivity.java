@@ -20,11 +20,9 @@ import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.databinding.ActivityMainBinding;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
-import at.ac.univie.se2_team_0308.models.IObserver;
-import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
-import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
-import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
-import at.ac.univie.se2_team_0308.viewmodels.NotifierViewModel;
+import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
+import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class MainActivity extends AppCompatActivity implements IObserver {
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     private ActivityMainBinding binding;
     private static Context context;
 
-    private NotifierViewModel notifierViewModel;
+    private EventNotifierViewModel eventNotifierViewModel;
     private TaskViewModel taskViewModel;
 
     @Override
@@ -53,24 +51,22 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         taskViewModel.attachObserver(this);
         Log.d(TAG, "attached  observer to taskViewModel");
 
-        notifierViewModel.getAllNotifiers().observe(this, new Observer<List<SettingsNotifier>>() {
+        eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
             @Override
-            public void onChanged(List<SettingsNotifier> settingsNotifiers) {
-                for (SettingsNotifier notifier : settingsNotifiers) {
+            public void onChanged(List<EventNotifier> eventNotifiers) {
+                for (EventNotifier notifier : eventNotifiers) {
                     if (notifier.getEvent() == ENotificationEvent.CREATE) {
-                        notifierViewModel.setOnCreateNotifier(notifier.getNotifier());
+                        eventNotifierViewModel.setOnCreateNotifier(notifier.getNotifier());
                     }
                     if (notifier.getEvent() == ENotificationEvent.UPDATE) {
-                        notifierViewModel.setOnUpdateNotifier(notifier.getNotifier());
+                        eventNotifierViewModel.setOnUpdateNotifier(notifier.getNotifier());
                     }
                     if (notifier.getEvent() == ENotificationEvent.DELETE) {
-                        notifierViewModel.setOnDeleteNotifier(notifier.getNotifier());
+                        eventNotifierViewModel.setOnDeleteNotifier(notifier.getNotifier());
                     }
                 }
 
-                for (SettingsNotifier notifier : settingsNotifiers) {
-                    Log.d(TAG, "Saved settings: " + settingsNotifiers.toString());
-                }
+                Log.d(TAG, "Saved settings:\n" + eventNotifiers.toString());
             }
         });
 
@@ -82,19 +78,21 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
     @Override
     public void receivedUpdate(ENotificationEvent event, ATask... tasks) {
-        Log.d(TAG, "received update from taskViewModel");
         String message = "";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            message = Arrays.stream(tasks).map(ATask::getTaskName) .collect(Collectors.joining("\n"));
+            message = Arrays.stream(tasks).map(ATask::getTaskName).collect(Collectors.joining("\n"));
         }
-        if(event == ENotificationEvent.CREATE){
-            notifierViewModel.getOnCreateNotifier().sendNotification(event, message);
+
+        Log.d(TAG, "received update from taskViewModel:" + event.name() + message);
+
+        if (event == ENotificationEvent.CREATE) {
+            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message);
         }
-        if(event == ENotificationEvent.UPDATE){
-            notifierViewModel.getOnUpdateNotifier().sendNotification(event, message);
+        if (event == ENotificationEvent.UPDATE) {
+            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message);
         }
-        if(event == ENotificationEvent.DELETE){
-            notifierViewModel.getOnDeleteNotifier().sendNotification(event, message);
+        if (event == ENotificationEvent.DELETE) {
+            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message);
         }
     }
 
@@ -104,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         taskViewModel.detachObserver(this);
     }
 
-    private  void configureBottomNavBar(){
+    private void configureBottomNavBar() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_list, R.id.navigation_calendar, R.id.navigation_settings).build();
@@ -113,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         NavigationUI.setupWithNavController(binding.bottomNavView, navController);
     }
 
-    private  void initViewModels(){
-        notifierViewModel = new ViewModelProvider(this).get(NotifierViewModel.class);
+    private void initViewModels() {
+        eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
     }
 }

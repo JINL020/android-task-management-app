@@ -7,51 +7,47 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
-import at.ac.univie.se2_team_0308.models.IObserver;
-import at.ac.univie.se2_team_0308.models.ISubject;
-import at.ac.univie.se2_team_0308.repository.NotifierRepository;
+import at.ac.univie.se2_team_0308.repository.EventNotifierRepository;
+import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
-import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
 
-public class NotifierViewModel extends AndroidViewModel {
-    private static final String TAG = "MAIN_ACTIVITY";
+public class EventNotifierViewModel extends AndroidViewModel {
+    private static final String TAG = "VIEW_MODEL";
 
-    private NotifierRepository notifierRepository;
-    private LiveData<List<SettingsNotifier>> settingNotifiers;
+    private EventNotifierRepository eventNotifierRepository;
+    private LiveData<List<EventNotifier>> settingNotifiers;
 
     private INotifier onCreateNotifier = new LoggerCore();
     private INotifier onUpdateNotifier = new LoggerCore();
     private INotifier onDeleteNotifier = new LoggerCore();
 
-    public NotifierViewModel(@NonNull Application application) {
+    public EventNotifierViewModel(@NonNull Application application) {
         super(application);
-        this.notifierRepository = new NotifierRepository(application);
-        this.settingNotifiers = notifierRepository.getAllNotifiers();
+        this.eventNotifierRepository = new EventNotifierRepository(application);
+        this.settingNotifiers = eventNotifierRepository.getAllEventNotifiers();
     }
 
     /*public void insert(SettingsNotifier settingsNotifier){
         notifierRepository.insert(settingsNotifier);
     }*/
 
-    public void update(SettingsNotifier settingsNotifier){
-        notifierRepository.update(settingsNotifier);
-        Log.d(TAG, "updated settings " + settingsNotifier.toString());
+    public void update(EventNotifier eventNotifier) {
+        eventNotifierRepository.update(eventNotifier);
+        Log.d(TAG, "EventNotifierViewModel updated" + eventNotifier.toString());
     }
 
     /*public void delete(SettingsNotifier settingsNotifier){
         notifierRepository.delete(settingsNotifier);
     }*/
 
-    public void deleteAll(){
-        notifierRepository.deleteAll();
+    public void deleteAll() {
+        eventNotifierRepository.deleteAll();
     }
 
-    public LiveData<List<SettingsNotifier>> getAllNotifiers(){
+    public LiveData<List<EventNotifier>> getAllNotifiers() {
         return settingNotifiers;
     }
 
