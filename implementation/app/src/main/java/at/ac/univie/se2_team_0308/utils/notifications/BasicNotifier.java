@@ -21,18 +21,13 @@ public class BasicNotifier extends ADecoratorNotifier{
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, ATask... task) {
-        super.sendNotification(event, task);
+    public void sendNotification(ENotificationEvent event, String message) {
+        super.sendNotification(event, message);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = MainActivity.getAppContext().getSystemService(NotificationManager.class);
             manager.createNotificationChannel(notificationChannel);
-        }
-
-        String message = "";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            message = Arrays.stream(task).map(ATask::getTaskName) .collect(Collectors.joining("\n\n"));
         }
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.getAppContext(), "notifications");

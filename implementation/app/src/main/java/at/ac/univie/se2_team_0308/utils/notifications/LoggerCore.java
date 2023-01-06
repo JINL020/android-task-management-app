@@ -12,12 +12,7 @@ import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 
 public class LoggerCore implements INotifier {
     @Override
-    public void sendNotification(ENotificationEvent event, ATask... task) {
-        String message = "";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            message = Arrays.stream(task).map(ATask::getTaskName).collect(Collectors.joining("\n"));
-        }
-
+    public void sendNotification(ENotificationEvent event, String message) {
         Log.i(event.name(), ": " + message);
     }
 

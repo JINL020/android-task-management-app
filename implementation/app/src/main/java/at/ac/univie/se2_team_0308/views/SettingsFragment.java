@@ -24,7 +24,7 @@ import at.ac.univie.se2_team_0308.utils.notifications.SettingsNotifier;
 import at.ac.univie.se2_team_0308.viewmodels.NotifierViewModel;
 
 public class SettingsFragment extends Fragment {
-    private static final String TAG = "SETTINGS";
+    private static final String TAG = "SETTINGS_FRAGMENT";
 
     private FragmentSettingsBinding binding;
     private NotifierViewModel notifierViewModel;
@@ -38,56 +38,13 @@ public class SettingsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
         notifierViewModel = new ViewModelProvider(getActivity()).get(NotifierViewModel.class);
 
         initViews();
         initCheckboxListeners();
+        initCheckboxLayout();
 
-        notifierViewModel.getAllNotifiers().observe(getViewLifecycleOwner(), new Observer<List<SettingsNotifier>>() {
-            @Override
-            public void onChanged(List<SettingsNotifier> settingsNotifiers) {
-                for (SettingsNotifier sn : settingsNotifiers) {
-                    if (sn.getEvent() == ENotificationEvent.CREATE) {
-                        //TaskChecklist tc = new TaskChecklist("Hello","", EPriority.LOW, EStatus.COMPLETED, ECategory.CHECKLIST,null);
-                        //sn.getNotifier().update(ENotificationEvent.CREATE, tc);
-                        if (sn.isPopup()) {
-                            onCreatePopupCheckBox.setChecked(true);
-                        }
-                        if (sn.isBasic()) {
-                            onCreateBasicCheckBox.setChecked(true);
-                        }
-                        notifierViewModel.setOnCreateNotifier(sn.getNotifier());
-                    }
-                    if (sn.getEvent() == ENotificationEvent.UPDATE) {
-                        if (sn.isPopup()) {
-                            onUpdatePopupCheckBox.setChecked(true);
-                        }
-                        if (sn.isBasic()) {
-                            onUpdateBasicCheckBox.setChecked(true);
-                        }
-                    }
-                    if (sn.getEvent() == ENotificationEvent.DELETE) {
-                        if (sn.isPopup()) {
-                            onDeletePopupCheckBox.setChecked(true);
-                        }
-                        if (sn.isBasic()) {
-                            onDeleteBasicCheckBox.setChecked(true);
-                        }
-                    }
-                }
-
-                for (SettingsNotifier notifier : settingsNotifiers) {
-                    Log.d("settings", "onChanged: " + settingsNotifiers.toString());
-                }
-            }
-        });
-
-        //Log.d("settings","helllo"+onCreateObserver.getNotifierType().toString());
-        Log.d("settings", "hello"+ notifierViewModel.getOnCreateNotifier().getNotifierType());
-
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -105,11 +62,12 @@ public class SettingsFragment extends Fragment {
         onDeleteBasicCheckBox = binding.checkBoxOnDeleteBasic;
     }
 
-    private void initCheckboxListeners(){
+    private void initCheckboxListeners() {
         onCreatePopupCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateOnCreateNotifier();
+                Log.d(TAG,"(!)selected and updated onCreate popup Notification Settings");
             }
         });
 
@@ -117,6 +75,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 updateOnCreateNotifier();
+                Log.d(TAG,"(!)selected and updated onCreate basic Notification Settings");
             }
         });
 
@@ -124,6 +83,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 updateOnUpdateNotifier();
+                Log.d(TAG,"(!)selected and updated onUpdate popup Notification Settings");
             }
         });
 
@@ -131,6 +91,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 updateOnUpdateNotifier();
+                Log.d(TAG,"(!)selected and updated onUpdate basic Notification Settings");
             }
         });
 
@@ -138,6 +99,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 updateOnDeleteNotifier();
+                Log.d(TAG,"(!)selected and updated onDelete popup Notification Settings");
             }
         });
 
@@ -145,9 +107,33 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 updateOnDeleteNotifier();
+                Log.d(TAG,"(!)selected and updated onDelete basic Notification Settings");
             }
         });
+    }
 
+    private void initCheckboxLayout() {
+        notifierViewModel.getAllNotifiers().observe(getViewLifecycleOwner(), new Observer<List<SettingsNotifier>>() {
+            @Override
+            public void onChanged(List<SettingsNotifier> settingsNotifiers) {
+                for (SettingsNotifier notifier : settingsNotifiers) {
+                    boolean isPopup = notifier.isPopup();
+                    boolean isBasic = notifier.isBasic();
+                    if (notifier.getEvent() == ENotificationEvent.CREATE) {
+                        onCreatePopupCheckBox.setChecked(isPopup);
+                        onCreateBasicCheckBox.setChecked(isBasic);
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.UPDATE) {
+                        onUpdatePopupCheckBox.setChecked(isPopup);
+                        onUpdateBasicCheckBox.setChecked(isBasic);
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.DELETE) {
+                        onDeletePopupCheckBox.setChecked(isPopup);
+                        onDeleteBasicCheckBox.setChecked(isBasic);
+                    }
+                }
+            }
+        });
     }
 
     private void updateOnCreateNotifier() {
@@ -179,7 +165,6 @@ public class SettingsFragment extends Fragment {
         if (basic) {
             notifier = new BasicNotifier(notifier);
         }
-        //Log.d("settings", notifier.getNotifierType().toString());
         return notifier;
     }
 

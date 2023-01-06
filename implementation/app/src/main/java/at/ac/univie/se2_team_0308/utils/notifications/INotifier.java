@@ -6,7 +6,7 @@ import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 
 public interface INotifier {
-    void sendNotification(ENotificationEvent event, ATask... task);
+    void sendNotification(ENotificationEvent event, String message);
 
     List<ENotifier> getNotifierType();
 }

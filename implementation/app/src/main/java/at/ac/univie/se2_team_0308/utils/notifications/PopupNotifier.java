@@ -11,19 +11,14 @@ import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.views.MainActivity;
 
 public class PopupNotifier extends ADecoratorNotifier {
+
     public PopupNotifier(INotifier wrapped) {
         super(wrapped);
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, ATask... task) {
-        super.sendNotification(event, task);
-
-        String message = "";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            message = Arrays.stream(task).map(ATask::getTaskName).collect(Collectors.joining("\n\n"));
-        }
-
+    public void sendNotification(ENotificationEvent event, String message) {
+        super.sendNotification(event, message);
         Toast.makeText(MainActivity.getAppContext(), event.name() + "\n" + message, Toast.LENGTH_SHORT).show();
     }
 

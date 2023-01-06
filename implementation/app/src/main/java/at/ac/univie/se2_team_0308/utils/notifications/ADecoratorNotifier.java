@@ -13,8 +13,8 @@ public abstract class ADecoratorNotifier implements INotifier {
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, ATask... task) {
-        wrapped.sendNotification(event, task);
+    public void sendNotification(ENotificationEvent event, String message) {
+        wrapped.sendNotification(event, message);
     }
 
     @Override
