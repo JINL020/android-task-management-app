@@ -1,14 +1,16 @@
 package at.ac.univie.se2_team_0308.utils.import_tasks;
 
 import android.content.ContentResolver;
-import android.database.Cursor;
 import android.net.Uri;
-import android.provider.OpenableColumns;
 import android.util.Log;
 import android.util.Pair;
 
-import java.util.ArrayList;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
@@ -51,7 +53,7 @@ public class ImporterFacade {
             TaskSynchronizer taskSynchronizer = new TaskSynchronizer();
             taskSynchronizer.synchronizeTasks(taskViewModel, importedTasks.first, importedTasks.second);
         }
-        catch (Exception e){
+        catch (UnsupportedDocumentFormatException | ParserConfigurationException | IOException | SAXException e){
             Log.e(TAG, e.toString());
         }
 
