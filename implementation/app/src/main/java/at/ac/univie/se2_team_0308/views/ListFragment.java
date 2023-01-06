@@ -122,7 +122,9 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
             @Override
             public void onClick(View view) {
                 if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
-                    viewModel.deleteAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds());
+                    if (!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
+                        viewModel.deleteAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds());
+                    }
                 }
             }
         });
@@ -162,6 +164,9 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
 
                         if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
                             exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON);
+                            adapter.setSelectModeOn(false);
+                            viewModel.deselectAllTaskAppointment();
+                            viewModel.deselectAllTaskChecklist();
                             showToast("Tasks exported");
                         }
                     } catch (Exception e) {
@@ -180,6 +185,9 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                     List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
                     if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
                         exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
+                        adapter.setSelectModeOn(false);
+                        viewModel.deselectAllTaskAppointment();
+                        viewModel.deselectAllTaskChecklist();
                         showToast("Tasks exported");
                     }
                 } catch (Exception e) {
