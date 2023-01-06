@@ -327,6 +327,8 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         toast.show();
     }
 
+    // Code taken from: https://developer.android.com/training/basics/intents/result
+    // TODO - move to another class?
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override

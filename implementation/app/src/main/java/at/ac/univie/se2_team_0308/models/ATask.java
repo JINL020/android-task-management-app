@@ -29,7 +29,6 @@ public abstract class ATask {
         this.creationDate = Calendar.getInstance().getTime();
     }
 
-
     public int getId() {
         return id;
     }

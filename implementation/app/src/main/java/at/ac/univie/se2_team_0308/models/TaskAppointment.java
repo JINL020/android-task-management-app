@@ -22,7 +22,7 @@ public class TaskAppointment extends ATask implements Parcelable {
         this.deadline = deadline;
     }
 
-    protected TaskAppointment(Parcel in) {
+    public TaskAppointment(Parcel in) {
         super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.APPOINTMENT);
         setId(in.readInt());
         setTaskName(in.readString());
