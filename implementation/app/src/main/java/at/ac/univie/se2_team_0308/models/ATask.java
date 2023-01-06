@@ -15,7 +15,7 @@ public abstract class ATask {
     private boolean isSelected = false;
     private ECategory category;
 
-   // @TypeConverters(DateConverter.class)
+    // @TypeConverters(DateConverter.class)
     private Date creationDate;
 
     public static final String TAG ="Task";
