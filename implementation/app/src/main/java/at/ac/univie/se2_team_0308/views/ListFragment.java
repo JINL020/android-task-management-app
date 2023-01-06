@@ -133,14 +133,8 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
-//                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
-//                }
                 PropertyToBeUpdated fragment = new PropertyToBeUpdated(ListFragment.this);
                 fragment.show(getChildFragmentManager(), "update_property");
-                /*if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
-                }*/
             }
         });
 
@@ -323,6 +317,10 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         if ((viewModel.getSelectedTaskAppointmentIds() != null) && (viewModel.getSelectedTaskChecklistIds() != null)) {
             if (!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
                 viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+                adapter.setSelectModeOn(false);
+                viewModel.deselectAllTaskAppointment();
+                viewModel.deselectAllTaskChecklist();
+                showLayout(ELayout.ADD);
             }
         }
     }
