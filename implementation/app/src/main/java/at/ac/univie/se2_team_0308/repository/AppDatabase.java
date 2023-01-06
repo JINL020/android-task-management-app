@@ -28,7 +28,7 @@ import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 
-@Database(entities = {TaskAppointment.class, TaskChecklist.class, EventNotifier.class}, version = 3, exportSchema = false)
+@Database(entities = {TaskAppointment.class, TaskChecklist.class, EventNotifier.class}, version = 1, exportSchema = false)
 @TypeConverters({EPriorityTypeConverter.class, EStatusTypeConverter.class, ECategoryTypeConverter.class, SubtasksConverter.class, DateConverter.class, ENotificationEventTypeConverter.class, INotifierTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TaskAppointmentDao taskAppointmentDao();
