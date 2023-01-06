@@ -61,25 +61,15 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new populateDbAsyncTask(INSTANCE).execute();
+            AppDatabase.databaseWriteExecutor.execute(() -> populateDb(INSTANCE.eventNotifierDao()));;
         }
     };
 
-    private static class populateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private IEventNotifierDao eventNotifierDao;
-
-        public populateDbAsyncTask(AppDatabase db) {
-            this.eventNotifierDao = db.eventNotifierDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            INotifier defaultObserver = new LoggerCore();
-            eventNotifierDao.insert(new EventNotifier(ENotificationEvent.CREATE, defaultObserver));
-            eventNotifierDao.insert(new EventNotifier(ENotificationEvent.UPDATE, defaultObserver));
-            eventNotifierDao.insert(new EventNotifier(ENotificationEvent.DELETE, defaultObserver));
-            return null;
-        }
+    private static void populateDb(IEventNotifierDao eventNotifierDao){
+        INotifier defaultObserver = new LoggerCore();
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.CREATE, defaultObserver));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.UPDATE, defaultObserver));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.DELETE, defaultObserver));
     }
 
 }
