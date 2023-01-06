@@ -13,6 +13,7 @@ import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
+import at.ac.univie.se2_team_0308.models.Subtask;
 
 public class DisplayClass implements Parcelable {
     private int id;
@@ -24,7 +25,7 @@ public class DisplayClass implements Parcelable {
     private ECategory categoryEnum;
     private Date creationDate;
     private Date deadline;
-    private List<String> subtasks;
+    private List<Subtask> subtasks;
 
     public DisplayClass(TaskAppointment appointment) {
         this.id = appointment.getId();
@@ -36,7 +37,7 @@ public class DisplayClass implements Parcelable {
         this.categoryEnum = appointment.getCategory();
         this.creationDate = appointment.getCreationDate();
         this.deadline = appointment.getDeadline();
-        this.subtasks = new ArrayList<>();
+        this.subtasks = new ArrayList<Subtask>();
     }
 
     public DisplayClass(TaskChecklist checklist) {
@@ -62,7 +63,7 @@ public class DisplayClass implements Parcelable {
         categoryEnum = ECategory.valueOf(in.readString());
         creationDate = new Date(in.readLong());
         deadline = new Date(in.readLong());
-        subtasks = in.createStringArrayList();
+        subtasks = in.readArrayList(Subtask.class.getClassLoader());
     }
 
     public int getId() {
@@ -137,11 +138,11 @@ public class DisplayClass implements Parcelable {
         this.deadline = deadline;
     }
 
-    public List<String> getSubtasks() {
+    public List<Subtask> getSubtasks() {
         return subtasks;
     }
 
-    public void setSubtasks(List<String> subtasks) {
+    public void setSubtasks(List<Subtask> subtasks) {
         this.subtasks = subtasks;
     }
 
@@ -172,6 +173,6 @@ public class DisplayClass implements Parcelable {
         parcel.writeString(categoryEnum.toString());
         parcel.writeLong(deadline.getTime());
         parcel.writeLong(creationDate.getTime());
-        parcel.writeStringList(subtasks);
+        parcel.writeList(subtasks);
     }
 }

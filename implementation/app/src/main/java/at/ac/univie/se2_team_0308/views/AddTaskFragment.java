@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -19,13 +20,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
+import at.ac.univie.se2_team_0308.models.Subtask;
+import at.ac.univie.se2_team_0308.utils.DisplayClass;
+import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class AddTaskFragment extends DialogFragment {
@@ -61,6 +68,10 @@ public class AddTaskFragment extends DialogFragment {
 
     private TaskViewModel viewModel;
 
+    private RecyclerView subtasksRecView;
+    private RelativeLayout subtasksRelLayout;
+    private Button addSubtaskButton;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -74,9 +85,8 @@ public class AddTaskFragment extends DialogFragment {
                 taskTypeValidation.setVisibility(View.GONE);
                 isSelectedAppointment = true;
                 isSelectedChecklist = false;
-                if(relLayoutChooseDeadline.getVisibility() == View.GONE) {
-                    relLayoutChooseDeadline.setVisibility(View.VISIBLE);
-                }
+                relLayoutChooseDeadline.setVisibility(View.VISIBLE);
+                subtasksRelLayout.setVisibility(View.GONE);
             }
         });
 
@@ -87,6 +97,15 @@ public class AddTaskFragment extends DialogFragment {
                 isSelectedChecklist = true;
                 isSelectedAppointment = false;
                 relLayoutChooseDeadline.setVisibility(View.GONE);
+                subtasksRelLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        addSubtaskButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // TODO add subtask
+                boolean n = true;
             }
         });
 
@@ -204,6 +223,29 @@ public class AddTaskFragment extends DialogFragment {
         spinnerDatePicker = view.findViewById(R.id.spinnerDatePicker);
         relLayoutChooseDeadline = view.findViewById(R.id.relLayoutChooseDeadline);
         taskTypeValidation = view.findViewById(R.id.taskTypeValidation);
+        subtasksRelLayout = view.findViewById(R.id.subtasksRelLayout);
+        subtasksRecView = view.findViewById(R.id.subtasksRecView);
+        addSubtaskButton = view.findViewById(R.id.btnAddSubtask);
+
+    }
+
+    private void setSubtasksView(){
+        SubtaskListAdapter adapter = new SubtaskListAdapter(requireActivity(), new ArrayList<>(), new SubtaskListAdapter.onSubtaskClickListener(){
+            @Override
+            public void onDelete(Subtask taskModel) {
+                System.out.print("subtask DELETE request");
+            }
+            @Override
+            public void onAdd(Subtask taskModel) {
+                System.out.print("subtask ADD request");
+            }
+            @Override
+            public void onSubtaskChecked(Subtask taskModel, boolean isChecked) {
+                System.out.print("subtask CHECKED request: " + isChecked);
+            }
+        });
+        subtasksRecView.setAdapter(adapter);
+        subtasksRecView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
     }
 
     @Override

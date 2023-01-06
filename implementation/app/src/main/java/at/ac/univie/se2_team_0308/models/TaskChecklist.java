@@ -15,9 +15,9 @@ import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 @Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
-    List<String> subtasks;
+    List<Subtask> subtasks;
 
-    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<String> subtasks){
+    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<Subtask> subtasks){
         super(taskName, description, priority, status, category);
         this.subtasks = subtasks;
     }
@@ -31,8 +31,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         setStatus(EStatus.valueOf(in.readString()));
         setCategory(ECategory.valueOf(in.readString()));
         setCreationDate(new Date(in.readLong()));
-        subtasks = in.createStringArrayList();
-
+        setSubtasks(in.readArrayList(Subtask.class.getClassLoader()));
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {
@@ -61,7 +60,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeString(String.valueOf(getStatus()));
         parcel.writeString(ECategory.CHECKLIST.name());
         parcel.writeLong(getCreationDate().getTime());
-        parcel.writeStringList(subtasks);
+        parcel.writeList(getSubtasks());
     }
 
     @Override
@@ -72,13 +71,24 @@ public class TaskChecklist extends ATask implements Parcelable {
                 '}';
     }
 
-    public List<String> getSubtasks() {
-        return subtasks;
-    }
-
-    public void setSubtasks(List<String> subtasks) {
+    public List<Subtask> getSubtasks() { return subtasks;}
+    public void setSubtasks(List<Subtask> subtasks) {
         this.subtasks = subtasks;
     }
+
+    void removeAllSubtasks(){
+        this.subtasks.clear();
+    }
+
+    void addSubtask(Subtask subtask){
+        this.subtasks.add(subtask);
+    }
+
+    void removeSubtask(Subtask subtask){
+        subtask.removeAllSubtasks();
+        this.subtasks.remove(subtask);
+    }
+
 
     @Override
     public boolean equals(Object o) {

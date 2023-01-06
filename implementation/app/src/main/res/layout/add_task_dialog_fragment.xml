@@ -219,18 +219,51 @@
 
             </RelativeLayout>
 
+
+<!--            TODO should identifiers be different from activity_task ?-->
+
             <RelativeLayout
-                android:layout_width="300dp"
+                android:id="@+id/subtasksRelLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayoutTaskStatus"
                 android:layout_centerHorizontal="true"
+                android:visibility="gone"
                 >
+                <TextView
+                    android:id="@+id/txtSubtasks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Subtasks"
+                    android:textStyle="italic"
 
+                    />
 
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/subtasksScrollview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtSubtasks"
+                    >
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/subtasksRecView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/subtask_row_item" />
+                </androidx.core.widget.NestedScrollView>
 
             </RelativeLayout>
 
-
+            <Button
+                android:id="@+id/btnAddSubtask"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/subtasksRelLayout"
+                android:text="Add Subtask"
+                />
 
 
 
