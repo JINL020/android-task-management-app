@@ -6,10 +6,10 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-// TODO catch exception
 public class FileContentRetriever {
     public static final String TAG = "FileContentRetriever";
     private final ContentResolver contentResolver;
@@ -17,8 +17,8 @@ public class FileContentRetriever {
     public FileContentRetriever(ContentResolver contentResolver){
         this.contentResolver = contentResolver;
     }
-    //TODO: add exception file not supported
-    public String getFile(Uri uri) throws Exception {
+
+    public String getFile(Uri uri) throws IOException {
         InputStream inputStream;
         String result = "";
         try {
@@ -35,7 +35,7 @@ public class FileContentRetriever {
         return result;
     }
 // Taken from https://stackoverflow.com/questions/12910503/read-file-as-string
-    public String convertStreamToString(InputStream is) throws Exception {
+    public String convertStreamToString(InputStream is) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
         String line;

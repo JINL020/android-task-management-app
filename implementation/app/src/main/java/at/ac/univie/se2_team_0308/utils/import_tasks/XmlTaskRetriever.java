@@ -16,8 +16,8 @@ public class XmlTaskRetriever {
 
     public Pair<List<String>, List<String>> getTasks() {
         Log.d(TAG, "Retrieve individual strings containing tasks from xml file");
-        String regexAppointment = "<at.ac.univie.se2__team__0308.models.TaskAppointment>.*</at.ac.univie.se2__team__0308.models.TaskAppointment>";
-        String regexChecklist = "<at.ac.univie.se2__team__0308.models.TaskChecklist>.*</at.ac.univie.se2__team__0308.models.TaskChecklist>";
+        String regexAppointment = "<at.ac.univie.se2__team__0308.models.TaskAppointment>.*?</at.ac.univie.se2__team__0308.models.TaskAppointment>";
+        String regexChecklist = "<at.ac.univie.se2__team__0308.models.TaskChecklist>.*?</at.ac.univie.se2__team__0308.models.TaskChecklist>";
 
         boolean dotall = true;
         List<String> taskAppointmentStrings = MatchRetriever.retrieveTasks(regexAppointment, fileContent, dotall);
