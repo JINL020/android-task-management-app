@@ -232,7 +232,7 @@ public class TaskActivity extends AppCompatActivity {
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);
         deadlineRelLayout = findViewById(R.id.relLayoutTaskDeadlineEdit);
         deadlineSpinnerPicker = findViewById(R.id.datePickerEdit);
-        timePicker = findViewById(R.id.timePicker);
+        timePicker = findViewById(R.id.timePickerTaskActivity);
         timePicker.setIs24HourView(true);
     }
 }
