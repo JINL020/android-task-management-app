@@ -1,5 +1,7 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         configureBottomNavBar();
 
         initViewModels();
+
+        initNotificationChannel();
 
         taskViewModel.attachObserver(this);
         Log.d(TAG, "attached  observer to taskViewModel");
@@ -114,5 +118,13 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     private void initViewModels() {
         eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+    }
+
+    private void initNotificationChannel(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(notificationChannel);
+        }
     }
 }

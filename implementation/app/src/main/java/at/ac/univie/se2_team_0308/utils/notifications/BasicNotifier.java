@@ -25,16 +25,16 @@ public class BasicNotifier extends ADecoratorNotifier {
     public void sendNotification(ENotificationEvent event, String message) {
         super.sendNotification(event, message);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = MainActivity.getAppContext().getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(notificationChannel);
-        }
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.getAppContext(), "notifications");
-        notificationBuilder.setSmallIcon(android.R.drawable.stat_notify_sync).setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(event.name()).bigText(message));
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.getAppContext(), "notifications")
+                .setSmallIcon(android.R.drawable.stat_notify_sync)
+                .setStyle(new NotificationCompat
+                        .BigTextStyle()
+                        .setBigContentTitle(event.name())
+                        .bigText(message)
+                );
 
         Notification notification = notificationBuilder.build();
+
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(MainActivity.getAppContext());
         notificationManagerCompat.notify(1, notification);
 
