@@ -153,9 +153,15 @@ public class AddTaskFragment extends DialogFragment {
                     int day = spinnerDatePicker.getDayOfMonth();
                     int month = spinnerDatePicker.getMonth();
                     int year = spinnerDatePicker.getYear();
+                    int hour = 0;
+                    int minute = 0;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        hour = timePicker.getHour();
+                        minute = timePicker.getMinute();
+                    }
 
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
+                    calendar.set(year, month, day, hour, minute);
                     deadline = new Date(calendar.getTimeInMillis());
                 }
 
