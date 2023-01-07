@@ -161,7 +161,7 @@ public class AddTaskFragment extends DialogFragment {
                     }
 
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day, hour, minute);
+                    calendar.set(year, month, day, hour, minute, 0);
                     deadline = new Date(calendar.getTimeInMillis());
                 }
 

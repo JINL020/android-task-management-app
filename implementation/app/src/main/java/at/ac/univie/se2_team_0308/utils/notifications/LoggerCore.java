@@ -14,7 +14,7 @@ public class LoggerCore implements INotifier {
     @Override
     public void sendNotification(ENotificationEvent event, String message) {
         Log.d(event.name(), message);
-        Log.d(TAG, "send out notification: " + event.name() + message);
+        Log.d(TAG, "send out notification: " + event.name() + " " + message);
     }
 
     @Override

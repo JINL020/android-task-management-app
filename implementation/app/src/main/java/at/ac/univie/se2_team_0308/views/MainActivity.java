@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
             message = Arrays.stream(tasks).map(ATask::getTaskName).collect(Collectors.joining("\n"));
         }
 
-        Log.d(TAG, "received update from taskViewModel:" + event.name() + message);
+        Log.d(TAG, "received update from taskViewModel: " + event.name() + " " + message);
 
         if (event == ENotificationEvent.CREATE) {
             eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message);
@@ -109,6 +110,11 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         }
         if (event == ENotificationEvent.DELETE) {
             eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message);
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    cancelAlarm((TaskAppointment) task);
+                }
+            }
         }
     }
 
@@ -156,5 +162,15 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         Log.d(TAG, "set alarm for " + appointment);
+    }
+
+    private void cancelAlarm(TaskAppointment appointment) {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        Log.d(TAG, "cancel alarm for " + appointment);
     }
 }

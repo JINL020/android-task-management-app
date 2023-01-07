@@ -214,7 +214,7 @@ public class TaskActivity extends AppCompatActivity {
                     }
 
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day, hour,minute);
+                    calendar.set(year, month, day, hour, minute, 0);
                     incomingTask.setDeadline(new Date(calendar.getTimeInMillis()));
 
                     incomingAppointment.setDeadline(incomingTask.getDeadline());
