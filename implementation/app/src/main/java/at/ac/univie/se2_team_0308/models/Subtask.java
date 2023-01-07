@@ -20,19 +20,19 @@ public class Subtask  implements Parcelable {
     private int id;
     private EStatus state;
     private String name;
-    private Map<Integer, Subtask> subtasks;
+    private List<Subtask> subtasks;
 
     public Subtask(String name){
         this.name = name;
         this.state = EStatus.NOT_STARTED;
-        this.subtasks = new LinkedHashMap<Integer, Subtask>();
+        this.subtasks = new ArrayList<>();
     }
 
     protected Subtask(Parcel in) {
         setId(in.readInt());
         setName(in.readString());
         setState(EStatus.valueOf(in.readString()));
-        this.subtasks = new LinkedHashMap<Integer, Subtask>();
+        this.subtasks = new ArrayList<>();
         setSubtasks(in.createTypedArrayList(Subtask.CREATOR));
     }
 
@@ -73,29 +73,26 @@ public class Subtask  implements Parcelable {
     }
 
     public List<Subtask> getSubtasks() {
-        Collection<Subtask> values = subtasks.values();
-        return new ArrayList<Subtask>(values);
+        return subtasks;
     }
 
     public void setSubtasks(List<Subtask> subtasks) {
-        for (Subtask sub: subtasks){
-            addSubtask(sub);
-        }
+        this.subtasks = subtasks;
     }
 
     public void addSubtask(Subtask subtask){
-        subtasks.put(subtask.getId(), subtask);
+        this.subtasks.add(subtask);
     }
 
     public void removeSubtask(Subtask task){
         task.removeAllSubtasks();
-        this.subtasks.remove(task.getId());
+        this.subtasks.remove(task);
     }
 
     public void removeSubtaskById(int id){
         Subtask toRemove = getSubtaskById(id);
         toRemove.removeAllSubtasks();
-        this.subtasks.remove(id);
+        this.subtasks.remove(toRemove);
     }
 
     public void removeAllSubtasks(){
@@ -103,7 +100,12 @@ public class Subtask  implements Parcelable {
     }
 
     public Subtask getSubtaskById(int id){
-        return this.subtasks.get(id);
+        for(Subtask s : subtasks){
+            if(s.getId() == id){
+                return s;
+            }
+        }
+        return null; // TODO throw exception: no subtask with given id
     }
 
     @Override
@@ -114,7 +116,7 @@ public class Subtask  implements Parcelable {
                 ", status=" + state +
                 ", subtasks=[");
         List<String> subtaskListStr = new ArrayList<String>();
-        for(Subtask s: this.subtasks.values()){
+        for(Subtask s: this.subtasks){
             subtaskListStr.add(s.toString());
         }
         resultString.concat(String.join(",", subtaskListStr));

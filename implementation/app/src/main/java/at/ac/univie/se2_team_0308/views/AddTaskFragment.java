@@ -168,11 +168,8 @@ public class AddTaskFragment extends DialogFragment {
 
                 List<Subtask> subtasks = new ArrayList<>();
                 if(isSelectedChecklist) {
-
-                    subtasks.add(new Subtask("test1"));
-                    subtasks.add(new Subtask("test2"));
-
-                    // TODO whatever it is to be done with checklist
+                    subtasks = subtaskListAdapter.getTasks();
+                    boolean n = true;
                 }
 
                 Log.d(TAG, "onClick: task Name " + taskName);
@@ -254,7 +251,6 @@ public class AddTaskFragment extends DialogFragment {
         addSubtaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                // TODO add subtask
                 subtaskListAdapter.addTask(new Subtask(""));
             }
         });

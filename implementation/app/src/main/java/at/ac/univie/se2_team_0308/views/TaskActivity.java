@@ -53,6 +53,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private TaskViewModel viewModel;
 
+    private SubtaskListAdapter subtaskListAdapter;
     private RecyclerView subtasksRecView;
     private RelativeLayout subtasksRelLayout;
     private Button addSubtaskButton;
@@ -87,7 +88,7 @@ public class TaskActivity extends AppCompatActivity {
         });
 
         addSubtaskButton.setOnClickListener(view -> {
-            System.out.print("ADD new subtask request");
+            subtaskListAdapter.addTask(new Subtask(""));
         });
     }
 
@@ -213,6 +214,7 @@ public class TaskActivity extends AppCompatActivity {
                     incomingChecklist.setDescription(incomingTask.getDescription());
                     incomingChecklist.setPriority(incomingTask.getPriority());
                     incomingChecklist.setStatus(incomingTask.getStatus());
+                    incomingChecklist.setSubtasks(subtaskListAdapter.getTasks());
                     viewModel.updateChecklist(incomingChecklist);
                 }
                 Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
@@ -227,7 +229,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void setSubtasksView(DisplayClass incomingTask){
-        SubtaskListAdapter adapter = new SubtaskListAdapter(this, incomingTask.getSubtasks(), new SubtaskListAdapter.onSubtaskClickListener(){
+        subtaskListAdapter = new SubtaskListAdapter(this, incomingTask.getSubtasks(), new SubtaskListAdapter.onSubtaskClickListener(){
             @Override
             public void onDelete(Subtask taskModel) {
                 System.out.print("subtask DELETE request");
@@ -241,7 +243,7 @@ public class TaskActivity extends AppCompatActivity {
                 System.out.print("subtask CHECKED request: " + isChecked);
             }
         });
-        subtasksRecView.setAdapter(adapter);
+        subtasksRecView.setAdapter(subtaskListAdapter);
         subtasksRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
     private void initViews() {
