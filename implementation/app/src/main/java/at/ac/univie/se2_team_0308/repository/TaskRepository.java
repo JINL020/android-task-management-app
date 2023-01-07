@@ -6,6 +6,9 @@ import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
@@ -29,8 +32,19 @@ public class TaskRepository {
         return allTasks;
     }
 
-    public void insertTaskAppointment(TaskAppointment taskAppointment) {
-        AppDatabase.databaseWriteExecutor.execute( () -> taskAppointmentDao.insert(taskAppointment));
+    public long insertTaskAppointment(TaskAppointment taskAppointment) {
+        Callable<Long> insertCallable = () -> taskAppointmentDao.insert(taskAppointment);
+        long rowId = 0;
+
+        Future<Long> future = AppDatabase.databaseWriteExecutor.submit(insertCallable);
+        try {
+            rowId = future.get();
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return rowId;
     }
 
     public void insertTaskChecklist(TaskChecklist taskChecklist) {
