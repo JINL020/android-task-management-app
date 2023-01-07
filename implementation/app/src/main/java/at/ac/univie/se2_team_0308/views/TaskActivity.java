@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,6 +48,7 @@ public class TaskActivity extends AppCompatActivity {
     private RelativeLayout subtasksView;
     private RelativeLayout deadlineRelLayout;
     private DatePicker deadlineSpinnerPicker;
+    private TimePicker timePicker;
 
     private TaskViewModel viewModel;
     private TextView subtasksList;
@@ -230,5 +232,7 @@ public class TaskActivity extends AppCompatActivity {
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);
         deadlineRelLayout = findViewById(R.id.relLayoutTaskDeadlineEdit);
         deadlineSpinnerPicker = findViewById(R.id.datePickerEdit);
+        timePicker = findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
     }
 }
