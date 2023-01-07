@@ -1,8 +1,11 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -15,13 +18,18 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.databinding.ActivityMainBinding;
 import at.ac.univie.se2_team_0308.models.ATask;
+import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.models.TaskAppointment;
+import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
@@ -30,6 +38,7 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 public class MainActivity extends AppCompatActivity implements IObserver {
 
     private static final String TAG = "MAIN_ACTIVITY";
+    public static final String EVENT_KEY = "appointment";
 
     private ActivityMainBinding binding;
     private static Context context;
@@ -53,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         initNotificationChannel();
 
         taskViewModel.attachObserver(this);
-        Log.d(TAG, "attached  observer to taskViewModel");
+        Log.d(TAG, "attached  observer to taskViewModel(MainActivity)");
 
         eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
             @Override
@@ -91,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         if (event == ENotificationEvent.CREATE) {
             eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message);
+            if (tasks[0].getCategory().equals(ECategory.APPOINTMENT)) {
+                setAlarm((TaskAppointment) tasks[0], message);
+            }
         }
         if (event == ENotificationEvent.UPDATE) {
             eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message);
@@ -120,11 +132,29 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
     }
 
-    private void initNotificationChannel(){
+    private void initNotificationChannel() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(notificationChannel);
         }
+    }
+
+    private void setAlarm(TaskAppointment appointment, String message) {
+        Date deadline = appointment.getDeadline();
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        Bundle extras = new Bundle();
+        extras.putString(EVENT_KEY, message);
+        intent.putExtras(extras);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(deadline);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Log.d(TAG, "set alarm for " + appointment);
     }
 }
