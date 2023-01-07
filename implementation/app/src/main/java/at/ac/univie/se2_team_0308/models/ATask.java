@@ -15,7 +15,7 @@ public abstract class ATask {
     private boolean isSelected = false;
     private ECategory category;
 
-   // @TypeConverters(DateConverter.class)
+    // @TypeConverters(DateConverter.class)
     private Date creationDate;
 
     public static final String TAG ="Task";
@@ -93,7 +93,6 @@ public abstract class ATask {
         this.creationDate = creationDate;
     }
 
-    @Override
     public String toString() {
         return "ATask{" +
                 "id=" + id +
@@ -112,7 +111,12 @@ public abstract class ATask {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ATask task = (ATask) o;
-        return id == task.id && isSelected == task.isSelected && Objects.equals(taskName, task.taskName) && Objects.equals(description, task.description) && priority == task.priority && status == task.status && category == task.category && Objects.equals(creationDate, task.creationDate);
+        return id == task.id
+                && isSelected == task.isSelected
+                && Objects.equals(taskName, task.taskName)
+                && Objects.equals(description, task.description)
+                && priority == task.priority && status == task.status && category == task.category
+                && Objects.equals(creationDate, task.creationDate);
     }
 
     @Override

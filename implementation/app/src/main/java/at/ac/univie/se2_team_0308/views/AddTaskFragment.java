@@ -37,7 +37,6 @@ import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class AddTaskFragment extends DialogFragment {
-
     public static final String TAG = "addtaskfragment";
 
     public interface SendDataFromAddDialog {
@@ -74,6 +73,16 @@ public class AddTaskFragment extends DialogFragment {
     private RelativeLayout subtasksRelLayout;
     private Button addSubtaskButton;
 
+    public AddTaskFragment(ListFragment listFragment) {
+        try {
+            listener = (AddTaskDialogListener) listFragment;
+            inputListener = (SendDataFromAddDialog) listFragment;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString());
+        }
+    }
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -108,19 +117,17 @@ public class AddTaskFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setView(view)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // nothing, we override it later
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.onDialogNegativeClick(AddTaskFragment.this, true);
-                    }
-                });
+        builder.setView(view).setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // nothing, we override it later
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                listener.onDialogNegativeClick(AddTaskFragment.this, true);
+            }
+        });
 
         final AlertDialog dialog = builder.create();
         dialog.show();
@@ -156,7 +163,7 @@ public class AddTaskFragment extends DialogFragment {
 
                 Date deadline = Calendar.getInstance().getTime();
 
-                if(isSelectedAppointment) {
+                if (isSelectedAppointment) {
                     int day = spinnerDatePicker.getDayOfMonth();
                     int month = spinnerDatePicker.getMonth();
                     int year = spinnerDatePicker.getYear();
@@ -197,17 +204,6 @@ public class AddTaskFragment extends DialogFragment {
             }
         });
         return dialog;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            listener = (AddTaskDialogListener) context;
-            inputListener = (SendDataFromAddDialog) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString());
-        }
     }
 
     private void initViews(View view) {

@@ -238,7 +238,7 @@ public class TaskActivity extends AppCompatActivity {
         editTaskDescription = findViewById(R.id.updateTaskDescription);
         editTaskPriority = findViewById(R.id.spinnerUpdateTaskPriority);
         editTaskStatus = findViewById(R.id.spinnerUpdateTaskStatus);
-        btnUpdateTask = findViewById(R.id.btnUpdate);
+        btnUpdateTask = findViewById(R.id.btnUpdateTaskInfo);
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);
         deadlineRelLayout = findViewById(R.id.relLayoutTaskDeadlineEdit);
         deadlineSpinnerPicker = findViewById(R.id.datePickerEdit);

@@ -7,6 +7,8 @@
     <string name="hideTasks">Hide</string>
     <string name="export">Export</string>
     <string name="update">Update</string>
+    <string name="exportJson">Export JSON</string>
+    <string name="exportXml">Export XML</string>
 
     <string-array name="priorities">
         <item>LOW</item>
@@ -23,4 +25,9 @@
     <string-array name="properties">
         <item>PRIORITY TO HIGH</item>
     </string-array>
+
+    <string name="title_list">List</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_activity_main2">MainActivity2</string>
 </resources>

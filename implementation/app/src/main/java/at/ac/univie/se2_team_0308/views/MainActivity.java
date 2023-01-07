@@ -1,26 +1,23 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.R;
+import at.ac.univie.se2_team_0308.databinding.ActivityMainBinding;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
 import at.ac.univie.se2_team_0308.models.ECategory;
@@ -32,171 +29,100 @@ import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
+import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
+import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
-import at.ac.univie.se2_team_0308.views.AddTaskFragment.SendDataFromAddDialog;
 
-public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, SendDataFromAddDialog, PropertyToBeUpdated.SelectPropertyToUpdateDialogListener, PropertyToBeUpdated.SendDataFromSelectPropertyUpdateDialog {
+public class MainActivity extends AppCompatActivity implements IObserver {
 
-    public static final String TAG = "main act";
+    private static final String TAG = "MAIN_ACTIVITY";
 
-    private RecyclerView recViewTasks;
-    private FloatingActionButton fabAdd;
-    private TaskListAdapter adapter;
-    private TaskViewModel viewModel;
+    private ActivityMainBinding binding;
+    private static Context context;
 
-    private Button btnSelect;
-    private boolean selectedPressed;
-    private RelativeLayout layoutSelected;
-    private Button btnDelete;
-    private Button btnHide;
-    private Button btnExport;
-    private Button btnUpdate;
-
-    private static ATaskFactory taskFactory;
+    private EventNotifierViewModel eventNotifierViewModel;
+    private TaskViewModel taskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        initViews();
-        initViewModel();
-        initRecyclerViews();
+        context = getApplicationContext();
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        fabAdd.setOnClickListener(new View.OnClickListener() {
+        setContentView(binding.getRoot());
+
+        configureBottomNavBar();
+
+        initViewModels();
+
+        taskViewModel.attachObserver(this);
+        Log.d(TAG, "attached  observer to taskViewModel");
+
+        eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
             @Override
-            public void onClick(View view) {
-                DialogFragment fragment = new AddTaskFragment();
-                fragment.show(getSupportFragmentManager(), "addtask");
-            }
-        });
-
-        btnSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-
-                selectedPressed = !selectedPressed;
-
-                if(selectedPressed){
-                    adapter.setSelectModeOn(true);
-                    fabAdd.setVisibility(View.GONE);
-                    layoutSelected.setVisibility(View.VISIBLE);
-                }
-                else {
-                    adapter.setSelectModeOn(false);
-                    fabAdd.setVisibility(View.VISIBLE);
-                    layoutSelected.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-                    viewModel.deleteAllSelectedTasks(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist());
-                }
-            }
-        });
-
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment fragment = new PropertyToBeUpdated();
-                fragment.show(getSupportFragmentManager(), "update_property");
-                /*if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
-                }*/
-            }
-        });
-    }
-
-    private void initViewModel() {
-        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        viewModel.init(getApplication());
-        viewModel.getAllLiveTasks().observe(this, new Observer<Pair<List<TaskAppointment>, List<TaskChecklist>>>() {
-            @Override
-            public void onChanged(Pair<List<TaskAppointment>, List<TaskChecklist>> taskModels) {
-                adapter.setTasks(viewModel.getAllTasks());
-                adapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    private void initRecyclerViews() {
-        adapter = new TaskListAdapter(this, viewModel.getAllTasks(), new TaskListAdapter.onSelectItemListener() {
-            @Override
-            public void onItemSelected(ATask taskModel) {
-                if (taskModel.isSelected()) {
-                    if (taskModel.getCategory() == ECategory.APPOINTMENT) {
-                        viewModel.selectTaskAppointment(taskModel);
-                    } else {
-                        viewModel.selectTaskChecklist(taskModel);
+            public void onChanged(List<EventNotifier> eventNotifiers) {
+                for (EventNotifier notifier : eventNotifiers) {
+                    if (notifier.getEvent() == ENotificationEvent.CREATE) {
+                        eventNotifierViewModel.setOnCreateNotifier(notifier.getNotifier());
                     }
-                    Log.d(TAG, "onItemSelected: item is selected");
-                } else {
-                    if (taskModel.getCategory() == ECategory.APPOINTMENT) {
-                        viewModel.deselectTaskAppointment(taskModel);
-                    } else {
-                        viewModel.deselectTaskChecklist(taskModel);
+                    if (notifier.getEvent() == ENotificationEvent.UPDATE) {
+                        eventNotifierViewModel.setOnUpdateNotifier(notifier.getNotifier());
                     }
-                    Log.d(TAG, "onItemSelected: item is deselected");
+                    if (notifier.getEvent() == ENotificationEvent.DELETE) {
+                        eventNotifierViewModel.setOnDeleteNotifier(notifier.getNotifier());
+                    }
                 }
+
+                Log.d(TAG, "Saved settings:\n" + eventNotifiers.toString());
             }
         });
-        recViewTasks.setAdapter(adapter);
-        recViewTasks.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+
     }
 
-    private void initViews() {
-        fabAdd = findViewById(R.id.fabAdd);
-        recViewTasks = findViewById(R.id.recViewTasks);
-        btnSelect = findViewById(R.id.btnSelect);
-        layoutSelected = findViewById(R.id.layoutSelect);
-        layoutSelected.setVisibility(View.GONE);
-        btnDelete = findViewById(R.id.btnDelete);
-        btnHide = findViewById(R.id.btnHide);
-        btnExport = findViewById(R.id.btnExport);
-        btnUpdate = findViewById(R.id.btnUpdate);
+    public static Context getAppContext() {
+        return MainActivity.context;
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
-        if (wantToCloseDialog) {
-            dialogFragment.dismiss();
+    public void receivedUpdate(ENotificationEvent event, ATask... tasks) {
+        String message = "";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            message = Arrays.stream(tasks).map(ATask::getTaskName).collect(Collectors.joining("\n"));
+        }
+
+        Log.d(TAG, "received update from taskViewModel:" + event.name() + message);
+
+        if (event == ENotificationEvent.CREATE) {
+            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message);
+        }
+        if (event == ENotificationEvent.UPDATE) {
+            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message);
+        }
+        if (event == ENotificationEvent.DELETE) {
+            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message);
         }
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
-        if (wantToCloseDialog) {
-            dialogFragment.dismiss();
-        }
+    protected void onDestroy() {
+        super.onDestroy();
+        taskViewModel.detachObserver(this);
     }
 
-    @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<Subtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
-        Log.d(TAG, "sendDataResult: taskName" + taskName);
-        Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
-        Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
-        Log.d(TAG, "sendDataResult: statusEnum" + statusEnum.toString());
-        Log.d(TAG, "sendDataResult: deadline" + deadline.toString());
-        if (isSelectedAppointment) {
-            taskFactory = new TaskAppointmentFactory();
-            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
-        } else if (isSelectedChecklist) {
-            taskFactory = new TaskChecklistFactory();
-            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks));
-        }
-        recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
+    private void configureBottomNavBar() {
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_list, R.id.navigation_calendar, R.id.navigation_settings).build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.bottomNavView, navController);
     }
 
-    @Override
-    public void sendDataResult(String propertyName) {
-        if ((viewModel.getSelectedTasksAppointment() != null)  && (viewModel.getSelectedTasksChecklist() != null) ) {
-            if(!viewModel.getSelectedTasksAppointment().isEmpty() || !viewModel.getSelectedTasksChecklist().isEmpty()) {
-                viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
-            }
-        }
+    private void initViewModels() {
+        eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
     }
 }
