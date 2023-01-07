@@ -13,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ public class AddTaskFragment extends DialogFragment {
     private AddTaskDialogListener listener;
     private SendDataFromAddDialog inputListener;
     private DatePicker spinnerDatePicker;
+    private TimePicker timePicker;
 
     private RelativeLayout relLayoutCard;
     private RelativeLayout relLayoutChooseDeadline;
@@ -192,6 +194,8 @@ public class AddTaskFragment extends DialogFragment {
         spinnerDatePicker = view.findViewById(R.id.spinnerDatePicker);
         relLayoutChooseDeadline = view.findViewById(R.id.relLayoutChooseDeadline);
         taskTypeValidation = view.findViewById(R.id.taskTypeValidation);
+        timePicker = view.findViewById(R.id.timePickerAddTaskDialog);
+        timePicker.setIs24HourView(true);
     }
 
     @Override
