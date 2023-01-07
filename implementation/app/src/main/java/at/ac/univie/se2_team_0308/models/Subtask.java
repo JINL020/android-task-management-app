@@ -15,6 +15,7 @@ import java.util.Objects;
 
 @Entity(tableName = "checklist_subtask")
 public class Subtask  implements Parcelable {
+    public static final String TAG = "Subtask";
 
     @PrimaryKey(autoGenerate = true)
     private int id;

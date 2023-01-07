@@ -32,12 +32,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         setStatus(EStatus.valueOf(in.readString()));
         setCategory(ECategory.valueOf(in.readString()));
         setCreationDate(new Date(in.readLong()));
-        try{
-            setSubtasks(in.createTypedArrayList(Subtask.CREATOR));
-        } catch (RuntimeException e){
-            String n = e.getMessage();
-            boolean nn = true;
-        }
+        setSubtasks(in.createTypedArrayList(Subtask.CREATOR));
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {

@@ -169,7 +169,6 @@ public class AddTaskFragment extends DialogFragment {
                 List<Subtask> subtasks = new ArrayList<>();
                 if(isSelectedChecklist) {
                     subtasks = subtaskListAdapter.getTasks();
-                    boolean n = true;
                 }
 
                 Log.d(TAG, "onClick: task Name " + taskName);
@@ -231,20 +230,7 @@ public class AddTaskFragment extends DialogFragment {
     }
 
     private void initSubtasksView(){
-         subtaskListAdapter = new SubtaskListAdapter(requireActivity(), new ArrayList<>(), new SubtaskListAdapter.onSubtaskClickListener(){
-            @Override
-            public void onDelete(Subtask taskModel) {
-                System.out.print("subtask DELETE request");
-            }
-            @Override
-            public void onAdd(Subtask taskModel) {
-                System.out.print("subtask ADD request");
-            }
-            @Override
-            public void onSubtaskChecked(Subtask taskModel, boolean isChecked) {
-                System.out.print("subtask CHECKED request: " + isChecked);
-            }
-        });
+         subtaskListAdapter = new SubtaskListAdapter(requireActivity(), new ArrayList<>());
         subtasksRecView.setAdapter(subtaskListAdapter);
         subtasksRecView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
 

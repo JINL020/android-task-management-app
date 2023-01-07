@@ -28,23 +28,15 @@ import at.ac.univie.se2_team_0308.models.Subtask;
 
 public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.ViewHolder> {
 
-    public interface onSubtaskClickListener {
-        void onDelete(Subtask taskModel);
-        void onAdd(Subtask taskModel);
-        void onSubtaskChecked(Subtask taskModel, boolean isChecked);
-    }
-
-    public static final String TAG = "";
+    public static final String TAG = "SubtaskListAdapter";
 
     private List<Subtask> tasks;
     private Context context;
     private boolean hasAnotherLevelOfSubtasks = true;
-    private onSubtaskClickListener onSubtaskClickListener;
 
-    public SubtaskListAdapter(Context context, List<Subtask> tasks, onSubtaskClickListener onSubtaskClickListener) {
+    public SubtaskListAdapter(Context context, List<Subtask> tasks) {
         this.context = context;
         this.tasks = tasks;
-        this.onSubtaskClickListener = onSubtaskClickListener;
     }
 
     public void setHasAnotherLevelOfSubtasks(boolean value){
@@ -71,12 +63,10 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 int adapterPosition = holder.getAdapterPosition();
@@ -89,42 +79,25 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
             int adapterPosition = holder.getAdapterPosition();
             EStatus state = holder.checkBox.isChecked() ? EStatus.COMPLETED : EStatus.NOT_STARTED;
             tasks.get(adapterPosition).setState(state);
-            onSubtaskClickListener.onSubtaskChecked(tasks.get(holder.getAdapterPosition()), holder.checkBox.isChecked());
         });
 
         holder.deleteButton.setOnClickListener(view -> {
             int adapterPosition = holder.getAdapterPosition();
-            onSubtaskClickListener.onDelete(tasks.get(adapterPosition));
             tasks.get(adapterPosition).removeAllSubtasks();
-            removeTask(tasks.get(adapterPosition));
+            tasks.remove(tasks.get(adapterPosition));
+            notifyDataSetChanged();
         });
 
         if(hasAnotherLevelOfSubtasks){
-            // add button is displayed only for subtask which can have another level
 
-
-            SubtaskListAdapter adapter = new SubtaskListAdapter(context, tasks.get(position).getSubtasks(), new SubtaskListAdapter.onSubtaskClickListener(){
-                @Override
-                public void onDelete(Subtask taskModel) {
-                    System.out.print("subtask DELETE request");
-                }
-                @Override
-                public void onAdd(Subtask taskModel) {
-                    return;
-                } //
-                @Override
-                public void onSubtaskChecked(Subtask taskModel, boolean isChecked) {
-                    System.out.print("subtask CHECKED request: " + isChecked);
-                }
-            });
+            SubtaskListAdapter adapter = new SubtaskListAdapter(context, tasks.get(position).getSubtasks());
             // we don't want to have infinite subtask levels
             adapter.setHasAnotherLevelOfSubtasks(false);
             holder.subSubtasksRecView.setAdapter(adapter);
             holder.subSubtasksRecView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-
+            // add button is displayed only for subtask which can have another level
             holder.addButton.setOnClickListener(view -> {
                 int adapterPosition = holder.getAdapterPosition();
-                onSubtaskClickListener.onAdd(tasks.get(adapterPosition));
                 tasks.get(adapterPosition).addSubtask(new Subtask(""));
                 notifyDataSetChanged();
             });
@@ -143,18 +116,9 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
     public List<Subtask>  getTasks(){
         return this.tasks;
     }
-    public void setTasks(List<Subtask> tasks) {
-        this.tasks = tasks;
-        notifyDataSetChanged();
-    }
 
     public void addTask(Subtask task){
         this.tasks.add(task);
-        notifyDataSetChanged();
-    }
-
-    public void removeTask(Subtask task){
-        this.tasks.remove(task);
         notifyDataSetChanged();
     }
 

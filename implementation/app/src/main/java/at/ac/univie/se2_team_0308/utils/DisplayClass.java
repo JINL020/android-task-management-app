@@ -63,7 +63,7 @@ public class DisplayClass implements Parcelable {
         categoryEnum = ECategory.valueOf(in.readString());
         creationDate = new Date(in.readLong());
         deadline = new Date(in.readLong());
-        subtasks = in.readArrayList(Subtask.class.getClassLoader());
+        subtasks = in.createTypedArrayList(Subtask.CREATOR);
     }
 
     public int getId() {
@@ -173,6 +173,6 @@ public class DisplayClass implements Parcelable {
         parcel.writeString(categoryEnum.toString());
         parcel.writeLong(deadline.getTime());
         parcel.writeLong(creationDate.getTime());
-        // TODO parcel.writeList(subtasks);
+        parcel.writeTypedList(subtasks);
     }
 }

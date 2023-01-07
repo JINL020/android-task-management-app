@@ -35,6 +35,8 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class TaskActivity extends AppCompatActivity {
 
+    public static final String TAG = "TaskActivity";
+
     private EditText editTaskName;
     private EditText editTaskDescription;
     private Spinner editTaskPriority;
@@ -57,8 +59,6 @@ public class TaskActivity extends AppCompatActivity {
     private RecyclerView subtasksRecView;
     private RelativeLayout subtasksRelLayout;
     private Button addSubtaskButton;
-
-    public static final String TAG = "TaskActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,20 +229,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void setSubtasksView(DisplayClass incomingTask){
-        subtaskListAdapter = new SubtaskListAdapter(this, incomingTask.getSubtasks(), new SubtaskListAdapter.onSubtaskClickListener(){
-            @Override
-            public void onDelete(Subtask taskModel) {
-                System.out.print("subtask DELETE request");
-            }
-            @Override
-            public void onAdd(Subtask taskModel) {
-                System.out.print("subtask ADD request");
-            }
-            @Override
-            public void onSubtaskChecked(Subtask taskModel, boolean isChecked) {
-                System.out.print("subtask CHECKED request: " + isChecked);
-            }
-        });
+        subtaskListAdapter = new SubtaskListAdapter(this, incomingTask.getSubtasks());
         subtasksRecView.setAdapter(subtaskListAdapter);
         subtasksRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
