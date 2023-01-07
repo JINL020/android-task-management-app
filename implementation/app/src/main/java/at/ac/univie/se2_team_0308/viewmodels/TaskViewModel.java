@@ -31,6 +31,7 @@ public class TaskViewModel extends AndroidViewModel {
         super(application);
         this.repository = new TaskRepository(application);
         this.allTasks = repository.getAllTasks();
+        boolean n = true;
     }
 
     public void init(Application application){

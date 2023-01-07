@@ -173,6 +173,6 @@ public class DisplayClass implements Parcelable {
         parcel.writeString(categoryEnum.toString());
         parcel.writeLong(deadline.getTime());
         parcel.writeLong(creationDate.getTime());
-        parcel.writeList(subtasks);
+        // TODO parcel.writeList(subtasks);
     }
 }

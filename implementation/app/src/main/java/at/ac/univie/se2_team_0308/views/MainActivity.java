@@ -26,6 +26,7 @@ import at.ac.univie.se2_team_0308.models.ATaskFactory;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
+import at.ac.univie.se2_team_0308.models.Subtask;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
     }
 
     @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
+    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<Subtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
         Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
         Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskFragment.A
             viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
         } else if (isSelectedChecklist) {
             taskFactory = new TaskChecklistFactory();
-            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks));
         }
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }

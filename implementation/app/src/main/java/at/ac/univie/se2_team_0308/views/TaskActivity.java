@@ -133,6 +133,7 @@ public class TaskActivity extends AppCompatActivity {
             case "APPOINTMENT":
                 Log.d(TAG, "onCreate: isappointment");
                 subtasksRelLayout.setVisibility(View.GONE);
+                addSubtaskButton.setVisibility(View.GONE);
                 deadlineRelLayout.setVisibility(View.VISIBLE);
 
                 Date incomingDate = incomingTask.getDeadline();
@@ -148,6 +149,7 @@ public class TaskActivity extends AppCompatActivity {
                 break;
             case "CHECKLIST":
                 subtasksRelLayout.setVisibility(View.VISIBLE);
+                addSubtaskButton.setVisibility(View.VISIBLE);
                 deadlineRelLayout.setVisibility(View.GONE);
                 Log.d(TAG, "onBindViewHolder: the subtasks is not null");
                 if (incomingTask.getSubtasks() != null && !incomingTask.getSubtasks().isEmpty()) {

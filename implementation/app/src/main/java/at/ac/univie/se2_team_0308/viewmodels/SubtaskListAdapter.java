@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
@@ -55,6 +56,7 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
         holder.subtaskTitle.setText(tasks.get(position).getName());
         // TODO listener for text input
         holder.checkBox.setChecked(tasks.get(position).getState() == EStatus.COMPLETED);
+
         holder.checkBox.setOnClickListener(view -> {
             onSubtaskClickListener.onSubtaskChecked(tasks.get(holder.getAdapterPosition()), holder.checkBox.isChecked());
         });
@@ -66,6 +68,22 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
             int adapterPosition = holder.getAdapterPosition();
             onSubtaskClickListener.onDelete(tasks.get(adapterPosition));
         });
+        SubtaskListAdapter adapter = new SubtaskListAdapter(context, tasks.get(position).getSubtasks(), new SubtaskListAdapter.onSubtaskClickListener(){
+            @Override
+            public void onDelete(Subtask taskModel) {
+                System.out.print("subtask DELETE request");
+            }
+            @Override
+            public void onAdd(Subtask taskModel) {
+                System.out.print("subtask ADD request");
+            }
+            @Override
+            public void onSubtaskChecked(Subtask taskModel, boolean isChecked) {
+                System.out.print("subtask CHECKED request: " + isChecked);
+            }
+        });
+        holder.subSubtasksRecView.setAdapter(adapter);
+        holder.subSubtasksRecView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
     }
 
     @Override
@@ -81,6 +99,16 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
         notifyDataSetChanged();
     }
 
+    public void addTask(Subtask task){
+        this.tasks.add(task);
+        notifyDataSetChanged();
+    }
+
+    public void removeTask(Subtask task){
+        this.tasks.remove(task);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private CheckBox checkBox;
@@ -88,6 +116,7 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
         private MaterialCardView parent;
         private ImageButton addButton;
         private ImageButton deleteButton;
+        private RecyclerView subSubtasksRecView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,6 +124,7 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
             subtaskTitle = itemView.findViewById(R.id.subtaskEditText);
             addButton = itemView.findViewById(R.id.subtaskAddBtn);
             deleteButton = itemView.findViewById(R.id.subtaskDeleteBtn);
+            subSubtasksRecView = itemView.findViewById(R.id.subtaskDeeperRecView);
         }
     }
 }

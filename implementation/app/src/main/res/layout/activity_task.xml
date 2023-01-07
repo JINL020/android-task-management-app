@@ -218,6 +218,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/subtasksRelLayout"
                     android:text="Add Subtask"
+                    android:visibility="gone"
                     />
 
                 <RelativeLayout

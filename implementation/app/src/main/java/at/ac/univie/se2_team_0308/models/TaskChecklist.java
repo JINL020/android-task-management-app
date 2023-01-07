@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.TypeConverters;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +32,12 @@ public class TaskChecklist extends ATask implements Parcelable {
         setStatus(EStatus.valueOf(in.readString()));
         setCategory(ECategory.valueOf(in.readString()));
         setCreationDate(new Date(in.readLong()));
-        setSubtasks(in.readArrayList(Subtask.class.getClassLoader()));
+        try{
+            setSubtasks(in.createTypedArrayList(Subtask.CREATOR));
+        } catch (RuntimeException e){
+            String n = e.getMessage();
+            boolean nn = true;
+        }
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {
@@ -60,7 +66,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeString(String.valueOf(getStatus()));
         parcel.writeString(ECategory.CHECKLIST.name());
         parcel.writeLong(getCreationDate().getTime());
-        parcel.writeList(getSubtasks());
+        parcel.writeTypedList(subtasks);
     }
 
     @Override
@@ -71,7 +77,9 @@ public class TaskChecklist extends ATask implements Parcelable {
                 '}';
     }
 
-    public List<Subtask> getSubtasks() { return subtasks;}
+    public List<Subtask> getSubtasks() {
+        return subtasks;
+    }
     public void setSubtasks(List<Subtask> subtasks) {
         this.subtasks = subtasks;
     }

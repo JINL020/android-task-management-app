@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity(tableName = "checklist_subtask")
-public class Subtask  { // implements Parcelable
+public class Subtask  implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -29,11 +29,24 @@ public class Subtask  { // implements Parcelable
     }
 
     protected Subtask(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
+        setId(in.readInt());
+        setName(in.readString());
+        setState(EStatus.valueOf(in.readString()));
+        this.subtasks = new LinkedHashMap<Integer, Subtask>();
+        setSubtasks(in.createTypedArrayList(Subtask.CREATOR));
     }
 
+    public static final Creator<Subtask> CREATOR = new Creator<Subtask>() {
+        @Override
+        public Subtask createFromParcel(Parcel in) {
+            return new Subtask(in);
+        }
 
+        @Override
+        public Subtask[] newArray(int size) {
+            return new Subtask[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -122,33 +135,16 @@ public class Subtask  { // implements Parcelable
         return Objects.hash(id, name, state);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-//    public static final Creator<Subtask> CREATOR = new Creator<Subtask>() {
-//        @Override
-//        public Subtask createFromParcel(Parcel in) {
-//            return new Subtask(in);
-//        }
-//
-//        @Override
-//        public Subtask[] newArray(int size) {
-//            return new Subtask[size];
-//        }
-//    };
-
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel in, int i) {
-//        setId(in.readInt());
-//        setName(in.readString());
-//        setState(EStatus.valueOf(in.readString()));
-//        List<Subtask> subtasksList = new ArrayList<>();
-//        in.readList(subtasksList, Subtask.class.getClassLoader());
-//        for(Subtask s : subtasksList){
-//            addSubtask(s);
-//        }
-//    }
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(String.valueOf(getState()));
+        parcel.writeTypedList(getSubtasks());
+    }
 }
