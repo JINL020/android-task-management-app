@@ -219,6 +219,7 @@ public class TaskActivity extends AppCompatActivity {
 
                     incomingAppointment.setDeadline(incomingTask.getDeadline());
                     viewModel.updateAppointment(incomingAppointment);
+
                 }
                 if (incomingTask.getCategoryEnum() == ECategory.CHECKLIST){
                     incomingChecklist.setTaskName(incomingTask.getTaskName());
