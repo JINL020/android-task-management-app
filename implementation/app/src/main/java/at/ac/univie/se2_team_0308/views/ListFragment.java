@@ -1,6 +1,5 @@
 package at.ac.univie.se2_team_0308.views;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -19,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -28,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -49,7 +45,6 @@ import at.ac.univie.se2_team_0308.utils.export.EFormat;
 import at.ac.univie.se2_team_0308.utils.export.Exporter;
 import at.ac.univie.se2_team_0308.utils.filter.FilterManager;
 import at.ac.univie.se2_team_0308.utils.filter.HiddenTasksFilter;
-import at.ac.univie.se2_team_0308.utils.filter.IFilter;
 import at.ac.univie.se2_team_0308.utils.filter.UnhiddenTasksFilter;
 import at.ac.univie.se2_team_0308.utils.import_tasks.ImporterFacade;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
@@ -167,10 +162,20 @@ public class ListFragment extends ATaskListFragment {
             @Override
             public void onClick(View view) {
                 if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
-                    if(switchHidden.isChecked()) {
-                        viewModel.hideAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), false);
-                    } else {
-                        viewModel.hideAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), true);
+                    if (!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
+                        if(switchHidden.isChecked()) {
+                            viewModel.hideAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), false);
+                            adapter.setSelectModeOn(false);
+                            viewModel.deselectAllTaskAppointment();
+                            viewModel.deselectAllTaskChecklist();
+                            showLayout(ELayout.ADD);
+                        } else {
+                            viewModel.hideAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), true);
+                            adapter.setSelectModeOn(false);
+                            viewModel.deselectAllTaskAppointment();
+                            viewModel.deselectAllTaskChecklist();
+                            showLayout(ELayout.ADD);
+                        }
                     }
                 }
             }
