@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.databinding.FragmentCalendarBinding;
+import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
 import at.ac.univie.se2_team_0308.models.ECategory;
@@ -342,7 +343,7 @@ public class CalendarFragment extends ATaskListFragment {
     }
 
     @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
+    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
         Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
         Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
@@ -350,10 +351,10 @@ public class CalendarFragment extends ATaskListFragment {
         Log.d(TAG, "sendDataResult: deadline" + deadline.toString());
         if (isSelectedAppointment) {
             taskFactory = new TaskAppointmentFactory();
-            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks));
         } else if (isSelectedChecklist) {
             taskFactory = new TaskChecklistFactory();
-            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks));
         }
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }
@@ -366,5 +367,4 @@ public class CalendarFragment extends ATaskListFragment {
                     importerFacade.importTasks(uri);
                 }
             });
-
 }
