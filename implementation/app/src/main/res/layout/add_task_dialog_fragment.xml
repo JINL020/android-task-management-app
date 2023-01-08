@@ -1,124 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:backgroundTint="#FFFFFF"
-    app:cardElevation="10dp"
     app:cardCornerRadius="10dp"
-    >
+    app:cardElevation="10dp">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <RelativeLayout
+            android:id="@+id/relLayoutCard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/relLayoutCard"
-            android:padding="30sp"
-            >
+            android:padding="30sp">
 
             <TextView
                 android:id="@+id/AddNewTaskTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:text="Add New Task"
                 android:textColor="#FF8F6372"
-                android:layout_centerHorizontal="true"
                 android:textSize="30sp"
-                android:textStyle="bold"/>
-
+                android:textStyle="bold" />
 
 
             <RelativeLayout
+                android:id="@+id/relLayoutTaskTitle"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/AddNewTaskTitle"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/relLayoutTaskTitle"
                 android:layout_marginTop="20dp">
 
                 <TextView
+                    android:id="@+id/txtTaskName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Task Title"
                     android:textStyle="italic"
-                    android:id="@+id/txtTaskName"
 
                     />
 
                 <EditText
-                    android:layout_below="@+id/txtTaskName"
-                    android:hint="Enter Task Title"
                     android:id="@+id/editTaskName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    />
+                    android:layout_below="@+id/txtTaskName"
+                    android:hint="Enter Task Title" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/relLayoutTaskDescription"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayoutTaskTitle"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/relLayoutTaskDescription"
                 android:layout_marginTop="20dp">
 
                 <TextView
+                    android:id="@+id/txtTaskDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Task Description"
                     android:textStyle="italic"
-                    android:id="@+id/txtTaskDescription"
 
                     />
 
                 <EditText
-                    android:layout_below="@+id/txtTaskDescription"
-                    android:hint="Enter Task Description"
                     android:id="@+id/editTaskDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    />
+                    android:layout_below="@+id/txtTaskDescription"
+                    android:hint="Enter Task Description" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/relLayoutTaskType"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayoutTaskDescription"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/relLayoutTaskType"
                 android:layout_marginTop="20dp">
 
                 <TextView
+                    android:id="@+id/txtChooseTaskType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Choose Task Type:"
                     android:textStyle="italic"
-                    android:id="@+id/txtChooseTaskType"
 
                     />
 
                 <RadioGroup
-                    android:layout_below="@+id/txtChooseTaskType"
                     android:id="@+id/editTaskRadioGroupTaskType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_below="@+id/txtChooseTaskType"
+                    android:orientation="horizontal">
+
                     <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:id="@+id/radioButtonAppointment"
-                        android:text="Appointment"/>
-                    <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="Appointment" />
+
+                    <RadioButton
                         android:id="@+id/radioButtonChecklist"
-                        android:text="Checklist"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Checklist" />
 
                 </RadioGroup>
 
@@ -126,96 +122,101 @@
                     android:id="@+id/taskTypeValidation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#F44336"
-                    android:textStyle="italic"
                     android:layout_below="@+id/editTaskRadioGroupTaskType"
                     android:text="Please Select Task Type"
-                    android:visibility="gone"/>
+                    android:textColor="#F44336"
+                    android:textStyle="italic"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/relLayoutChooseDeadline"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayoutTaskType"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/relLayoutChooseDeadline"
                 android:layout_marginTop="20dp"
                 android:animateLayoutChanges="true"
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/txtTaskDeadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Task Deadline"
                     android:textStyle="italic"
-                    android:id="@+id/txtTaskDeadline"
 
                     />
 
                 <DatePicker
+                    android:id="@+id/spinnerDatePicker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtTaskDeadline"
-                    android:datePickerMode="spinner"
-                    android:id="@+id/spinnerDatePicker"
-                    android:entries="@array/statuses"
                     android:calendarViewShown="false"
-                    />
+                    android:datePickerMode="spinner"
+                    android:entries="@array/statuses" />
+
+                <TimePicker
+                    android:id="@+id/timePickerAddTaskDialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/spinnerDatePicker"
+                    android:timePickerMode="spinner" />
+
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/relLayoutTaskPriority"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayoutChooseDeadline"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/relLayoutTaskPriority"
                 android:layout_marginTop="20dp">
 
                 <TextView
+                    android:id="@+id/txtTaskPriority"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Task Priority"
                     android:textStyle="italic"
-                    android:id="@+id/txtTaskPriority"
 
                     />
 
                 <Spinner
+                    android:id="@+id/spinnerTaskPriority"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtTaskPriority"
-                    android:id="@+id/spinnerTaskPriority"
-                    android:entries="@array/priorities"
-                    />
+                    android:entries="@array/priorities" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/relLayoutTaskStatus"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayoutTaskPriority"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/relLayoutTaskStatus"
                 android:layout_marginTop="20dp">
 
                 <TextView
+                    android:id="@+id/txtTaskStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Task Status"
                     android:textStyle="italic"
-                    android:id="@+id/txtTaskStatus"
 
                     />
 
                 <Spinner
+                    android:id="@+id/spinnerTaskStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtTaskStatus"
-                    android:id="@+id/spinnerTaskStatus"
-                    android:entries="@array/statuses"
-                    />
+                    android:entries="@array/statuses" />
 
             </RelativeLayout>
 

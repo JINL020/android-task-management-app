@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     tools:context=".views.SettingsFragment">
 
     <TextView
@@ -11,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notify me when"
-        android:textColor="#FF8F6372"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,6 +92,31 @@
         android:text="Basic Notification"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkBoxOnDeletePopup" />
+
+    <TextView
+        android:id="@+id/textViewOnAppointment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upcoming appointment"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnDeleteBasic" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnAppointmentPopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Popup Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewOnAppointment" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnAppointmentBasic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Basic Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnAppointmentPopup" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

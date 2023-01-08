@@ -1,6 +1,11 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,13 +18,19 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.databinding.ActivityMainBinding;
 import at.ac.univie.se2_team_0308.models.ATask;
+import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.models.TaskAppointment;
+import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
@@ -28,9 +39,10 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 public class MainActivity extends AppCompatActivity implements IObserver {
 
     private static final String TAG = "MAIN_ACTIVITY";
+    public static final String EVENT_KEY = "appointment";
+    public static final String NOTIFIER_KEY = "notifier";
 
     private ActivityMainBinding binding;
-    private static Context context;
 
     private EventNotifierViewModel eventNotifierViewModel;
     private TaskViewModel taskViewModel;
@@ -39,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        context = getApplicationContext();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
@@ -48,8 +59,10 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         initViewModels();
 
+        initNotificationChannel();
+
         taskViewModel.attachObserver(this);
-        Log.d(TAG, "attached  observer to taskViewModel");
+        Log.d(TAG, "attached observer to taskViewModel(MainActivity)");
 
         eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
             @Override
@@ -64,16 +77,15 @@ public class MainActivity extends AppCompatActivity implements IObserver {
                     if (notifier.getEvent() == ENotificationEvent.DELETE) {
                         eventNotifierViewModel.setOnDeleteNotifier(notifier.getNotifier());
                     }
+                    if (notifier.getEvent() == ENotificationEvent.APPOINTMENT) {
+                        eventNotifierViewModel.setOnAppointmentNotifier(notifier.getNotifier());
+                    }
                 }
 
-                Log.d(TAG, "Saved settings:\n" + eventNotifiers.toString());
+                Log.d(TAG, "Saved settings: " + eventNotifiers);
             }
         });
 
-    }
-
-    public static Context getAppContext() {
-        return MainActivity.context;
     }
 
     @Override
@@ -83,23 +95,41 @@ public class MainActivity extends AppCompatActivity implements IObserver {
             message = Arrays.stream(tasks).map(ATask::getTaskName).collect(Collectors.joining("\n"));
         }
 
-        Log.d(TAG, "received update from taskViewModel:" + event.name() + message);
+        Log.d(TAG, "received update from taskViewModel: " + event.name() + " " + message);
 
         if (event == ENotificationEvent.CREATE) {
-            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message);
+            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message, getApplicationContext());
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    setAlarm((TaskAppointment)task, message);
+                }
+            }
         }
         if (event == ENotificationEvent.UPDATE) {
-            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message);
+            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message, getApplicationContext());
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    cancelAlarm((TaskAppointment) task);
+                    setAlarm((TaskAppointment)task, message);
+                }
+            }
         }
         if (event == ENotificationEvent.DELETE) {
-            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message);
+            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message, getApplicationContext());
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    cancelAlarm((TaskAppointment) task);
+                }
+            }
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        taskViewModel.detachObserver(this);
+        //taskViewModel.detachObserver(this);
+        Log.d(TAG, "detached observer to taskViewModel(MainActivity)");
+
     }
 
     private void configureBottomNavBar() {
@@ -114,5 +144,46 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     private void initViewModels() {
         eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+    }
+
+    private void initNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    private void setAlarm(TaskAppointment appointment, String message) {
+        Date deadline = appointment.getDeadline();
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        Bundle extras = new Bundle();
+        extras.putString(EVENT_KEY, message);
+        INotifierTypeConverter notifierTypeConverter = new INotifierTypeConverter();
+        String notifier = notifierTypeConverter.fromINotifier(eventNotifierViewModel.getOnAppointmentNotifier());
+        extras.putString(NOTIFIER_KEY, notifier);
+
+        intent.putExtras(extras);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(deadline);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Log.d(TAG, "set alarm for " + appointment);
+    }
+
+    private void cancelAlarm(TaskAppointment appointment) {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        Log.d(TAG, "cancel alarm for " + appointment);
     }
 }

@@ -23,6 +23,7 @@ public class EventNotifierViewModel extends AndroidViewModel {
     private INotifier onCreateNotifier = new LoggerCore();
     private INotifier onUpdateNotifier = new LoggerCore();
     private INotifier onDeleteNotifier = new LoggerCore();
+    private INotifier onAppointmentNotifier = new LoggerCore();
 
     public EventNotifierViewModel(@NonNull Application application) {
         super(application);
@@ -73,5 +74,13 @@ public class EventNotifierViewModel extends AndroidViewModel {
 
     public void setOnDeleteNotifier(INotifier onDeleteNotifier) {
         this.onDeleteNotifier = onDeleteNotifier;
+    }
+
+    public INotifier getOnAppointmentNotifier() {
+        return onAppointmentNotifier;
+    }
+
+    public void setOnAppointmentNotifier(INotifier onAppointmentNotifier) {
+        this.onAppointmentNotifier = onAppointmentNotifier;
     }
 }

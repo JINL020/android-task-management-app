@@ -15,7 +15,7 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 @Dao
 public interface TaskAppointmentDao {
     @Insert
-    void insert(TaskAppointment task);
+    long insert(TaskAppointment task);
 
     @Insert
     void insertAll(TaskAppointment... tasks);

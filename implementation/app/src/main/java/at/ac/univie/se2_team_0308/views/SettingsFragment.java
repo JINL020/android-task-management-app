@@ -35,6 +35,8 @@ public class SettingsFragment extends Fragment {
     private CheckBox onUpdateBasicCheckBox;
     private CheckBox onDeletePopupCheckBox;
     private CheckBox onDeleteBasicCheckBox;
+    private CheckBox onAppointmentPopupCheckBox;
+    private CheckBox onAppointmentBasicCheckBox;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
@@ -60,6 +62,8 @@ public class SettingsFragment extends Fragment {
         onUpdateBasicCheckBox = binding.checkBoxOnUpdateBasic;
         onDeletePopupCheckBox = binding.checkBoxOnDeletePopup;
         onDeleteBasicCheckBox = binding.checkBoxOnDeleteBasic;
+        onAppointmentPopupCheckBox = binding.checkBoxOnAppointmentPopup;
+        onAppointmentBasicCheckBox = binding.checkBoxOnAppointmentBasic;
     }
 
     private void initCheckboxListeners() {
@@ -110,6 +114,22 @@ public class SettingsFragment extends Fragment {
                 Log.d(TAG,"(!)selected and updated onDelete basic Notification Settings");
             }
         });
+
+        onAppointmentPopupCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateOnAppointmentNotifier();
+                Log.d(TAG,"(!)selected and updated onAppointment popup Notification Settings");
+            }
+        });
+
+        onAppointmentBasicCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateOnAppointmentNotifier();
+                Log.d(TAG,"(!)selected and updated onAppointment popup Notification Settings");
+            }
+        });
     }
 
     private void initCheckboxLayout() {
@@ -130,6 +150,10 @@ public class SettingsFragment extends Fragment {
                     if (notifier.getEvent() == ENotificationEvent.DELETE) {
                         onDeletePopupCheckBox.setChecked(isPopup);
                         onDeleteBasicCheckBox.setChecked(isBasic);
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.APPOINTMENT) {
+                        onAppointmentPopupCheckBox.setChecked(isPopup);
+                        onAppointmentBasicCheckBox.setChecked(isBasic);
                     }
                 }
             }
@@ -155,6 +179,13 @@ public class SettingsFragment extends Fragment {
         boolean onDeleteBasic = onDeleteBasicCheckBox.isChecked();
         INotifier onDeleteNotifier = buildNotifier(onDeletePopup, onDeleteBasic);
         eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.DELETE, onDeleteNotifier));
+    }
+
+    private void updateOnAppointmentNotifier() {
+        boolean onAppointmentPopup = onAppointmentPopupCheckBox.isChecked();
+        boolean onAppointmentBasic = onAppointmentBasicCheckBox.isChecked();
+        INotifier notifier = buildNotifier(onAppointmentPopup, onAppointmentBasic);
+        eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.APPOINTMENT, notifier));
     }
 
     private INotifier buildNotifier(boolean popup, boolean basic) {

@@ -70,6 +70,7 @@ public abstract class AppDatabase extends RoomDatabase {
         eventNotifierDao.insert(new EventNotifier(ENotificationEvent.CREATE, defaultObserver));
         eventNotifierDao.insert(new EventNotifier(ENotificationEvent.UPDATE, defaultObserver));
         eventNotifierDao.insert(new EventNotifier(ENotificationEvent.DELETE, defaultObserver));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.APPOINTMENT, defaultObserver));
     }
 
 }

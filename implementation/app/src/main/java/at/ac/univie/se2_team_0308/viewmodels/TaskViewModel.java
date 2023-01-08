@@ -51,7 +51,8 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
     }
 
     public void insertAppointment(TaskAppointment task){
-        repository.insertTaskAppointment(task);
+        long insertedTaskId = repository.insertTaskAppointment(task);
+        task.setId((int)insertedTaskId);
         notifyObservers(ENotificationEvent.CREATE, task);
     }
 

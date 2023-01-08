@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +59,7 @@ public class AddTaskFragment extends DialogFragment {
     private AddTaskDialogListener listener;
     private SendDataFromAddDialog inputListener;
     private DatePicker spinnerDatePicker;
+    private TimePicker timePicker;
 
     private RelativeLayout relLayoutCard;
     private RelativeLayout relLayoutChooseDeadline;
@@ -165,9 +167,15 @@ public class AddTaskFragment extends DialogFragment {
                     int day = spinnerDatePicker.getDayOfMonth();
                     int month = spinnerDatePicker.getMonth();
                     int year = spinnerDatePicker.getYear();
+                    int hour = 0;
+                    int minute = 0;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        hour = timePicker.getHour();
+                        minute = timePicker.getMinute();
+                    }
 
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
+                    calendar.set(year, month, day, hour, minute, 0);
                     deadline = new Date(calendar.getTimeInMillis());
                 }
 

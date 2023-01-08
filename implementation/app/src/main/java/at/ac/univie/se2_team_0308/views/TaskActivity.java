@@ -4,6 +4,7 @@ import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_CA
 import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_KEY;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -52,6 +55,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private RelativeLayout deadlineRelLayout;
     private DatePicker deadlineSpinnerPicker;
+    private TimePicker timePicker;
 
     private TaskViewModel viewModel;
 
@@ -148,7 +152,17 @@ public class TaskActivity extends AppCompatActivity {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
+                int hour = 0;
+                int minute = 0;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    minute = calendar.get(Calendar.MINUTE);
+                }
                 deadlineSpinnerPicker.updateDate(year, month, day);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    timePicker.setHour(hour);
+                    timePicker.setMinute(minute);
+                }
                 break;
             case "CHECKLIST":
                 subtasksRelLayout.setVisibility(View.VISIBLE);
@@ -203,9 +217,15 @@ public class TaskActivity extends AppCompatActivity {
                     int day = deadlineSpinnerPicker.getDayOfMonth();
                     int month = deadlineSpinnerPicker.getMonth();
                     int year = deadlineSpinnerPicker.getYear();
+                    int hour = 0;
+                    int minute = 0;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        hour = timePicker.getHour();
+                        minute = timePicker.getMinute();
+                    }
 
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
+                    calendar.set(year, month, day, hour, minute, 0);
                     incomingTask.setDeadline(new Date(calendar.getTimeInMillis()));
 
                     incomingAppointment.setDeadline(incomingTask.getDeadline());
