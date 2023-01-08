@@ -21,10 +21,10 @@ public class PropertyToBeUpdated extends DialogFragment {
 
     public static final String TAG = "select_property_to_update_fragment";
 
-    public PropertyToBeUpdated(ListFragment listFragment) {
+    public PropertyToBeUpdated(ATaskListFragment taskListFragment) {
         try {
-            listener = (SelectPropertyToUpdateDialogListener) listFragment;
-            inputListener = (SendDataFromSelectPropertyUpdateDialog) listFragment;
+            listener = (SelectPropertyToUpdateDialogListener) taskListFragment;
+            inputListener = (SendDataFromSelectPropertyUpdateDialog) taskListFragment;
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString());
         }

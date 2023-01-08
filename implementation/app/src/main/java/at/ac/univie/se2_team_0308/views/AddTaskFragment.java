@@ -1,6 +1,7 @@
 package at.ac.univie.se2_team_0308.views;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -72,15 +73,14 @@ public class AddTaskFragment extends DialogFragment {
     private RelativeLayout subtasksRelLayout;
     private Button addSubtaskButton;
 
-    public AddTaskFragment(ListFragment listFragment) {
+    public AddTaskFragment(ATaskListFragment taskListFragment) {
         try {
-            listener = (AddTaskDialogListener) listFragment;
-            inputListener = (SendDataFromAddDialog) listFragment;
+            listener = (AddTaskDialogListener) taskListFragment;
+            inputListener = (SendDataFromAddDialog) taskListFragment;
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString());
         }
     }
-
 
     @NonNull
     @Override
@@ -112,7 +112,6 @@ public class AddTaskFragment extends DialogFragment {
                 addSubtaskButton.setVisibility(View.VISIBLE);
             }
         });
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

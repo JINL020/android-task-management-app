@@ -1,16 +1,21 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.app.Application;
+import android.os.Build;
+import android.util.Log;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
@@ -158,10 +163,13 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
         }
     }
 
+    public void hideAllSelectedTasks(List<Integer> selectedItemsAppointment, List<Integer> selectedItemsChecklist, boolean isHidden) {
+        repository.updateSelectedTasksHiddenStatus(selectedItemsAppointment, selectedItemsChecklist, isHidden);
+    }
+
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllLiveTasks() {
         return allTasks;
     }
-
 
     public List<ATask> getAllTasks(){
         List<ATask> tasks = new ArrayList<>();
@@ -195,5 +203,28 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
         for(IObserver observer : taskViewModelObservers){
             observer.receivedUpdate(event, tasks);
         }
+    }
+
+    public List<ATask> getAppointmentTasks(Date deadline){
+        List<ATask> tasks = new ArrayList<>();
+        for (TaskAppointment task : allTasks.getValue().first) {
+            Calendar calTask = Calendar.getInstance();
+            Calendar calDeadline = Calendar.getInstance();
+            calTask.setTime(task.getDeadline());
+            calDeadline.setTime(deadline);
+            boolean sameDay = calTask.get(Calendar.YEAR) == calDeadline.get(Calendar.YEAR) &&
+                    calTask.get(Calendar.DAY_OF_YEAR) == calDeadline.get(Calendar.DAY_OF_YEAR);
+            if(sameDay) {
+                tasks.add(task);
+                Log.d(TAG, "Dates are similar: " + calTask.toString() + " -- " + calDeadline.toString());
+            }
+        }
+        Collections.sort(tasks, new Comparator<ATask>() {
+            @Override
+            public int compare(ATask task1, ATask task2) {
+                return (int) (task1.getCreationDate().getTime() - task2.getCreationDate().getTime());
+            }
+        });
+        return tasks;
     }
 }

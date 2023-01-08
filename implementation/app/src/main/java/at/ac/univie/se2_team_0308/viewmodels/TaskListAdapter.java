@@ -2,6 +2,7 @@ package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -134,8 +135,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 }
             });
         } else {
-            holder.buttonSelect.setChecked(false);
-            tasks.get(holder.getAdapterPosition()).setSelected(false);
             holder.buttonSelect.setVisibility(View.GONE);
         }
 
@@ -147,6 +146,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.taskTypeImageChecklist.setVisibility(View.VISIBLE);
             holder.taskTypeImageAppointment.setVisibility(View.GONE);
         }
+        //TODO
+
+        //Set task color
+        holder.parent.setCardBackgroundColor(Color.parseColor(tasks.get(position).getTaskColor()));
     }
 
     @Override
