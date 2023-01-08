@@ -12,10 +12,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,12 +25,16 @@ import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
+import at.ac.univie.se2_team_0308.models.SubtaskList;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.DisplayClass;
+import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class TaskActivity extends AppCompatActivity {
+
+    public static final String TAG = "TaskActivity";
 
     private EditText editTaskName;
     private EditText editTaskDescription;
@@ -44,14 +49,15 @@ public class TaskActivity extends AppCompatActivity {
     private TaskChecklist incomingChecklist;
     private ECategory incomingCategory;
 
-    private RelativeLayout subtasksView;
     private RelativeLayout deadlineRelLayout;
     private DatePicker deadlineSpinnerPicker;
 
     private TaskViewModel viewModel;
-    private TextView subtasksList;
 
-    public static final String TAG = "TaskActivity";
+    private SubtaskListAdapter subtaskListAdapter;
+    private RecyclerView subtasksRecView;
+    private RelativeLayout subtasksRelLayout;
+    private Button addSubtaskButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +81,13 @@ public class TaskActivity extends AppCompatActivity {
             }
         }
 
-        btnCancelUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
-                startActivity(intentBack);
-            }
+        btnCancelUpdate.setOnClickListener(view -> {
+            Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
+            startActivity(intentBack);
+        });
+
+        addSubtaskButton.setOnClickListener(view -> {
+            subtaskListAdapter.addTask(new SubtaskList(""));
         });
     }
 
@@ -125,7 +132,8 @@ public class TaskActivity extends AppCompatActivity {
         switch (incomingTask.getCategoryEnum().toString()) {
             case "APPOINTMENT":
                 Log.d(TAG, "onCreate: isappointment");
-                subtasksView.setVisibility(View.GONE);
+                subtasksRelLayout.setVisibility(View.GONE);
+                addSubtaskButton.setVisibility(View.GONE);
                 deadlineRelLayout.setVisibility(View.VISIBLE);
 
                 Date incomingDate = incomingTask.getDeadline();
@@ -140,13 +148,12 @@ public class TaskActivity extends AppCompatActivity {
                 deadlineSpinnerPicker.updateDate(year, month, day);
                 break;
             case "CHECKLIST":
-                //TODO
-                subtasksView.setVisibility(View.VISIBLE);
+                subtasksRelLayout.setVisibility(View.VISIBLE);
+                addSubtaskButton.setVisibility(View.VISIBLE);
                 deadlineRelLayout.setVisibility(View.GONE);
                 Log.d(TAG, "onBindViewHolder: the subtasks is not null");
                 if (incomingTask.getSubtasks() != null && !incomingTask.getSubtasks().isEmpty()) {
-                    //TODO this is just for testing
-                    subtasksList.setText(incomingTask.getSubtasks().get(0));
+                    setSubtasksView(incomingTask);
                 }
                 break;
         }
@@ -206,6 +213,7 @@ public class TaskActivity extends AppCompatActivity {
                     incomingChecklist.setDescription(incomingTask.getDescription());
                     incomingChecklist.setPriority(incomingTask.getPriority());
                     incomingChecklist.setStatus(incomingTask.getStatus());
+                    incomingChecklist.setSubtasks(subtaskListAdapter.getTasks());
                     viewModel.updateChecklist(incomingChecklist);
                 }
                 Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
@@ -219,16 +227,22 @@ public class TaskActivity extends AppCompatActivity {
         viewModel.init(getApplication());
     }
 
+    private void setSubtasksView(DisplayClass incomingTask){
+        subtaskListAdapter = new SubtaskListAdapter(this, incomingTask.getSubtasks());
+        subtasksRecView.setAdapter(subtaskListAdapter);
+        subtasksRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+    }
     private void initViews() {
         editTaskName = findViewById(R.id.updateTaskName);
         editTaskDescription = findViewById(R.id.updateTaskDescription);
         editTaskPriority = findViewById(R.id.spinnerUpdateTaskPriority);
         editTaskStatus = findViewById(R.id.spinnerUpdateTaskStatus);
         btnUpdateTask = findViewById(R.id.btnUpdateTaskInfo);
-        subtasksView = findViewById(R.id.subtasks);
-        subtasksList = findViewById(R.id.subtasksListTaskActivity);
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);
         deadlineRelLayout = findViewById(R.id.relLayoutTaskDeadlineEdit);
         deadlineSpinnerPicker = findViewById(R.id.datePickerEdit);
+        subtasksRelLayout = findViewById(R.id.subtasksRelLayout);
+        subtasksRecView = findViewById(R.id.subtasksRecView);
+        addSubtaskButton = findViewById(R.id.btnAddSubtask);
     }
 }

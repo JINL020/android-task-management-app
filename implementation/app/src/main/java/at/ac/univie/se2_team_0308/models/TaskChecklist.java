@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.TypeConverters;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -15,9 +16,9 @@ import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 @Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
-    List<String> subtasks;
+    List<ASubtask> subtasks = new ArrayList<>();
 
-    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<String> subtasks){
+    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks){
         super(taskName, description, priority, status, category);
         this.subtasks = subtasks;
     }
@@ -31,8 +32,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         setStatus(EStatus.valueOf(in.readString()));
         setCategory(ECategory.valueOf(in.readString()));
         setCreationDate(new Date(in.readLong()));
-        subtasks = in.createStringArrayList();
-
+        setSubtasks(in.readArrayList(ASubtask.class.getClassLoader()));
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {
@@ -61,7 +61,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeString(String.valueOf(getStatus()));
         parcel.writeString(ECategory.CHECKLIST.name());
         parcel.writeLong(getCreationDate().getTime());
-        parcel.writeStringList(subtasks);
+        parcel.writeList(subtasks);
     }
 
     @Override
@@ -72,13 +72,26 @@ public class TaskChecklist extends ATask implements Parcelable {
                 '}';
     }
 
-    public List<String> getSubtasks() {
+    public List<ASubtask> getSubtasks() {
         return subtasks;
     }
-
-    public void setSubtasks(List<String> subtasks) {
+    public void setSubtasks(List<ASubtask> subtasks) {
         this.subtasks = subtasks;
     }
+
+    void removeAllSubtasks(){
+        this.subtasks.clear();
+    }
+
+    void addSubtask(ASubtask subtask){
+        this.subtasks.add(subtask);
+    }
+
+    void removeSubtask(ASubtask subtask){
+        subtask.removeAllSubtasks();
+        this.subtasks.remove(subtask);
+    }
+
 
     @Override
     public boolean equals(Object o) {

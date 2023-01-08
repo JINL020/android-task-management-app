@@ -147,7 +147,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.taskTypeImageChecklist.setVisibility(View.VISIBLE);
             holder.taskTypeImageAppointment.setVisibility(View.GONE);
         }
-        //TODO
     }
 
     @Override
@@ -182,7 +181,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         private RelativeLayout lowPriorityRelLayout;
         private RelativeLayout mediumPriorityRelLayout;
         private RelativeLayout highPriorityRelLayout;
-        private TextView subtasksList;
+       // private TextView subtasksList;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -198,7 +197,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             lowPriorityRelLayout = itemView.findViewById(R.id.relLayoutLowPriority);
             mediumPriorityRelLayout = itemView.findViewById(R.id.relLayoutMediumPriority);
             highPriorityRelLayout = itemView.findViewById(R.id.relLayoutHighPriority);
-            subtasksList = itemView.findViewById(R.id.subtasksList);
+           // subtasksList = itemView.findViewById(R.id.subtasksList);
         }
     }
 }

@@ -37,6 +37,7 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
         super(application);
         this.repository = new TaskRepository(application);
         this.allTasks = repository.getAllTasks();
+        boolean n = true;
     }
 
     public void init(Application application){

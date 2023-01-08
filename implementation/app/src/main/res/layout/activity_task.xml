@@ -152,20 +152,19 @@
                     android:visibility="gone">
 
                     <TextView
+                        android:id="@+id/txtTaskDeadline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Task Deadline"
                         android:textStyle="italic"
-                        android:id="@+id/txtTaskDeadline"
-
                         />
 
                     <DatePicker
+                        android:id="@+id/datePickerEdit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txtTaskDeadline"
                         android:datePickerMode="spinner"
-                        android:id="@+id/datePickerEdit"
                         android:entries="@array/statuses"
                         android:calendarViewShown="false"
                         />
@@ -174,12 +173,59 @@
 
                 </RelativeLayout>
 
+
+
+                <RelativeLayout
+                    android:id="@+id/subtasksRelLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:layout_below="@+id/relLayoutTaskDeadlineEdit"
+                    android:layout_centerHorizontal="true"
+                    >
+                    <TextView
+                        android:id="@+id/txtSubtasks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Subtasks"
+                        android:textStyle="italic"
+
+                        />
+
+                    <androidx.core.widget.NestedScrollView
+                        android:id="@+id/subtasksScrollview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtSubtasks"
+                        >
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/subtasksRecView"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            tools:listitem="@layout/subtask_row_item" />
+
+                    </androidx.core.widget.NestedScrollView>
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/btnAddSubtask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/subtasksRelLayout"
+                    android:text="Add Subtask"
+                    android:visibility="gone"
+                    />
+
                 <RelativeLayout
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/subtasks"
-                    android:layout_centerHorizontal="true"
-                    >
+                    android:layout_below="@+id/btnAddSubtask"
+                    android:layout_centerHorizontal="true">
 
                     <Button
                         android:id="@+id/btnCancelUpdate"
@@ -202,40 +248,6 @@
                         android:backgroundTint="#8F6372"
                         android:text="Update Task" />
 
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/subtasks"
-                    android:visibility="gone"
-                    android:layout_marginStart="20dp"
-                    android:layout_below="@+id/relLayoutTaskDeadlineEdit"
-                    android:layout_centerHorizontal="true"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="Subtasks"
-                        android:textStyle="italic"
-                        android:id="@+id/txtSubtasks"
-                        />
-
-                    <androidx.core.widget.NestedScrollView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/txtSubtasks"
-                        android:id="@+id/scrollViewSubtasks">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/subtasksListTaskActivity"/>
-
-                    </androidx.core.widget.NestedScrollView>
 
                 </RelativeLayout>
 
