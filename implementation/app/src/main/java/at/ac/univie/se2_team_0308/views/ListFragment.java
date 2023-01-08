@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -20,14 +22,17 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.databinding.FragmentListBinding;
 import at.ac.univie.se2_team_0308.models.ATask;
@@ -41,19 +46,25 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
 import at.ac.univie.se2_team_0308.utils.export.EFormat;
 import at.ac.univie.se2_team_0308.utils.export.Exporter;
+import at.ac.univie.se2_team_0308.utils.filter.FilterManager;
+import at.ac.univie.se2_team_0308.utils.filter.HiddenTasksFilter;
+import at.ac.univie.se2_team_0308.utils.filter.IFilter;
+import at.ac.univie.se2_team_0308.utils.filter.UnhiddenTasksFilter;
 import at.ac.univie.se2_team_0308.utils.import_tasks.ImporterFacade;
 import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
-public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog, PropertyToBeUpdated.SelectPropertyToUpdateDialogListener, PropertyToBeUpdated.SendDataFromSelectPropertyUpdateDialog {
+public class ListFragment extends ATaskListFragment implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog, PropertyToBeUpdated.SelectPropertyToUpdateDialogListener, PropertyToBeUpdated.SendDataFromSelectPropertyUpdateDialog {
     private FragmentListBinding binding;
 
-    public static final String TAG = "main act";
+    public static final String TAG = "list view";
 
     private RecyclerView recViewTasks;
     private FloatingActionButton fabAdd;
     private TaskListAdapter adapter;
     private TaskViewModel viewModel;
+
+    private Switch switchHidden;
 
     // Variables influenced by the press of the "Select" button
     private Button btnSelect;
@@ -76,15 +87,11 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
 
     private static ATaskFactory taskFactory;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        initViews();
-        initViewModel();
-        initRecyclerViews();
-        initUtils();
+        initLayout();
 
         // Add new task
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +146,36 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                 /*if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
                     viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
                 }*/
+            }
+        });
+
+        //Switch hidden tasks
+        switchHidden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked) {
+                    btnHide.setText("Unhide");
+                    adapter.setTasks(new FilterManager().applyFilter(viewModel.getAllTasks(), new HiddenTasksFilter()));
+                    adapter.notifyDataSetChanged();
+                } else {
+                    btnHide.setText("Hide");
+                    adapter.setTasks(new FilterManager().applyFilter(viewModel.getAllTasks(), new UnhiddenTasksFilter()));
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        //Hide selected tasks
+        btnHide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
+                    if(switchHidden.isChecked()) {
+                        viewModel.hideAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), false);
+                    } else {
+                        viewModel.hideAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), true);
+                    }
+                }
             }
         });
 
@@ -197,7 +234,8 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         binding = null;
     }
 
-    private void initViews() {
+    @Override
+    protected void initViews() {
         fabAdd = binding.fabAdd;
         recViewTasks = binding.recViewTasks;
         btnSelect = binding.btnSelect;
@@ -212,22 +250,29 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         btnExportJson = binding.btnExportJson;
         btnExportXml = binding.btnExportXml;
         btnImport = binding.btnImport;
-
+        switchHidden = binding.switchHidden;
     }
 
-    private void initViewModel() {
+    @Override
+    protected void initViewModel() {
         viewModel = new ViewModelProvider(getActivity()).get(TaskViewModel.class);
         viewModel.init(getActivity().getApplication());// init does the same thing as the constructor, why init?
         viewModel.getAllLiveTasks().observe(getViewLifecycleOwner(), new Observer<Pair<List<TaskAppointment>, List<TaskChecklist>>>() {
             @Override
             public void onChanged(Pair<List<TaskAppointment>, List<TaskChecklist>> taskModels) {
-                adapter.setTasks(viewModel.getAllTasks());
-                adapter.notifyDataSetChanged();
+                if(switchHidden.isChecked()) {
+                    adapter.setTasks(new FilterManager().applyFilter(viewModel.getAllTasks(), new HiddenTasksFilter()));
+                    adapter.notifyDataSetChanged();
+                } else {
+                    adapter.setTasks(new FilterManager().applyFilter(viewModel.getAllTasks(), new UnhiddenTasksFilter()));
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
 
-    private void initRecyclerViews() {
+    @Override
+    protected void initRecyclerViews() {
         adapter = new TaskListAdapter(getActivity(), viewModel.getAllTasks(), new TaskListAdapter.onSelectItemListener() {
             @Override
             public void onItemSelected(ATask taskModel) {
@@ -252,40 +297,36 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         recViewTasks.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), RecyclerView.VERTICAL, false));
     }
 
-    private void initUtils() {
+    @Override
+    protected void initUtils() {
         importerFacade = new ImporterFacade(viewModel, getActivity().getContentResolver());
         exporter = new Exporter();
+
+        initDragAndDrop();
     }
 
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
-        if (wantToCloseDialog) {
-            dialogFragment.dismiss();
-        }
-    }
+    private void initDragAndDrop() {
+        // START https://androidapps-development-blogs.medium.com/drag-and-drop-reorder-in-recyclerview-android-2a3093d16ba2
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP| ItemTouchHelper.DOWN|ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int fromPos = viewHolder.getAdapterPosition();
+                int toPos = target.getAdapterPosition();
+                Collections.swap(Objects.requireNonNull(viewModel.getAllTasks()), fromPos, toPos);
+                adapter.notifyItemMoved(fromPos, toPos);
+                adapter.notifyItemRangeChanged(fromPos, toPos);
+                return false;
+            }
 
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog) {
-        if (wantToCloseDialog) {
-            dialogFragment.dismiss();
-        }
-    }
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
-    @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
-        Log.d(TAG, "sendDataResult: taskName" + taskName);
-        Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
-        Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
-        Log.d(TAG, "sendDataResult: statusEnum" + statusEnum.toString());
-        Log.d(TAG, "sendDataResult: deadline" + deadline.toString());
-        if (isSelectedAppointment) {
-            taskFactory = new TaskAppointmentFactory();
-            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
-        } else if (isSelectedChecklist) {
-            taskFactory = new TaskChecklistFactory();
-            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
-        }
-        recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recViewTasks);
+        // END
     }
 
     // Choose which view elements/layouts to make visible
@@ -319,12 +360,21 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
         }
     }
 
-    private void showToast(CharSequence text) {
-        Context context = getActivity().getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
+    @Override
+    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
+        Log.d(TAG, "sendDataResult: taskName" + taskName);
+        Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
+        Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
+        Log.d(TAG, "sendDataResult: statusEnum" + statusEnum.toString());
+        Log.d(TAG, "sendDataResult: deadline" + deadline.toString());
+        if (isSelectedAppointment) {
+            taskFactory = new TaskAppointmentFactory();
+            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+        } else if (isSelectedChecklist) {
+            taskFactory = new TaskChecklistFactory();
+            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+        }
+        recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
@@ -335,4 +385,5 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
                     importerFacade.importTasks(uri);
                 }
             });
+
 }

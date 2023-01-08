@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -78,8 +79,10 @@ public class TaskActivity extends AppCompatActivity {
         btnCancelUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
-                startActivity(intentBack);
+                finish();
+                //Old implementation: will not work on all screens of navbar
+                //Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
+                //startActivity(intentBack);
             }
         });
     }

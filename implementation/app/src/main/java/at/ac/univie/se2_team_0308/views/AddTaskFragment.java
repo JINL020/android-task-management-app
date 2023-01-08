@@ -51,10 +51,10 @@ public class AddTaskFragment extends DialogFragment {
 
     private TaskViewModel viewModel;
 
-    public AddTaskFragment(ListFragment listFragment) {
+    public AddTaskFragment(ATaskListFragment taskListFragment) {
         try {
-            listener = (AddTaskDialogListener) listFragment;
-            inputListener = (SendDataFromAddDialog) listFragment;
+            listener = (AddTaskDialogListener) taskListFragment;
+            inputListener = (SendDataFromAddDialog) taskListFragment;
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString());
         }
