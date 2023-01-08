@@ -1,5 +1,6 @@
 package at.ac.univie.se2_team_0308.utils.notifications;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,9 +18,9 @@ public class PopupNotifier extends ADecoratorNotifier {
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, String message) {
-        super.sendNotification(event, message);
-        Toast.makeText(MainActivity.getAppContext(), event.name() + "\n" + message, Toast.LENGTH_SHORT).show();
+    public void sendNotification(ENotificationEvent event, String message, Context context) {
+        super.sendNotification(event, message, context);
+        Toast.makeText(context, event.name() + "\n" + message, Toast.LENGTH_SHORT).show();
         Log.d(TAG, "send out notification: " + event.name() + message);
     }
 

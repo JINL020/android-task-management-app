@@ -1,6 +1,7 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;

@@ -3,6 +3,7 @@ package at.ac.univie.se2_team_0308.utils.notifications;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -22,10 +23,10 @@ public class BasicNotifier extends ADecoratorNotifier {
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, String message) {
-        super.sendNotification(event, message);
+    public void sendNotification(ENotificationEvent event, String message, Context context) {
+        super.sendNotification(event, message, context);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.getAppContext(), "notifications")
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "notifications")
                 .setSmallIcon(android.R.drawable.stat_notify_sync)
                 .setStyle(new NotificationCompat
                         .BigTextStyle()
@@ -35,7 +36,7 @@ public class BasicNotifier extends ADecoratorNotifier {
 
         Notification notification = notificationBuilder.build();
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(MainActivity.getAppContext());
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(1, notification);
 
         Log.d(TAG, "send out notification: " + event.name() + message);

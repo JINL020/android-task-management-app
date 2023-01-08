@@ -12,6 +12,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         INotifier notifier = new BasicNotifier(new PopupNotifier(new LoggerCore()));
-        notifier.sendNotification(ENotificationEvent.APPOINTMENT, intent.getStringExtra(EVENT_KEY));
+        notifier.sendNotification(ENotificationEvent.APPOINTMENT, intent.getStringExtra(EVENT_KEY), context);
     }
 }

@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     public static final String EVENT_KEY = "appointment";
 
     private ActivityMainBinding binding;
-    private static Context context;
 
     private EventNotifierViewModel eventNotifierViewModel;
     private TaskViewModel taskViewModel;
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        context = getApplicationContext();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
@@ -80,14 +78,10 @@ public class MainActivity extends AppCompatActivity implements IObserver {
                     }
                 }
 
-                Log.d(TAG, "Saved settings:\n" + eventNotifiers.toString());
+                Log.d(TAG, "Saved settings: " + eventNotifiers.toString());
             }
         });
 
-    }
-
-    public static Context getAppContext() {
-        return MainActivity.context;
     }
 
     @Override
@@ -100,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         Log.d(TAG, "received update from taskViewModel: " + event.name() + " " + message);
 
         if (event == ENotificationEvent.CREATE) {
-            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message);
+            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message, getApplicationContext());
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
                     setAlarm((TaskAppointment)task, message);
@@ -108,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
             }
         }
         if (event == ENotificationEvent.UPDATE) {
-            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message);
+            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message, getApplicationContext());
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
                     cancelAlarm((TaskAppointment) task);
@@ -117,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
             }
         }
         if (event == ENotificationEvent.DELETE) {
-            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message);
+            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message, getApplicationContext());
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
                     cancelAlarm((TaskAppointment) task);
@@ -160,12 +154,12 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         Date deadline = appointment.getDeadline();
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        Intent intent = new Intent(this, AlarmReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
         Bundle extras = new Bundle();
         extras.putString(EVENT_KEY, message);
         intent.putExtras(extras);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(deadline);
@@ -175,9 +169,9 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     }
 
     private void cancelAlarm(TaskAppointment appointment) {
-        Intent intent = new Intent(this, AlarmReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
