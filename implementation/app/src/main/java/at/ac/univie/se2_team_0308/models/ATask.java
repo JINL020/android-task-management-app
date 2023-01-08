@@ -14,6 +14,8 @@ public abstract class ATask {
     private EStatus status;
     private boolean isSelected = false;
     private ECategory category;
+    private boolean isHidden = false;
+    private String taskColor = "#E1E1E1"; //default light grey color
 
    // @TypeConverters(DateConverter.class)
     private Date creationDate;
@@ -93,6 +95,14 @@ public abstract class ATask {
         this.creationDate = creationDate;
     }
 
+    public boolean isHidden() { return isHidden; }
+
+    public void setHidden(boolean isHidden) { this.isHidden = isHidden; }
+
+    public String getTaskColor() { return taskColor; }
+
+    public void setTaskColor(String color) { this.taskColor = color; }
+
     public String toString() {
         return "ATask{" +
                 "id=" + id +
@@ -101,6 +111,7 @@ public abstract class ATask {
                 ", priority=" + priority +
                 ", status=" + status +
                 ", isSelected=" + isSelected +
+                ", isHidden=" + isHidden +
                 ", category=" + category +
                 ", creationDate=" + creationDate +
                 '}';
