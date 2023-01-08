@@ -53,7 +53,6 @@ public class TaskAppointment extends ATask implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        //TODO
         parcel.writeInt(getId());
         parcel.writeString(getTaskName());
         parcel.writeString(getDescription());

@@ -2,6 +2,7 @@ package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -134,8 +135,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 }
             });
         } else {
-            holder.buttonSelect.setChecked(false);
-            tasks.get(holder.getAdapterPosition()).setSelected(false);
             holder.buttonSelect.setVisibility(View.GONE);
         }
 
@@ -148,6 +147,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.taskTypeImageAppointment.setVisibility(View.GONE);
         }
         //TODO
+
+        //Set task color
+        holder.parent.setCardBackgroundColor(Color.parseColor(tasks.get(position).getTaskColor()));
     }
 
     @Override
@@ -182,7 +184,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         private RelativeLayout lowPriorityRelLayout;
         private RelativeLayout mediumPriorityRelLayout;
         private RelativeLayout highPriorityRelLayout;
-        private TextView subtasksList;
+       // private TextView subtasksList;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -198,7 +200,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             lowPriorityRelLayout = itemView.findViewById(R.id.relLayoutLowPriority);
             mediumPriorityRelLayout = itemView.findViewById(R.id.relLayoutMediumPriority);
             highPriorityRelLayout = itemView.findViewById(R.id.relLayoutHighPriority);
-            subtasksList = itemView.findViewById(R.id.subtasksList);
+           // subtasksList = itemView.findViewById(R.id.subtasksList);
         }
     }
 }

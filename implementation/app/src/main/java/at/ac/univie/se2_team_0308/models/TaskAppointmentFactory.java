@@ -6,7 +6,7 @@ import java.util.List;
 public class TaskAppointmentFactory extends ATaskFactory {
 
     @Override
-    public ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<String> subtasks) {
+    public ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks) {
         return new TaskAppointment(taskName, description, priority, status, ECategory.APPOINTMENT, deadline);
     }
 }

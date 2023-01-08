@@ -30,6 +30,7 @@ public class ParcelableTaskChecklistTest {
         test.writeToParcel(parcel, 0);
         parcel.setDataPosition(0);
 
+
         TaskChecklist createdFromParcel = TaskChecklist.CREATOR.createFromParcel(parcel);
         assertEquals(test, createdFromParcel);
     }

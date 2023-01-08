@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -20,17 +21,33 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
+import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
+import at.ac.univie.se2_team_0308.models.SubtaskList;
+import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 public class AddTaskFragment extends DialogFragment {
     public static final String TAG = "addtaskfragment";
+
+    public interface SendDataFromAddDialog {
+        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
+    }
+
+    public interface AddTaskDialogListener {
+        void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
+        void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
+    }
 
     private EditText editTaskName;
     private EditText editTaskDescription;
@@ -53,24 +70,19 @@ public class AddTaskFragment extends DialogFragment {
 
     private TaskViewModel viewModel;
 
-    public AddTaskFragment(ListFragment listFragment) {
+    private SubtaskListAdapter subtaskListAdapter;
+    private RecyclerView subtasksRecView;
+    private RelativeLayout subtasksRelLayout;
+    private Button addSubtaskButton;
+
+    public AddTaskFragment(ATaskListFragment taskListFragment) {
         try {
-            listener = (AddTaskDialogListener) listFragment;
-            inputListener = (SendDataFromAddDialog) listFragment;
+            listener = (AddTaskDialogListener) taskListFragment;
+            inputListener = (SendDataFromAddDialog) taskListFragment;
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString());
         }
     }
-
-    public interface SendDataFromAddDialog {
-        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
-    }
-
-    public interface AddTaskDialogListener {
-        void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
-        void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
-    }
-
 
     @NonNull
     @Override
@@ -85,9 +97,9 @@ public class AddTaskFragment extends DialogFragment {
                 taskTypeValidation.setVisibility(View.GONE);
                 isSelectedAppointment = true;
                 isSelectedChecklist = false;
-                if (relLayoutChooseDeadline.getVisibility() == View.GONE) {
-                    relLayoutChooseDeadline.setVisibility(View.VISIBLE);
-                }
+                relLayoutChooseDeadline.setVisibility(View.VISIBLE);
+                subtasksRelLayout.setVisibility(View.GONE);
+                addSubtaskButton.setVisibility(View.GONE);
             }
         });
 
@@ -98,6 +110,8 @@ public class AddTaskFragment extends DialogFragment {
                 isSelectedChecklist = true;
                 isSelectedAppointment = false;
                 relLayoutChooseDeadline.setVisibility(View.GONE);
+                subtasksRelLayout.setVisibility(View.VISIBLE);
+                addSubtaskButton.setVisibility(View.VISIBLE);
             }
         });
 
@@ -165,13 +179,23 @@ public class AddTaskFragment extends DialogFragment {
                     deadline = new Date(calendar.getTimeInMillis());
                 }
 
-                if (isSelectedChecklist) {
-                    // TODO whatever it is to be done with checklist
+                List<ASubtask> subtasks = new ArrayList<>();
+                if(isSelectedChecklist) {
+                    subtasks = subtaskListAdapter.getTasks();
                 }
 
                 Log.d(TAG, "onClick: task Name " + taskName);
 
-                inputListener.sendDataResult(taskName, taskDescription, priorityEnum, statusEnum, deadline, isSelectedAppointment, isSelectedChecklist);
+                inputListener.sendDataResult(
+                        taskName,
+                        taskDescription ,
+                        priorityEnum,
+                        statusEnum,
+                        deadline,
+                        subtasks,
+                        isSelectedAppointment,
+                        isSelectedChecklist
+                );
 
                 if (!isSelectedAppointment && !isSelectedChecklist) {
                     taskTypeValidation.setVisibility(View.VISIBLE);
@@ -202,6 +226,25 @@ public class AddTaskFragment extends DialogFragment {
         taskTypeValidation = view.findViewById(R.id.taskTypeValidation);
         timePicker = view.findViewById(R.id.timePickerAddTaskDialog);
         timePicker.setIs24HourView(true);
+
+
+        subtasksRelLayout = view.findViewById(R.id.subtasksRelLayout);
+        subtasksRecView = view.findViewById(R.id.subtasksRecView);
+        addSubtaskButton = view.findViewById(R.id.btnAddSubtask);
+        initSubtasksView();
+    }
+
+    private void initSubtasksView(){
+         subtaskListAdapter = new SubtaskListAdapter(requireActivity(), new ArrayList<>());
+        subtasksRecView.setAdapter(subtaskListAdapter);
+        subtasksRecView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
+
+        addSubtaskButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                subtaskListAdapter.addTask(new SubtaskList(""));
+            }
+        });
     }
 
     @Override
