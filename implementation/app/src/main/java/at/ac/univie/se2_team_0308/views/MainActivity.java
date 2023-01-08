@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         initNotificationChannel();
 
         taskViewModel.attachObserver(this);
-        Log.d(TAG, "attached  observer to taskViewModel(MainActivity)");
+        Log.d(TAG, "attached observer to taskViewModel(MainActivity)");
 
         eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
             @Override
@@ -101,12 +101,20 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         if (event == ENotificationEvent.CREATE) {
             eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message);
-            if (tasks[0].getCategory().equals(ECategory.APPOINTMENT)) {
-                setAlarm((TaskAppointment) tasks[0], message);
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    setAlarm((TaskAppointment)task, message);
+                }
             }
         }
         if (event == ENotificationEvent.UPDATE) {
             eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message);
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    cancelAlarm((TaskAppointment) task);
+                    setAlarm((TaskAppointment)task, message);
+                }
+            }
         }
         if (event == ENotificationEvent.DELETE) {
             eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message);
@@ -121,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        taskViewModel.detachObserver(this);
+        //taskViewModel.detachObserver(this);
+        Log.d(TAG, "detached observer to taskViewModel(MainActivity)");
+
     }
 
     private void configureBottomNavBar() {
@@ -155,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         extras.putString(EVENT_KEY, message);
         intent.putExtras(extras);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(deadline);
