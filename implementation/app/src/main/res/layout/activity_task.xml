@@ -150,8 +150,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Task Deadline"
-                        android:textStyle="italic"
-                        />
+                        android:textStyle="italic" />
 
                     <DatePicker
                         android:id="@+id/datePickerEdit"
@@ -189,7 +188,6 @@
                         android:layout_marginTop="20dp"
                         android:text="Subtasks"
                         android:textStyle="italic"
-
                         />
 
                     <androidx.core.widget.NestedScrollView
@@ -223,7 +221,9 @@
                 <RelativeLayout
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
+
                     android:layout_below="@+id/btnAddSubtask"
+
                     android:layout_centerHorizontal="true">
 
                     <Button
@@ -249,8 +249,6 @@
 
 
                 </RelativeLayout>
-
-
             </RelativeLayout>
 
 

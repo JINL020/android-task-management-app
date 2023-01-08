@@ -224,6 +224,9 @@ public class AddTaskFragment extends DialogFragment {
         spinnerDatePicker = view.findViewById(R.id.spinnerDatePicker);
         relLayoutChooseDeadline = view.findViewById(R.id.relLayoutChooseDeadline);
         taskTypeValidation = view.findViewById(R.id.taskTypeValidation);
+        timePicker = view.findViewById(R.id.timePickerAddTaskDialog);
+        timePicker.setIs24HourView(true);
+
 
         subtasksRelLayout = view.findViewById(R.id.subtasksRelLayout);
         subtasksRecView = view.findViewById(R.id.subtasksRecView);

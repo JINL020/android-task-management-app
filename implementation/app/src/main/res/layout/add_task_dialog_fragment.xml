@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:backgroundTint="#FFFFFF"
     app:cardCornerRadius="10dp"
     app:cardElevation="10dp">
@@ -239,8 +240,8 @@
                     android:layout_marginTop="20dp"
                     android:text="Subtasks"
                     android:textStyle="italic"
-
                     />
+
 
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/subtasksScrollview"
@@ -257,7 +258,7 @@
 
             </RelativeLayout>
 
-            <Button
+          <Button
                 android:id="@+id/btnAddSubtask"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
@@ -267,9 +268,6 @@
                 android:text="Add Subtask"
                 android:visibility="gone"
                 />
-
-
-
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>

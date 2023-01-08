@@ -230,6 +230,7 @@ public class TaskActivity extends AppCompatActivity {
 
                     incomingAppointment.setDeadline(incomingTask.getDeadline());
                     viewModel.updateAppointment(incomingAppointment);
+
                 }
                 if (incomingTask.getCategoryEnum() == ECategory.CHECKLIST){
                     incomingChecklist.setTaskName(incomingTask.getTaskName());
@@ -264,8 +265,11 @@ public class TaskActivity extends AppCompatActivity {
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);
         deadlineRelLayout = findViewById(R.id.relLayoutTaskDeadlineEdit);
         deadlineSpinnerPicker = findViewById(R.id.datePickerEdit);
+        timePicker = findViewById(R.id.timePickerTaskActivity);
+        timePicker.setIs24HourView(true);
         subtasksRelLayout = findViewById(R.id.subtasksRelLayout);
         subtasksRecView = findViewById(R.id.subtasksRecView);
         addSubtaskButton = findViewById(R.id.btnAddSubtask);
+
     }
 }
