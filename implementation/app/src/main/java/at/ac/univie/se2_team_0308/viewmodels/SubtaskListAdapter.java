@@ -1,11 +1,8 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,24 +14,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.card.MaterialCardView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
+import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.EStatus;
-import at.ac.univie.se2_team_0308.models.Subtask;
+import at.ac.univie.se2_team_0308.models.SubtaskItem;
 
 public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.ViewHolder> {
 
     public static final String TAG = "SubtaskListAdapter";
 
-    private List<Subtask> tasks;
+    private List<ASubtask> tasks;
     private Context context;
     private boolean hasAnotherLevelOfSubtasks = true;
 
-    public SubtaskListAdapter(Context context, List<Subtask> tasks) {
+    public SubtaskListAdapter(Context context, List<ASubtask> tasks) {
         this.context = context;
         this.tasks = tasks;
     }
@@ -98,7 +93,7 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
             // add button is displayed only for subtask which can have another level
             holder.addButton.setOnClickListener(view -> {
                 int adapterPosition = holder.getAdapterPosition();
-                tasks.get(adapterPosition).addSubtask(new Subtask(""));
+                tasks.get(adapterPosition).addSubtask(new SubtaskItem(""));
                 notifyDataSetChanged();
             });
         }
@@ -113,11 +108,11 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
         return tasks.size();
     }
 
-    public List<Subtask>  getTasks(){
+    public List<ASubtask>  getTasks(){
         return this.tasks;
     }
 
-    public void addTask(Subtask task){
+    public void addTask(ASubtask task){
         this.tasks.add(task);
         notifyDataSetChanged();
     }

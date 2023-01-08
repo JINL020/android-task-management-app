@@ -12,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,7 +25,7 @@ import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
-import at.ac.univie.se2_team_0308.models.Subtask;
+import at.ac.univie.se2_team_0308.models.SubtaskList;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.DisplayClass;
@@ -88,7 +87,7 @@ public class TaskActivity extends AppCompatActivity {
         });
 
         addSubtaskButton.setOnClickListener(view -> {
-            subtaskListAdapter.addTask(new Subtask(""));
+            subtaskListAdapter.addTask(new SubtaskList(""));
         });
     }
 

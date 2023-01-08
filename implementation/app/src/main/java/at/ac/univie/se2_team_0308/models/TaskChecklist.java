@@ -16,9 +16,9 @@ import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 @Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
-    List<Subtask> subtasks;
+    List<ASubtask> subtasks = new ArrayList<>();
 
-    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<Subtask> subtasks){
+    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks){
         super(taskName, description, priority, status, category);
         this.subtasks = subtasks;
     }
@@ -32,7 +32,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         setStatus(EStatus.valueOf(in.readString()));
         setCategory(ECategory.valueOf(in.readString()));
         setCreationDate(new Date(in.readLong()));
-        setSubtasks(in.createTypedArrayList(Subtask.CREATOR));
+        setSubtasks(in.readArrayList(ASubtask.class.getClassLoader()));
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {
@@ -61,7 +61,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeString(String.valueOf(getStatus()));
         parcel.writeString(ECategory.CHECKLIST.name());
         parcel.writeLong(getCreationDate().getTime());
-        parcel.writeTypedList(subtasks);
+        parcel.writeList(subtasks);
     }
 
     @Override
@@ -72,10 +72,10 @@ public class TaskChecklist extends ATask implements Parcelable {
                 '}';
     }
 
-    public List<Subtask> getSubtasks() {
+    public List<ASubtask> getSubtasks() {
         return subtasks;
     }
-    public void setSubtasks(List<Subtask> subtasks) {
+    public void setSubtasks(List<ASubtask> subtasks) {
         this.subtasks = subtasks;
     }
 
@@ -83,11 +83,11 @@ public class TaskChecklist extends ATask implements Parcelable {
         this.subtasks.clear();
     }
 
-    void addSubtask(Subtask subtask){
+    void addSubtask(ASubtask subtask){
         this.subtasks.add(subtask);
     }
 
-    void removeSubtask(Subtask subtask){
+    void removeSubtask(ASubtask subtask){
         subtask.removeAllSubtasks();
         this.subtasks.remove(subtask);
     }

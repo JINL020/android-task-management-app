@@ -1,7 +1,6 @@
 package at.ac.univie.se2_team_0308.views;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,10 +28,10 @@ import java.util.Date;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
+import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
-import at.ac.univie.se2_team_0308.models.Subtask;
-import at.ac.univie.se2_team_0308.utils.DisplayClass;
+import at.ac.univie.se2_team_0308.models.SubtaskList;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
@@ -40,7 +39,7 @@ public class AddTaskFragment extends DialogFragment {
     public static final String TAG = "addtaskfragment";
 
     public interface SendDataFromAddDialog {
-        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<Subtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
+        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
     }
 
     public interface AddTaskDialogListener {
@@ -173,7 +172,7 @@ public class AddTaskFragment extends DialogFragment {
                     deadline = new Date(calendar.getTimeInMillis());
                 }
 
-                List<Subtask> subtasks = new ArrayList<>();
+                List<ASubtask> subtasks = new ArrayList<>();
                 if(isSelectedChecklist) {
                     subtasks = subtaskListAdapter.getTasks();
                 }
@@ -233,7 +232,7 @@ public class AddTaskFragment extends DialogFragment {
         addSubtaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                subtaskListAdapter.addTask(new Subtask(""));
+                subtaskListAdapter.addTask(new SubtaskList(""));
             }
         });
     }

@@ -25,17 +25,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.databinding.FragmentListBinding;
+import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
-import at.ac.univie.se2_team_0308.models.Subtask;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
@@ -275,7 +274,7 @@ public class ListFragment extends Fragment implements AddTaskFragment.AddTaskDia
     }
 
     @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<Subtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
+    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
         Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
         Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
