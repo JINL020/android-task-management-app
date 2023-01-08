@@ -220,8 +220,6 @@
             </RelativeLayout>
 
 
-<!--            TODO should identifiers be different from activity_task ?-->
-
             <RelativeLayout
                 android:id="@+id/subtasksRelLayout"
                 android:layout_width="match_parent"
@@ -266,7 +264,42 @@
                 android:visibility="gone"
                 />
 
+        <RelativeLayout
+            android:id="@+id/attachmentsRelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnAddSubtask"
+            android:layout_centerHorizontal="true"
+            >
 
+            <TextView
+                android:id="@+id/txtAttachments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Attachments"
+                android:textStyle="italic"
+
+                />
+
+            <Button
+                android:id="@+id/btnAddAttachment"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/txtAttachments"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="5dp"
+                android:text="Attach file" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/filesListRecView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnAddAttachment"
+                tools:listitem="@layout/file_attachment" />
+
+        </RelativeLayout>
 
         </RelativeLayout>
 
