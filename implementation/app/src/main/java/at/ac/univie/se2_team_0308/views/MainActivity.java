@@ -30,6 +30,7 @@ import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
+import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
 import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
     private static final String TAG = "MAIN_ACTIVITY";
     public static final String EVENT_KEY = "appointment";
+    public static final String NOTIFIER_KEY = "notifier";
 
     private ActivityMainBinding binding;
 
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements IObserver {
                     }
                     if (notifier.getEvent() == ENotificationEvent.DELETE) {
                         eventNotifierViewModel.setOnDeleteNotifier(notifier.getNotifier());
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.APPOINTMENT) {
+                        eventNotifierViewModel.setOnAppointmentNotifier(notifier.getNotifier());
                     }
                 }
 
@@ -154,12 +159,17 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         Date deadline = appointment.getDeadline();
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
         Bundle extras = new Bundle();
         extras.putString(EVENT_KEY, message);
+        INotifierTypeConverter notifierTypeConverter = new INotifierTypeConverter();
+        String notifier = notifierTypeConverter.fromINotifier(eventNotifierViewModel.getOnAppointmentNotifier());
+        extras.putString(NOTIFIER_KEY, notifier);
+
         intent.putExtras(extras);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(deadline);
@@ -169,9 +179,9 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     }
 
     private void cancelAlarm(TaskAppointment appointment) {
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        Intent intent = new Intent(this, AlarmReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
