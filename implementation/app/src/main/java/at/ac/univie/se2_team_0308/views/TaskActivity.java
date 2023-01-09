@@ -3,9 +3,13 @@ package at.ac.univie.se2_team_0308.views;
 import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_CATEGORY;
 import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_KEY;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +20,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import at.ac.univie.se2_team_0308.R;
+import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
@@ -33,6 +41,8 @@ import at.ac.univie.se2_team_0308.models.SubtaskList;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.DisplayClass;
+import at.ac.univie.se2_team_0308.utils.import_tasks.UnsupportedDocumentFormatException;
+import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
@@ -63,6 +73,10 @@ public class TaskActivity extends AppCompatActivity {
     private RecyclerView subtasksRecView;
     private RelativeLayout subtasksRelLayout;
     private Button addSubtaskButton;
+
+    private Button btnAddAttachment;
+    private RecyclerView filesListRecView;
+    private AttachmentsAdapter attachmentsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +149,8 @@ public class TaskActivity extends AppCompatActivity {
                     break;
             }
         }
+
+        setAttachmentsView(incomingTask);
 
         switch (incomingTask.getCategoryEnum().toString()) {
             case "APPOINTMENT":
@@ -256,6 +272,19 @@ public class TaskActivity extends AppCompatActivity {
         subtasksRecView.setAdapter(subtaskListAdapter);
         subtasksRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
+    private void setAttachmentsView(DisplayClass incomingTask){
+        attachmentsAdapter = new AttachmentsAdapter(this);
+        attachmentsAdapter.setAttachments(incomingTask.getAttachments());
+        filesListRecView.setAdapter(attachmentsAdapter);
+        filesListRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        btnAddAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mGetContent.launch( "*/*");
+            }
+        });
+    }
+
     private void initViews() {
         editTaskName = findViewById(R.id.updateTaskName);
         editTaskDescription = findViewById(R.id.updateTaskDescription);
@@ -270,6 +299,29 @@ public class TaskActivity extends AppCompatActivity {
         subtasksRelLayout = findViewById(R.id.subtasksRelLayout);
         subtasksRecView = findViewById(R.id.subtasksRecView);
         addSubtaskButton = findViewById(R.id.btnAddSubtask);
-
+        filesListRecView = findViewById(R.id.filesListRecView);
+        btnAddAttachment = findViewById(R.id.btnAddAttachment);
     }
+
+    public static String getFilename(Uri uri, ContentResolver contentResolver) throws UnsupportedDocumentFormatException{
+        Cursor cursor = contentResolver.query(uri,null, null, null, null);
+        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        cursor.moveToFirst();
+        String filename =  cursor.getString(nameIndex);
+        return filename;
+    }
+
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    try {
+                        String fileName = getFilename(uri, getContentResolver());
+                        attachmentsAdapter.addAttachment(new Attachment(fileName));
+
+                    } catch (UnsupportedDocumentFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 }

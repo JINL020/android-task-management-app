@@ -18,13 +18,13 @@ public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
     List<ASubtask> subtasks = new ArrayList<>();
 
-    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks){
-        super(taskName, description, priority, status, category);
+    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks, List<Attachment> attachments){
+        super(taskName, description, priority, status, category, attachments);
         this.subtasks = subtasks;
     }
 
     protected TaskChecklist(Parcel in) {
-        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST);
+        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST, new ArrayList<>());
         setId(in.readInt());
         setTaskName(in.readString());
         setDescription(in.readString());
@@ -33,6 +33,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         setCategory(ECategory.valueOf(in.readString()));
         setCreationDate(new Date(in.readLong()));
         setSubtasks(in.readArrayList(ASubtask.class.getClassLoader()));
+        setAttachments(in.readArrayList(Attachment.class.getClassLoader()));
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {
@@ -62,6 +63,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeString(ECategory.CHECKLIST.name());
         parcel.writeLong(getCreationDate().getTime());
         parcel.writeList(subtasks);
+        parcel.writeList(getAttachments());
     }
 
     @Override

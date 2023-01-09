@@ -1,9 +1,13 @@
 package at.ac.univie.se2_team_0308.views;
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +20,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -31,9 +38,12 @@ import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.ASubtask;
+import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.SubtaskList;
+import at.ac.univie.se2_team_0308.utils.import_tasks.UnsupportedDocumentFormatException;
+import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
@@ -41,7 +51,7 @@ public class AddTaskFragment extends DialogFragment {
     public static final String TAG = "addtaskfragment";
 
     public interface SendDataFromAddDialog {
-        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
+        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
     }
 
     public interface AddTaskDialogListener {
@@ -75,6 +85,10 @@ public class AddTaskFragment extends DialogFragment {
     private RelativeLayout subtasksRelLayout;
     private Button addSubtaskButton;
 
+    private Button btnAddAttachment;
+    private RecyclerView filesListRecView;
+    private AttachmentsAdapter attachmentsAdapter;
+
     public AddTaskFragment(ATaskListFragment taskListFragment) {
         try {
             listener = (AddTaskDialogListener) taskListFragment;
@@ -90,6 +104,8 @@ public class AddTaskFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.add_task_dialog_fragment, null, false);
         initViews(view);
+        initSubtasksView();
+        initAttachmentsView();
 
         radioBtnAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,6 +209,7 @@ public class AddTaskFragment extends DialogFragment {
                         statusEnum,
                         deadline,
                         subtasks,
+                        attachmentsAdapter.getAttachments(),
                         isSelectedAppointment,
                         isSelectedChecklist
                 );
@@ -224,18 +241,28 @@ public class AddTaskFragment extends DialogFragment {
         spinnerDatePicker = view.findViewById(R.id.spinnerDatePicker);
         relLayoutChooseDeadline = view.findViewById(R.id.relLayoutChooseDeadline);
         taskTypeValidation = view.findViewById(R.id.taskTypeValidation);
+        filesListRecView = view.findViewById(R.id.filesListRecView);
         timePicker = view.findViewById(R.id.timePickerAddTaskDialog);
         timePicker.setIs24HourView(true);
-
-
         subtasksRelLayout = view.findViewById(R.id.subtasksRelLayout);
         subtasksRecView = view.findViewById(R.id.subtasksRecView);
         addSubtaskButton = view.findViewById(R.id.btnAddSubtask);
-        initSubtasksView();
+        btnAddAttachment = view.findViewById(R.id.btnAddAttachment);
     }
 
+    private void initAttachmentsView(){
+        attachmentsAdapter = new AttachmentsAdapter(requireActivity());
+        filesListRecView.setAdapter(attachmentsAdapter);
+        filesListRecView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
+        btnAddAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mGetContent.launch( "*/*");
+            }
+        });
+    }
     private void initSubtasksView(){
-         subtaskListAdapter = new SubtaskListAdapter(requireActivity(), new ArrayList<>());
+        subtaskListAdapter = new SubtaskListAdapter(requireActivity(), new ArrayList<>());
         subtasksRecView.setAdapter(subtaskListAdapter);
         subtasksRecView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
 
@@ -252,4 +279,28 @@ public class AddTaskFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
     }
+
+    public static String getFilename(Uri uri, ContentResolver contentResolver) throws UnsupportedDocumentFormatException{
+        Cursor cursor = contentResolver.query(uri,null, null, null, null);
+        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        cursor.moveToFirst();
+        String filename =  cursor.getString(nameIndex);
+        return filename;
+    }
+
+
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    try {
+                        String fileName = getFilename(uri, requireActivity().getContentResolver());
+                        attachmentsAdapter.addAttachment(new Attachment(fileName));
+
+                    } catch (UnsupportedDocumentFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
 }

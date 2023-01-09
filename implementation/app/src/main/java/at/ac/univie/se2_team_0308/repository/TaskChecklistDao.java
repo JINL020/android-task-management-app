@@ -38,7 +38,7 @@ public interface TaskChecklistDao {
     @Query("DELETE FROM task_checklists WHERE id in (:idList)")
     void deleteTasksById(List<Integer> idList);
 
-    @Query("SELECT id, taskName, description, priority, status, category, isSelected, isHidden, creationDate, subtasks FROM task_checklists")
+    @Query("SELECT id, taskName, description, priority, status, category, isSelected, isHidden, creationDate, subtasks, attachments FROM task_checklists")
     LiveData<List<TaskChecklist>> getAllTasks();
 
     @Query("SELECT * FROM task_checklists")

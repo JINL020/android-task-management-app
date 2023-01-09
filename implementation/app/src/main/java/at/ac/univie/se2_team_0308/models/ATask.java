@@ -1,8 +1,13 @@
 package at.ac.univie.se2_team_0308.models;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+
+import at.ac.univie.se2_team_0308.utils.AttachmentConverter;
 
 public abstract class ATask {
 
@@ -17,18 +22,23 @@ public abstract class ATask {
     private boolean isHidden = false;
     private String taskColor = "#E1E1E1"; //default light grey color
 
+    @TypeConverters(AttachmentConverter.class)
+    private List<Attachment> attachments;
+
+
     // @TypeConverters(DateConverter.class)
     private Date creationDate;
 
     public static final String TAG ="Task";
 
-    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category) {
+    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category, List<Attachment> attachments) {
         this.taskName = taskName;
         this.description = description;
         this.priority = priority;
         this.status = status;
         this.category = category;
         this.creationDate = Calendar.getInstance().getTime();
+        this.attachments = attachments;
     }
 
 
@@ -93,6 +103,25 @@ public abstract class ATask {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        if(attachments == null){
+            boolean n = true;
+        }
+        this.attachments = attachments;
+    }
+
+    public void addAttachment(Attachment a){
+        this.attachments.add(a);
+    }
+
+    public void removeAttachment(Attachment a){
+        this.attachments.remove(a);
     }
 
     public boolean isHidden() { return isHidden; }
