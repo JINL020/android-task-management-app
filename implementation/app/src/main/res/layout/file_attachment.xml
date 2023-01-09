@@ -18,23 +18,38 @@
         android:layout_margin="4dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <TextView
+            android:id="@+id/textExtension"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srcCompat="?attr/actionModePasteDrawable" />
+            android:fontFamily="sans-serif-condensed"
+            android:text="EXT"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/txtFileName"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
             android:layout_marginStart="2dp"
             android:layout_marginTop="2dp"
-            android:text="some_file.pdf"
-            android:textAlignment="center"
+            android:layout_marginEnd="5dp"
+            android:text="some_file"
+            android:textAlignment="textEnd"
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
+
+        <ImageButton
+            android:id="@+id/deleteFileBtn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            app:srcCompat="@android:drawable/ic_delete" />
+
+
     </LinearLayout>
 
 

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.ASubtask;
+import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
@@ -26,6 +27,7 @@ public class DisplayClass implements Parcelable {
     private Date creationDate;
     private Date deadline;
     private List<ASubtask> subtasks;
+    private List<Attachment> attachments;
 
     public DisplayClass(TaskAppointment appointment) {
         this.id = appointment.getId();
@@ -37,6 +39,7 @@ public class DisplayClass implements Parcelable {
         this.categoryEnum = appointment.getCategory();
         this.creationDate = appointment.getCreationDate();
         this.deadline = appointment.getDeadline();
+        this.attachments = appointment.getAttachments();
         this.subtasks = new ArrayList<ASubtask>();
     }
 
@@ -51,6 +54,8 @@ public class DisplayClass implements Parcelable {
         this.creationDate = checklist.getCreationDate();
         this.deadline = Calendar.getInstance().getTime();
         this.subtasks = checklist.getSubtasks();
+        this.attachments = checklist.getAttachments();
+        boolean n = true;
     }
 
     protected DisplayClass(Parcel in) {
@@ -64,6 +69,7 @@ public class DisplayClass implements Parcelable {
         creationDate = new Date(in.readLong());
         deadline = new Date(in.readLong());
         subtasks = in.readArrayList(ASubtask.class.getClassLoader());
+        attachments = in.readArrayList(Attachment.class.getClassLoader());
     }
 
     public int getId() {
@@ -158,6 +164,14 @@ public class DisplayClass implements Parcelable {
         }
     };
 
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -174,5 +188,6 @@ public class DisplayClass implements Parcelable {
         parcel.writeLong(deadline.getTime());
         parcel.writeLong(creationDate.getTime());
         parcel.writeList(subtasks);
+        parcel.writeList(attachments);
     }
 }

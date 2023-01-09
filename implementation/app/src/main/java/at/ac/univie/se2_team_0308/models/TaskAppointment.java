@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.TypeConverters;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.utils.DateConverter;
@@ -17,13 +19,13 @@ public class TaskAppointment extends ATask implements Parcelable {
     @TypeConverters(DateConverter.class)
     private Date deadline;
 
-    public TaskAppointment(String taskName, String description, EPriority priority, EStatus status, ECategory category, Date deadline){
-        super(taskName, description, priority, status, category);
+    public TaskAppointment(String taskName, String description, EPriority priority, EStatus status, ECategory category, Date deadline, List<Attachment> attachments){
+        super(taskName, description, priority, status, category, attachments);
         this.deadline = deadline;
     }
 
     protected TaskAppointment(Parcel in) {
-        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.APPOINTMENT);
+        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.APPOINTMENT, new ArrayList<>());
         setId(in.readInt());
         setTaskName(in.readString());
         setDescription(in.readString());
@@ -32,6 +34,7 @@ public class TaskAppointment extends ATask implements Parcelable {
         setCategory(ECategory.valueOf(in.readString()));
         deadline = new Date(in.readLong());
         setCreationDate(new Date(in.readLong()));
+        setAttachments(in.readArrayList(Attachment.class.getClassLoader()));
     }
 
     public static final Creator<TaskAppointment> CREATOR = new Creator<TaskAppointment>() {
@@ -61,6 +64,7 @@ public class TaskAppointment extends ATask implements Parcelable {
         parcel.writeString(ECategory.APPOINTMENT.name());
         parcel.writeLong(deadline.getTime());
         parcel.writeLong(getCreationDate().getTime());
+        parcel.writeList(getAttachments());
     }
 
     @Override
