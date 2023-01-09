@@ -11,7 +11,6 @@ public class AttachmentConverter {
     @TypeConverter
     public String attachmentsToJson(List<Attachment> subtasks) {
         Gson gson = new Gson();
-        String n = gson.toJson(subtasks);
         return gson.toJson(subtasks);
     }
 
@@ -19,7 +18,6 @@ public class AttachmentConverter {
     public ArrayList<Attachment> jsonToAttachements(String json)  {
         Gson gson = new Gson();
         Type type = new TypeToken<List<Attachment>>() {}.getType();
-        ArrayList<Attachment> nn = gson.fromJson(json, type);
         return gson.fromJson(json, type);
     }
 }
