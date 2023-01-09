@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements IObserver {
                         eventNotifierViewModel.setOnAppointmentNotifier(notifier.getNotifier());
                     }
                 }
-
                 Log.d(TAG, "Saved settings: " + eventNotifiers);
             }
         });
@@ -109,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements IObserver {
             eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message, getApplicationContext());
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    cancelAlarm((TaskAppointment) task);
                     setAlarm((TaskAppointment)task, message);
                 }
             }
@@ -168,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         intent.putExtras(extras);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(deadline);
@@ -180,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     private void cancelAlarm(TaskAppointment appointment) {
         Intent intent = new Intent(this, AlarmReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
