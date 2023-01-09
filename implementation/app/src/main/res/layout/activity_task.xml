@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,136 +16,131 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/relLayoutCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/relLayoutCard"
-                android:padding="30sp"
-                >
+                android:padding="30sp">
 
                 <TextView
                     android:id="@+id/TaskInfoTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:text="Task Info"
                     android:textColor="#FF8F6372"
-                    android:layout_centerHorizontal="true"
                     android:textSize="30sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <RelativeLayout
+                    android:id="@+id/relLayoutTaskTitleEdit"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/TaskInfoTitle"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/relLayoutTaskTitleEdit"
                     android:layout_marginTop="20dp">
 
                     <TextView
+                        android:id="@+id/txtTaskName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Task Title"
                         android:textStyle="italic"
-                        android:id="@+id/txtTaskName"
 
                         />
 
                     <EditText
-                        android:layout_below="@+id/txtTaskName"
-                        android:hint="Enter Task Title"
                         android:id="@+id/updateTaskName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        />
+                        android:layout_below="@+id/txtTaskName"
+                        android:hint="Enter Task Title" />
 
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/relLayoutTaskDescriptionEdit"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/relLayoutTaskTitleEdit"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/relLayoutTaskDescriptionEdit"
                     android:layout_marginTop="20dp">
 
                     <TextView
+                        android:id="@+id/txtTaskDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Task Description"
                         android:textStyle="italic"
-                        android:id="@+id/txtTaskDescription"
 
                         />
 
                     <EditText
-                        android:layout_below="@+id/txtTaskDescription"
-                        android:hint="Enter Task Description"
                         android:id="@+id/updateTaskDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        />
+                        android:layout_below="@+id/txtTaskDescription"
+                        android:hint="Enter Task Description" />
 
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/relLayoutTaskPriorityEdit"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/relLayoutTaskDescriptionEdit"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/relLayoutTaskPriorityEdit"
                     android:layout_marginTop="20dp">
 
                     <TextView
+                        android:id="@+id/txtTaskPriority"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Task Priority"
                         android:textStyle="italic"
-                        android:id="@+id/txtTaskPriority"
 
                         />
 
                     <Spinner
+                        android:id="@+id/spinnerUpdateTaskPriority"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txtTaskPriority"
-                        android:id="@+id/spinnerUpdateTaskPriority"
-                        android:entries="@array/priorities"
-                        />
+                        android:entries="@array/priorities" />
 
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/relLayoutTaskStatusEdit"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/relLayoutTaskPriorityEdit"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/relLayoutTaskStatusEdit"
                     android:layout_marginTop="20dp">
 
                     <TextView
+                        android:id="@+id/txtTaskStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Task Status"
                         android:textStyle="italic"
-                        android:id="@+id/txtTaskStatus"
 
                         />
 
                     <Spinner
+                        android:id="@+id/spinnerUpdateTaskStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txtTaskStatus"
-                        android:id="@+id/spinnerUpdateTaskStatus"
-                        android:entries="@array/statuses"
-                        />
+                        android:entries="@array/statuses" />
 
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/relLayoutTaskDeadlineEdit"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/relLayoutTaskStatusEdit"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/relLayoutTaskDeadlineEdit"
                     android:layout_marginTop="20dp"
                     android:animateLayoutChanges="true"
                     android:visibility="gone">
@@ -156,19 +150,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Task Deadline"
-                        android:textStyle="italic"
-                        />
+                        android:textStyle="italic" />
 
                     <DatePicker
                         android:id="@+id/datePickerEdit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/txtTaskDeadline"
-                        android:datePickerMode="spinner"
-                        android:entries="@array/statuses"
                         android:calendarViewShown="false"
-                        />
+                        android:datePickerMode="spinner"
+                        android:entries="@array/statuses" />
 
+                    <TimePicker
+                        android:id="@+id/timePickerTaskActivity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/datePickerEdit"
+                        android:timePickerMode="spinner"/>
 
 
                 </RelativeLayout>
@@ -190,7 +188,6 @@
                         android:layout_marginTop="20dp"
                         android:text="Subtasks"
                         android:textStyle="italic"
-
                         />
 
                     <androidx.core.widget.NestedScrollView
@@ -269,8 +266,8 @@
                         android:id="@+id/btnCancelUpdate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:layout_alignParentStart="true"
+                        android:layout_marginTop="20dp"
                         android:backgroundTint="#8F6372"
                         android:text="Cancel" />
 
@@ -278,27 +275,21 @@
                         android:id="@+id/btnUpdateTaskInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginStart="40dp"
                         android:layout_alignParentEnd="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="20dp"
                         android:layout_toRightOf="@+id/btnCancelUpdate"
                         android:backgroundTint="#8F6372"
                         android:text="Update Task" />
 
 
                 </RelativeLayout>
-
-
             </RelativeLayout>
 
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-
-
-
 
 
 </RelativeLayout>

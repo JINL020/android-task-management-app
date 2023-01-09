@@ -3,6 +3,7 @@ package at.ac.univie.se2_team_0308.utils.notifications;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -22,20 +23,20 @@ public class BasicNotifier extends ADecoratorNotifier {
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, String message) {
-        super.sendNotification(event, message);
+    public void sendNotification(ENotificationEvent event, String message, Context context) {
+        super.sendNotification(event, message, context);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = MainActivity.getAppContext().getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(notificationChannel);
-        }
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.getAppContext(), "notifications");
-        notificationBuilder.setSmallIcon(android.R.drawable.stat_notify_sync).setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(event.name()).bigText(message));
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "notifications")
+                .setSmallIcon(android.R.drawable.stat_notify_sync)
+                .setStyle(new NotificationCompat
+                        .BigTextStyle()
+                        .setBigContentTitle(event.name())
+                        .bigText(message)
+                );
 
         Notification notification = notificationBuilder.build();
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(MainActivity.getAppContext());
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(1, notification);
 
         Log.d(TAG, "send out notification: " + event.name() + message);

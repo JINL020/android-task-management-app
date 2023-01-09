@@ -31,7 +31,7 @@ public class INotifierTypeConverter {
     }
 
     @TypeConverter
-    public INotifier toIObserver(String json) {
+    public INotifier toINotifier(String json) {
         Type listType = new TypeToken<List<ENotifier>>() {
         }.getType();
 

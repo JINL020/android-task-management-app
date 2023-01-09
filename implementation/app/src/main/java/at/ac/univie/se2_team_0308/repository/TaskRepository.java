@@ -6,6 +6,9 @@ import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
@@ -29,8 +32,19 @@ public class TaskRepository {
         return allTasks;
     }
 
-    public void insertTaskAppointment(TaskAppointment taskAppointment) {
-        AppDatabase.databaseWriteExecutor.execute( () -> taskAppointmentDao.insert(taskAppointment));
+    public long insertTaskAppointment(TaskAppointment taskAppointment) {
+        Callable<Long> insertCallable = () -> taskAppointmentDao.insert(taskAppointment);
+        long rowId = 0;
+
+        Future<Long> future = AppDatabase.databaseWriteExecutor.submit(insertCallable);
+        try {
+            rowId = future.get();
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return rowId;
     }
 
     public void insertTaskChecklist(TaskChecklist taskChecklist) {
@@ -73,4 +87,31 @@ public class TaskRepository {
         AppDatabase.databaseWriteExecutor.execute( () -> taskChecklistDao.updateTaskPriority(taskIds, priorityEnum));
     }
 
+    // Update isHidden property
+    public void updateSelectedTasksHiddenStatus(List<Integer> taskIdsAppointment, List<Integer> taskIdsChecklist, boolean isHidden) {
+        updateAppointmentTasksHiddenStatus(taskIdsAppointment, isHidden);
+        updateChecklistTasksHiddenStatus(taskIdsChecklist, isHidden);
+    }
+
+    public void updateAppointmentTasksHiddenStatus(List<Integer> taskIds, boolean isHidden) {
+        AppDatabase.databaseWriteExecutor.execute( () -> taskAppointmentDao.updateHiddenStatus(taskIds, isHidden));
+    }
+
+    public void updateChecklistTasksHiddenStatus(List<Integer> taskIds, boolean isHidden) {
+        AppDatabase.databaseWriteExecutor.execute( () -> taskChecklistDao.updateHiddenStatus(taskIds, isHidden));
+    }
+
+    //Update task color property
+    public void updateSelectedTasksColor(List<Integer> taskIdsAppointment, List<Integer> taskIdsChecklist, String color) {
+        updateAppointmentTasksColor(taskIdsAppointment, color);
+        updateChecklistTasksColor(taskIdsChecklist, color);
+    }
+
+    public void updateAppointmentTasksColor(List<Integer> taskIds, String color) {
+        AppDatabase.databaseWriteExecutor.execute( () -> taskAppointmentDao.updateTaskColor(taskIds, color));
+    }
+
+    public void updateChecklistTasksColor(List<Integer> taskIds, String color) {
+        AppDatabase.databaseWriteExecutor.execute( () -> taskChecklistDao.updateTaskColor(taskIds, color));
+    }
 }

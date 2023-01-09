@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -16,6 +17,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.NavController;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -61,6 +65,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private RelativeLayout deadlineRelLayout;
     private DatePicker deadlineSpinnerPicker;
+    private TimePicker timePicker;
 
     private TaskViewModel viewModel;
 
@@ -96,8 +101,10 @@ public class TaskActivity extends AppCompatActivity {
         }
 
         btnCancelUpdate.setOnClickListener(view -> {
-            Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
-            startActivity(intentBack);
+            finish();
+            //Old implementation: will not work on all screens of navbar
+            //Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
+            //startActivity(intentBack);
         });
 
         addSubtaskButton.setOnClickListener(view -> {
@@ -161,7 +168,17 @@ public class TaskActivity extends AppCompatActivity {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
+                int hour = 0;
+                int minute = 0;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    minute = calendar.get(Calendar.MINUTE);
+                }
                 deadlineSpinnerPicker.updateDate(year, month, day);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    timePicker.setHour(hour);
+                    timePicker.setMinute(minute);
+                }
                 break;
             case "CHECKLIST":
                 subtasksRelLayout.setVisibility(View.VISIBLE);
@@ -216,13 +233,20 @@ public class TaskActivity extends AppCompatActivity {
                     int day = deadlineSpinnerPicker.getDayOfMonth();
                     int month = deadlineSpinnerPicker.getMonth();
                     int year = deadlineSpinnerPicker.getYear();
+                    int hour = 0;
+                    int minute = 0;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        hour = timePicker.getHour();
+                        minute = timePicker.getMinute();
+                    }
 
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
+                    calendar.set(year, month, day, hour, minute, 0);
                     incomingTask.setDeadline(new Date(calendar.getTimeInMillis()));
 
                     incomingAppointment.setDeadline(incomingTask.getDeadline());
                     viewModel.updateAppointment(incomingAppointment);
+
                 }
                 if (incomingTask.getCategoryEnum() == ECategory.CHECKLIST){
                     incomingChecklist.setTaskName(incomingTask.getTaskName());
@@ -270,6 +294,8 @@ public class TaskActivity extends AppCompatActivity {
         btnCancelUpdate = findViewById(R.id.btnCancelUpdate);
         deadlineRelLayout = findViewById(R.id.relLayoutTaskDeadlineEdit);
         deadlineSpinnerPicker = findViewById(R.id.datePickerEdit);
+        timePicker = findViewById(R.id.timePickerTaskActivity);
+        timePicker.setIs24HourView(true);
         subtasksRelLayout = findViewById(R.id.subtasksRelLayout);
         subtasksRecView = findViewById(R.id.subtasksRecView);
         addSubtaskButton = findViewById(R.id.btnAddSubtask);

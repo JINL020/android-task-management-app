@@ -1,5 +1,7 @@
 package at.ac.univie.se2_team_0308.utils.notifications;
 
+import android.content.Context;
+
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
@@ -14,8 +16,8 @@ public abstract class ADecoratorNotifier implements INotifier {
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, String message) {
-        wrapped.sendNotification(event, message);
+    public void sendNotification(ENotificationEvent event, String message, Context context) {
+        wrapped.sendNotification(event, message, context);
     }
 
     @Override

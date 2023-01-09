@@ -2,6 +2,7 @@ package at.ac.univie.se2_team_0308.views;
 
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,7 +31,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,8 +42,6 @@ import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.SubtaskList;
-import at.ac.univie.se2_team_0308.utils.import_tasks.FileContentRetriever;
-import at.ac.univie.se2_team_0308.utils.import_tasks.FilenameRetriever;
 import at.ac.univie.se2_team_0308.utils.import_tasks.UnsupportedDocumentFormatException;
 import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
@@ -70,6 +69,7 @@ public class AddTaskFragment extends DialogFragment {
     private AddTaskDialogListener listener;
     private SendDataFromAddDialog inputListener;
     private DatePicker spinnerDatePicker;
+    private TimePicker timePicker;
 
     private RelativeLayout relLayoutCard;
     private RelativeLayout relLayoutChooseDeadline;
@@ -89,15 +89,14 @@ public class AddTaskFragment extends DialogFragment {
     private RecyclerView filesListRecView;
     private AttachmentsAdapter attachmentsAdapter;
 
-    public AddTaskFragment(ListFragment listFragment) {
+    public AddTaskFragment(ATaskListFragment taskListFragment) {
         try {
-            listener = (AddTaskDialogListener) listFragment;
-            inputListener = (SendDataFromAddDialog) listFragment;
+            listener = (AddTaskDialogListener) taskListFragment;
+            inputListener = (SendDataFromAddDialog) taskListFragment;
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString());
         }
     }
-
 
     @NonNull
     @Override
@@ -184,9 +183,15 @@ public class AddTaskFragment extends DialogFragment {
                     int day = spinnerDatePicker.getDayOfMonth();
                     int month = spinnerDatePicker.getMonth();
                     int year = spinnerDatePicker.getYear();
+                    int hour = 0;
+                    int minute = 0;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        hour = timePicker.getHour();
+                        minute = timePicker.getMinute();
+                    }
 
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
+                    calendar.set(year, month, day, hour, minute, 0);
                     deadline = new Date(calendar.getTimeInMillis());
                 }
 
@@ -237,6 +242,8 @@ public class AddTaskFragment extends DialogFragment {
         relLayoutChooseDeadline = view.findViewById(R.id.relLayoutChooseDeadline);
         taskTypeValidation = view.findViewById(R.id.taskTypeValidation);
         filesListRecView = view.findViewById(R.id.filesListRecView);
+        timePicker = view.findViewById(R.id.timePickerAddTaskDialog);
+        timePicker.setIs24HourView(true);
         subtasksRelLayout = view.findViewById(R.id.subtasksRelLayout);
         subtasksRecView = view.findViewById(R.id.subtasksRecView);
         addSubtaskButton = view.findViewById(R.id.btnAddSubtask);
