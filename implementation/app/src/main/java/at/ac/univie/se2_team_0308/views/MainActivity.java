@@ -29,6 +29,7 @@ import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
+import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
 import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
@@ -81,11 +82,9 @@ public class MainActivity extends AppCompatActivity implements IObserver {
                         eventNotifierViewModel.setOnAppointmentNotifier(notifier.getNotifier());
                     }
                 }
-
                 Log.d(TAG, "Saved settings: " + eventNotifiers);
             }
         });
-
     }
 
     @Override
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         Log.d(TAG, "received update from taskViewModel: " + event.name() + " " + message);
 
         if (event == ENotificationEvent.CREATE) {
-            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message, getApplicationContext());
+            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message, this);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
                     setAlarm((TaskAppointment)task, message);
@@ -106,16 +105,15 @@ public class MainActivity extends AppCompatActivity implements IObserver {
             }
         }
         if (event == ENotificationEvent.UPDATE) {
-            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message, getApplicationContext());
+            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message, this);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    cancelAlarm((TaskAppointment) task);
                     setAlarm((TaskAppointment)task, message);
                 }
             }
         }
         if (event == ENotificationEvent.DELETE) {
-            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message, getApplicationContext());
+            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message, this);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
                     cancelAlarm((TaskAppointment) task);
@@ -127,14 +125,12 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //taskViewModel.detachObserver(this);
-        Log.d(TAG, "detached observer to taskViewModel(MainActivity)");
+        taskViewModel.detachObserver(this);
+        Log.d(TAG, "detached observer from taskViewModel(MainActivity)");
 
     }
 
     private void configureBottomNavBar() {
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_list, R.id.navigation_calendar, R.id.navigation_settings).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -156,6 +152,16 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
     private void setAlarm(TaskAppointment appointment, String message) {
         Date deadline = appointment.getDeadline();
+
+        Date currentTime = Calendar.getInstance().getTime();
+        if(currentTime.after(deadline)){
+            Log.d(TAG, "deadline already passed");
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(deadline);
+
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(this, AlarmReceiver.class);
@@ -168,19 +174,16 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         intent.putExtras(extras);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(deadline);
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         Log.d(TAG, "set alarm for " + appointment);
     }
 
     private void cancelAlarm(TaskAppointment appointment) {
         Intent intent = new Intent(this, AlarmReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
