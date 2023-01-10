@@ -29,6 +29,16 @@ public class DisplayClass implements Parcelable {
     private List<ASubtask> subtasks;
     private List<Attachment> attachments;
 
+    public byte[] getSketchData() {
+        return sketchData;
+    }
+
+    public void setSketchData(byte[] sketchData) {
+        this.sketchData = sketchData;
+    }
+
+    private byte[] sketchData;
+
     public DisplayClass(TaskAppointment appointment) {
         this.id = appointment.getId();
         this.taskName = appointment.getTaskName();
@@ -41,6 +51,7 @@ public class DisplayClass implements Parcelable {
         this.deadline = appointment.getDeadline();
         this.attachments = appointment.getAttachments();
         this.subtasks = new ArrayList<ASubtask>();
+        this.sketchData = appointment.getSketchData();
     }
 
     public DisplayClass(TaskChecklist checklist) {
@@ -55,7 +66,7 @@ public class DisplayClass implements Parcelable {
         this.deadline = Calendar.getInstance().getTime();
         this.subtasks = checklist.getSubtasks();
         this.attachments = checklist.getAttachments();
-        boolean n = true;
+        this.sketchData = checklist.getSketchData();
     }
 
     protected DisplayClass(Parcel in) {
@@ -70,6 +81,8 @@ public class DisplayClass implements Parcelable {
         deadline = new Date(in.readLong());
         subtasks = in.readArrayList(ASubtask.class.getClassLoader());
         attachments = in.readArrayList(Attachment.class.getClassLoader());
+        sketchData = new byte[in.readInt()];
+        in.readByteArray(sketchData);
     }
 
     public int getId() {
@@ -189,5 +202,7 @@ public class DisplayClass implements Parcelable {
         parcel.writeLong(creationDate.getTime());
         parcel.writeList(subtasks);
         parcel.writeList(attachments);
+        parcel.writeInt(sketchData.length);
+        parcel.writeByteArray(sketchData);
     }
 }

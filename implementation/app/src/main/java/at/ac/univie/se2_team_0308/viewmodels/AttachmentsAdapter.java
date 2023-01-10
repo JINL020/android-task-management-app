@@ -13,14 +13,35 @@ import java.util.List;
 import java.util.Locale;
 import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.Attachment;
+import at.ac.univie.se2_team_0308.views.AddTaskFragment;
+import at.ac.univie.se2_team_0308.views.TaskActivity;
 
 public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter.ViewHolder> {
     public static final String TAG = "AttachmentsAdapter";
     private Context context;
     List<Attachment> attachments;
 
-    public AttachmentsAdapter(Context context){
+    private AttachmentsAdapter.OpenFileListener listener;
+    public interface OpenFileListener {
+        void openFile(String sketchPath);
+    }
+
+    public AttachmentsAdapter(Context context, TaskActivity activity){
         this.context = context;
+        try {
+            this.listener = (OpenFileListener) activity;
+        } catch (ClassCastException e){
+            // tODO
+        }
+        this.attachments = new ArrayList<>();
+    }
+    public AttachmentsAdapter(Context context, AddTaskFragment activity){
+        this.context = context;
+        try {
+            this.listener = (OpenFileListener) activity;
+        } catch (ClassCastException e){
+            // TODO
+        }
         this.attachments = new ArrayList<>();
     }
 
@@ -62,11 +83,9 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
     public void onBindViewHolder(@NonNull AttachmentsAdapter.ViewHolder holder, int position) {
         holder.txtFileName.setText(this.attachments.get(position).getBaseName());
         holder.textExtension.setText(this.attachments.get(position).getExtension().toUpperCase(Locale.ROOT));
-        holder.deleteFileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                removeAttachment(holder.getAdapterPosition());
-            }
+        holder.deleteFileBtn.setOnClickListener(view -> removeAttachment(holder.getAdapterPosition()));
+        holder.openFileBtn.setOnClickListener(view -> {
+            listener.openFile(this.attachments.get(position).getFilePath());
         });
     }
 
@@ -80,12 +99,14 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
         private TextView textExtension;
         private TextView txtFileName;
         private ImageButton deleteFileBtn;
+        private ImageButton openFileBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textExtension = itemView.findViewById(R.id.textExtension);
             txtFileName = itemView.findViewById(R.id.txtFileName);
             deleteFileBtn = itemView.findViewById(R.id.deleteFileBtn);
+            openFileBtn = itemView.findViewById(R.id.openFileBtn);
         }
     }
 

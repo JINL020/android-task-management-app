@@ -166,36 +166,33 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/datePickerEdit"
-                        android:timePickerMode="spinner"/>
+                        android:timePickerMode="spinner" />
 
 
                 </RelativeLayout>
-
 
 
                 <RelativeLayout
                     android:id="@+id/subtasksRelLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_below="@+id/relLayoutTaskDeadlineEdit"
                     android:layout_centerHorizontal="true"
-                    >
+                    android:visibility="gone">
+
                     <TextView
                         android:id="@+id/txtSubtasks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="Subtasks"
-                        android:textStyle="italic"
-                        />
+                        android:textStyle="italic" />
 
                     <androidx.core.widget.NestedScrollView
                         android:id="@+id/subtasksScrollview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/txtSubtasks"
-                        >
+                        android:layout_below="@+id/txtSubtasks">
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/subtasksRecView"
@@ -211,20 +208,18 @@
                     android:id="@+id/btnAddSubtask"
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_alignParentEnd="true"
                     android:layout_below="@+id/subtasksRelLayout"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
                     android:text="Add Subtask"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:id="@+id/attachmentsRelLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/btnAddSubtask"
-                    android:layout_centerHorizontal="true"
-                    >
+                    android:layout_centerHorizontal="true">
 
                     <TextView
                         android:id="@+id/txtAttachments"
@@ -236,30 +231,63 @@
 
                         />
 
-                    <Button
-                        android:id="@+id/btnAddAttachment"
-                        style="@style/Widget.AppCompat.Button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                    <LinearLayout
+                        android:id="@+id/addAttachmentsLinLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_below="@+id/txtAttachments"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginTop="5dp"
-                        android:text="Attach file" />
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnAddAttachment"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="5dp"
+                            android:text="Attach file" />
+
+                        <Button
+                            android:id="@+id/btnAddSketch"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="5dp"
+                            android:text="Create sketch" />
+
+                    </LinearLayout>
 
                     <!--             TODO maybe try to display in flow layout-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/filesListRecView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/btnAddAttachment"
+                        android:layout_below="@+id/addAttachmentsLinLayout"
                         tools:listitem="@layout/file_attachment" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/sketchLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/attachmentsRelLayout">
+
+                    <ImageView
+                        android:id="@+id/sketchPlaceholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="20dp"
+                        android:visibility="gone"
+                         />
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/attachmentsRelLayout"
+                    android:layout_below="@+id/sketchLayout"
                     android:layout_centerHorizontal="true">
 
                     <Button

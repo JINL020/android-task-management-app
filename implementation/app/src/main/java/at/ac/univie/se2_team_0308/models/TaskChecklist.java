@@ -16,15 +16,16 @@ import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 @Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
-    List<ASubtask> subtasks = new ArrayList<>();
+    List<ASubtask> subtasks;
 
-    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks, List<Attachment> attachments){
-        super(taskName, description, priority, status, category, attachments);
-        this.subtasks = subtasks;
+    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData){
+        super(taskName, description, priority, status, category, attachments, sketchData);
+        this.subtasks = new ArrayList<>();
+        setSubtasks(subtasks);
     }
 
     protected TaskChecklist(Parcel in) {
-        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST, new ArrayList<>());
+        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST, new ArrayList<>(), new byte[0]);
         setId(in.readInt());
         setTaskName(in.readString());
         setDescription(in.readString());
@@ -34,6 +35,9 @@ public class TaskChecklist extends ATask implements Parcelable {
         setCreationDate(new Date(in.readLong()));
         setSubtasks(in.readArrayList(ASubtask.class.getClassLoader()));
         setAttachments(in.readArrayList(Attachment.class.getClassLoader()));
+        byte[] arr = new byte[in.readInt()];
+        in.readByteArray(arr);
+        setSketchData(arr);
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {
@@ -64,6 +68,8 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeLong(getCreationDate().getTime());
         parcel.writeList(subtasks);
         parcel.writeList(getAttachments());
+        parcel.writeInt(getSketchData().length);
+        parcel.writeByteArray(getSketchData());
     }
 
     @Override
@@ -78,7 +84,9 @@ public class TaskChecklist extends ATask implements Parcelable {
         return subtasks;
     }
     public void setSubtasks(List<ASubtask> subtasks) {
-        this.subtasks = subtasks;
+        if(subtasks != null) {
+            this.subtasks = subtasks;
+        }
     }
 
     void removeAllSubtasks(){
@@ -93,7 +101,6 @@ public class TaskChecklist extends ATask implements Parcelable {
         subtask.removeAllSubtasks();
         this.subtasks.remove(subtask);
     }
-
 
     @Override
     public boolean equals(Object o) {

@@ -1,4 +1,5 @@
 package at.ac.univie.se2_team_0308.models;
+import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -10,6 +11,7 @@ import java.util.Objects;
 import at.ac.univie.se2_team_0308.utils.AttachmentConverter;
 
 public abstract class ATask {
+    public static final String TAG ="Task";
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -21,17 +23,14 @@ public abstract class ATask {
     private ECategory category;
     private boolean isHidden = false;
     private String taskColor = "#E1E1E1"; //default light grey color
-
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    private byte[] sketchData;
     @TypeConverters(AttachmentConverter.class)
     private List<Attachment> attachments;
-
-
     // @TypeConverters(DateConverter.class)
     private Date creationDate;
 
-    public static final String TAG ="Task";
-
-    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category, List<Attachment> attachments) {
+    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category, List<Attachment> attachments, byte[] sketchData) {
         this.taskName = taskName;
         this.description = description;
         this.priority = priority;
@@ -39,8 +38,16 @@ public abstract class ATask {
         this.category = category;
         this.creationDate = Calendar.getInstance().getTime();
         this.attachments = attachments;
+        this.sketchData = sketchData;
     }
 
+    public byte[] getSketchData() {
+        return sketchData;
+    }
+
+    public void setSketchData(byte[] sketchData) {
+        this.sketchData = sketchData;
+    }
 
     public int getId() {
         return id;
@@ -110,9 +117,6 @@ public abstract class ATask {
     }
 
     public void setAttachments(List<Attachment> attachments) {
-        if(attachments == null){
-            boolean n = true;
-        }
         this.attachments = attachments;
     }
 

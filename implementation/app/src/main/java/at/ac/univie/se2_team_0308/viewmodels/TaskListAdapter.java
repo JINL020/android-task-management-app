@@ -154,9 +154,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        if (tasks == null) {
-            return 0;
-        }
         return tasks.size();
     }
 
@@ -184,7 +181,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         private RelativeLayout lowPriorityRelLayout;
         private RelativeLayout mediumPriorityRelLayout;
         private RelativeLayout highPriorityRelLayout;
-       // private TextView subtasksList;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -200,7 +196,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             lowPriorityRelLayout = itemView.findViewById(R.id.relLayoutLowPriority);
             mediumPriorityRelLayout = itemView.findViewById(R.id.relLayoutMediumPriority);
             highPriorityRelLayout = itemView.findViewById(R.id.relLayoutHighPriority);
-           // subtasksList = itemView.findViewById(R.id.subtasksList);
         }
     }
 }

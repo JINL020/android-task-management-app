@@ -7,22 +7,21 @@ import static at.ac.univie.se2_team_0308.views.MainActivity.NOTIFIER_KEY;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -30,12 +29,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.navigation.NavController;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +51,6 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.DisplayClass;
 import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
-import at.ac.univie.se2_team_0308.utils.import_tasks.UnsupportedDocumentFormatException;
 import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
@@ -61,8 +59,7 @@ import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
-public class TaskActivity extends AppCompatActivity implements IObserver {
-
+public class TaskActivity extends AppCompatActivity implements SketchFragment.SendDataFromSketchDialog, AttachmentsAdapter.OpenFileListener, IObserver {
     public static final String TAG = "TaskActivity";
 
     private EditText editTaskName;
@@ -93,6 +90,10 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
     private Button btnAddAttachment;
     private RecyclerView filesListRecView;
     private AttachmentsAdapter attachmentsAdapter;
+
+    private Button btnCreateSketch;
+    private ImageView sketchPlacheholder;
+    private byte[] sketchData = new byte[0];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +131,13 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
         addSubtaskButton.setOnClickListener(view -> {
             subtaskListAdapter.addTask(new SubtaskList(""));
         });
+
+        btnCreateSketch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SketchFragment(TaskActivity.this).show(getSupportFragmentManager(), "addsketch_fromactivity");
+            }
+        });
     }
 
     private void setViews(DisplayClass incomingTask) {
@@ -140,6 +148,15 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
 
         if (incomingTask.getDescription() != null) {
             editTaskDescription.setText(incomingTask.getDescription());
+        }
+
+        if(incomingTask.getSketchData() != null){
+            sketchData = incomingTask.getSketchData();
+            if(sketchData.length > 0){
+                Bitmap bmp = BitmapFactory.decodeByteArray(sketchData, 0, sketchData.length);
+                sketchPlacheholder.setImageBitmap(bmp);
+                sketchPlacheholder.setVisibility(View.VISIBLE);
+            }
         }
 
         if (incomingTask.getPriority() != null) {
@@ -205,9 +222,7 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
                 addSubtaskButton.setVisibility(View.VISIBLE);
                 deadlineRelLayout.setVisibility(View.GONE);
                 Log.d(TAG, "onBindViewHolder: the subtasks is not null");
-                if (incomingTask.getSubtasks() != null && !incomingTask.getSubtasks().isEmpty()) {
-                    setSubtasksView(incomingTask);
-                }
+                setSubtasksView(incomingTask);
                 break;
         }
 
@@ -243,12 +258,14 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
                 incomingTask.setDescription(editTaskDescription.getText().toString());
                 incomingTask.setPriority(newPriority);
                 incomingTask.setStatus(newStatus);
+                incomingTask.setSketchData(sketchData);
 
                 if (incomingTask.getCategoryEnum() == ECategory.APPOINTMENT) {
                     incomingAppointment.setTaskName(incomingTask.getTaskName());
                     incomingAppointment.setDescription(incomingTask.getDescription());
                     incomingAppointment.setPriority(incomingTask.getPriority());
                     incomingAppointment.setStatus(incomingTask.getStatus());
+                    incomingAppointment.setSketchData(incomingTask.getSketchData());
 
                     int day = deadlineSpinnerPicker.getDayOfMonth();
                     int month = deadlineSpinnerPicker.getMonth();
@@ -274,6 +291,8 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
                     incomingChecklist.setPriority(incomingTask.getPriority());
                     incomingChecklist.setStatus(incomingTask.getStatus());
                     incomingChecklist.setSubtasks(subtaskListAdapter.getTasks());
+                    incomingChecklist.setSketchData(incomingTask.getSketchData());
+
                     viewModel.updateChecklist(incomingChecklist);
                 }
                 Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
@@ -293,7 +312,7 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
         subtasksRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
     private void setAttachmentsView(DisplayClass incomingTask){
-        attachmentsAdapter = new AttachmentsAdapter(this);
+        attachmentsAdapter = new AttachmentsAdapter(this, this);
         attachmentsAdapter.setAttachments(incomingTask.getAttachments());
         filesListRecView.setAdapter(attachmentsAdapter);
         filesListRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -321,31 +340,36 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
         addSubtaskButton = findViewById(R.id.btnAddSubtask);
         filesListRecView = findViewById(R.id.filesListRecView);
         btnAddAttachment = findViewById(R.id.btnAddAttachment);
-    }
-
-
-    public static String getFilename(Uri uri, ContentResolver contentResolver) throws UnsupportedDocumentFormatException{
-        Cursor cursor = contentResolver.query(uri,null, null, null, null);
-        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        cursor.moveToFirst();
-        String filename =  cursor.getString(nameIndex);
-        return filename;
+        btnCreateSketch = findViewById(R.id.btnAddSketch);
+        sketchPlacheholder = findViewById(R.id.sketchPlaceholder);
     }
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    try {
-                        String fileName = getFilename(uri, getContentResolver());
-                        attachmentsAdapter.addAttachment(new Attachment(fileName));
-
-                    } catch (UnsupportedDocumentFormatException e) {
-                        e.printStackTrace();
-                    }
+                    File file = new File(uri.getPath());
+                    String fileName = file.getPath().split(":")[1];
+                    attachmentsAdapter.addAttachment(new Attachment(fileName));
                 }
             });
 
+    @Override
+    public void sendDataResult(Bitmap bitmap) {
+        // update sketch data
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        sketchData = bos.toByteArray();
+        // update image view
+        Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        sketchPlacheholder.setImageBitmap(mutableBitmap);
+        sketchPlacheholder.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void openFile(String sketchPath) {
+        // TODO open file
+    }
     private void initNotifierViewModel(){
         eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
         eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
@@ -387,7 +411,7 @@ public class TaskActivity extends AppCompatActivity implements IObserver {
         Date deadline = appointment.getDeadline();
 
         Date currentTime = Calendar.getInstance().getTime();
-        if(currentTime.after(deadline)){
+        if (currentTime.after(deadline)) {
             Log.d(TAG, "deadline already passed");
             return;
         }

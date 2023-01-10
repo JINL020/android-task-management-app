@@ -4,7 +4,11 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -14,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -31,6 +36,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,11 +56,11 @@ import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
-public class AddTaskFragment extends DialogFragment {
+public class AddTaskFragment extends DialogFragment implements SketchFragment.SendDataFromSketchDialog, AttachmentsAdapter.OpenFileListener {
     public static final String TAG = "addtaskfragment";
 
     public interface SendDataFromAddDialog {
-        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
+        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
     }
 
     public interface AddTaskDialogListener {
@@ -86,8 +95,11 @@ public class AddTaskFragment extends DialogFragment {
     private Button addSubtaskButton;
 
     private Button btnAddAttachment;
+    private Button btnCreateSketch;
     private RecyclerView filesListRecView;
     private AttachmentsAdapter attachmentsAdapter;
+    private ImageView sketchPlacheholder;
+    private byte[] sketchData = new byte[0];
 
     public AddTaskFragment(ATaskListFragment taskListFragment) {
         try {
@@ -128,6 +140,14 @@ public class AddTaskFragment extends DialogFragment {
                 relLayoutChooseDeadline.setVisibility(View.GONE);
                 subtasksRelLayout.setVisibility(View.VISIBLE);
                 addSubtaskButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnCreateSketch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment fragment = new SketchFragment(AddTaskFragment.this);
+                fragment.show(getChildFragmentManager(), "addsketch_fromfragment");
             }
         });
 
@@ -210,6 +230,7 @@ public class AddTaskFragment extends DialogFragment {
                         deadline,
                         subtasks,
                         attachmentsAdapter.getAttachments(),
+                        sketchData,
                         isSelectedAppointment,
                         isSelectedChecklist
                 );
@@ -248,10 +269,12 @@ public class AddTaskFragment extends DialogFragment {
         subtasksRecView = view.findViewById(R.id.subtasksRecView);
         addSubtaskButton = view.findViewById(R.id.btnAddSubtask);
         btnAddAttachment = view.findViewById(R.id.btnAddAttachment);
+        btnCreateSketch = view.findViewById(R.id.btnAddSketch);
+        sketchPlacheholder = view.findViewById(R.id.sketchPlaceholder);
     }
 
     private void initAttachmentsView(){
-        attachmentsAdapter = new AttachmentsAdapter(requireActivity());
+        attachmentsAdapter = new AttachmentsAdapter(requireActivity(), this);
         filesListRecView.setAdapter(attachmentsAdapter);
         filesListRecView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
         btnAddAttachment.setOnClickListener(new View.OnClickListener() {
@@ -280,27 +303,32 @@ public class AddTaskFragment extends DialogFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
     }
 
-    public static String getFilename(Uri uri, ContentResolver contentResolver) throws UnsupportedDocumentFormatException{
-        Cursor cursor = contentResolver.query(uri,null, null, null, null);
-        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        cursor.moveToFirst();
-        String filename =  cursor.getString(nameIndex);
-        return filename;
-    }
-
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    try {
-                        String fileName = getFilename(uri, requireActivity().getContentResolver());
-                        attachmentsAdapter.addAttachment(new Attachment(fileName));
-
-                    } catch (UnsupportedDocumentFormatException e) {
-                        e.printStackTrace();
-                    }
+                    File file = new File(uri.getPath());
+                    String fileName = file.getPath().split(":")[1];
+                    attachmentsAdapter.addAttachment(new Attachment(fileName));
                 }
             });
+
+    @Override
+    public void sendDataResult(Bitmap bitmap) {
+        // update sketch data
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        sketchData = bos.toByteArray();
+        // update image view
+        Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        sketchPlacheholder.setImageBitmap(mutableBitmap);
+        sketchPlacheholder.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void openFile(String sketchPath) {
+        // TODO open file
+    }
 
 }

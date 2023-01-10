@@ -19,13 +19,13 @@ public class TaskAppointment extends ATask implements Parcelable {
     @TypeConverters(DateConverter.class)
     private Date deadline;
 
-    public TaskAppointment(String taskName, String description, EPriority priority, EStatus status, ECategory category, Date deadline, List<Attachment> attachments){
-        super(taskName, description, priority, status, category, attachments);
+    public TaskAppointment(String taskName, String description, EPriority priority, EStatus status, ECategory category, Date deadline, List<Attachment> attachments, byte[] sketchData){
+        super(taskName, description, priority, status, category, attachments, sketchData);
         this.deadline = deadline;
     }
 
     protected TaskAppointment(Parcel in) {
-        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.APPOINTMENT, new ArrayList<>());
+        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.APPOINTMENT, new ArrayList<>(), new byte[0]);
         setId(in.readInt());
         setTaskName(in.readString());
         setDescription(in.readString());
@@ -35,6 +35,9 @@ public class TaskAppointment extends ATask implements Parcelable {
         deadline = new Date(in.readLong());
         setCreationDate(new Date(in.readLong()));
         setAttachments(in.readArrayList(Attachment.class.getClassLoader()));
+        byte[] arr = new byte[in.readInt()];
+        in.readByteArray(arr);
+        setSketchData(arr);
     }
 
     public static final Creator<TaskAppointment> CREATOR = new Creator<TaskAppointment>() {
@@ -65,6 +68,8 @@ public class TaskAppointment extends ATask implements Parcelable {
         parcel.writeLong(deadline.getTime());
         parcel.writeLong(getCreationDate().getTime());
         parcel.writeList(getAttachments());
+        parcel.writeInt(getSketchData().length);
+        parcel.writeByteArray(getSketchData());
     }
 
     @Override

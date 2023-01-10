@@ -228,24 +228,23 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relLayoutTaskStatus"
                 android:layout_centerHorizontal="true"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:id="@+id/txtSubtasks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="Subtasks"
-                    android:textStyle="italic"
-                    />
+                    android:textStyle="italic" />
 
 
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/subtasksScrollview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtSubtasks"
-                    >
+                    android:layout_below="@+id/txtSubtasks">
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/subtasksRecView"
                         android:layout_width="match_parent"
@@ -255,54 +254,82 @@
 
             </RelativeLayout>
 
-          <Button
+            <Button
                 android:id="@+id/btnAddSubtask"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
-                android:layout_marginTop="5dp"
-                android:layout_alignParentEnd="true"
                 android:layout_below="@+id/subtasksRelLayout"
-                android:text="Add Subtask"
-                android:visibility="gone"
-                />
-
-        <RelativeLayout
-            android:id="@+id/attachmentsRelLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btnAddSubtask"
-            android:layout_centerHorizontal="true"
-            >
-
-            <TextView
-                android:id="@+id/txtAttachments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Attachments"
-                android:textStyle="italic"
-
-                />
-
-            <Button
-                android:id="@+id/btnAddAttachment"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_below="@+id/txtAttachments"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
-                android:text="Attach file" />
+                android:text="Add Subtask"
+                android:visibility="gone" />
 
-<!--             TODO maybe try to display in flow layout-->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/filesListRecView"
+
+            <RelativeLayout
+                android:id="@+id/attachmentsRelLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btnAddAttachment"
-                tools:listitem="@layout/file_attachment" />
+                android:layout_below="@+id/btnAddSubtask"
+                android:layout_centerHorizontal="true">
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/txtAttachments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Attachments"
+                    android:textStyle="italic"
+
+                    />
+
+                <LinearLayout
+                    android:id="@+id/addAttachmentsLinLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/txtAttachments"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnAddAttachment"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="5dp"
+                        android:text="Attach file" />
+
+                    <Button
+                        android:id="@+id/btnAddSketch"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="5dp"
+                        android:text="Create sketch" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/filesListRecView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/addAttachmentsLinLayout"
+                    tools:listitem="@layout/file_attachment" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@+id/attachmentsRelLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/sketchPlaceholder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     />
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 

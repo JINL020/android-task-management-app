@@ -40,6 +40,14 @@
             android:textSize="13sp" />
 
         <ImageButton
+            android:id="@+id/openFileBtn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            app:srcCompat="@android:drawable/ic_menu_set_as" />
+
+        <ImageButton
             android:id="@+id/deleteFileBtn"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -48,6 +56,8 @@
             android:scaleX="0.5"
             android:scaleY="0.5"
             app:srcCompat="@android:drawable/ic_delete" />
+
+
 
 
     </LinearLayout>
