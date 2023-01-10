@@ -59,7 +59,8 @@ public class DeleteTaskTest {
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
                 java.util.Date.from(Instant.now()),
-                new ArrayList<>()
+                new ArrayList<>(),
+                new byte[0]
         );
         taskAppointmentDao.insert(taskAppointment);
         assertThat(taskAppointmentDao.getAllTasksList(), iterableWithSize(1));
@@ -78,7 +79,8 @@ public class DeleteTaskTest {
                 EStatus.NOT_STARTED,
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
-                new ArrayList<>()
+                new ArrayList<>(),
+                new byte[0]
         );
         taskChecklistDao.insert(taskChecklist);
         assertThat(taskChecklistDao.getAllTasksList(), iterableWithSize(1));

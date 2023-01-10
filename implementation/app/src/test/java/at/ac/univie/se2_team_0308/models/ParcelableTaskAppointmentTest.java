@@ -25,7 +25,8 @@ public class ParcelableTaskAppointmentTest {
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
-                new ArrayList<>()
+                new ArrayList<>(),
+                new byte[0]
         );
 
         Parcel parcel = Parcel.obtain();

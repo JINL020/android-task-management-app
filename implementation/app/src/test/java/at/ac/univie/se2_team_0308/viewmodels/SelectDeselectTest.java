@@ -64,7 +64,8 @@ public class SelectDeselectTest {
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
-                new ArrayList<>()
+                new ArrayList<>(),
+                new byte[0]
         );
         firstTask.setId(0);
         secondTask = new TaskChecklist(
@@ -74,7 +75,8 @@ public class SelectDeselectTest {
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
                 new ArrayList<>(),
-                new ArrayList<>()
+                new ArrayList<>(),
+                new byte[0]
         );
         secondTask.setId(1);
         adapter.setTasks(asList(firstTask, secondTask));
