@@ -2,6 +2,7 @@ package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -18,7 +19,7 @@ public class EventNotifierViewModel extends AndroidViewModel {
     private static final String TAG = "VIEW_MODEL";
 
     private EventNotifierRepository eventNotifierRepository;
-    private LiveData<List<EventNotifier>> settingNotifiers;
+    private LiveData<List<EventNotifier>> eventNotifiers;
 
     private INotifier onCreateNotifier = new LoggerCore();
     private INotifier onUpdateNotifier = new LoggerCore();
@@ -28,7 +29,7 @@ public class EventNotifierViewModel extends AndroidViewModel {
     public EventNotifierViewModel(@NonNull Application application) {
         super(application);
         this.eventNotifierRepository = new EventNotifierRepository(application);
-        this.settingNotifiers = eventNotifierRepository.getAllEventNotifiers();
+        this.eventNotifiers = eventNotifierRepository.getAllEventNotifiers();
     }
 
     /*public void insert(SettingsNotifier settingsNotifier){
@@ -38,18 +39,11 @@ public class EventNotifierViewModel extends AndroidViewModel {
     public void update(EventNotifier eventNotifier) {
         eventNotifierRepository.update(eventNotifier);
         Log.d(TAG, "EventNotifierViewModel updated" + eventNotifier.toString());
-    }
-
-    /*public void delete(SettingsNotifier settingsNotifier){
-        notifierRepository.delete(settingsNotifier);
-    }*/
-
-    public void deleteAll() {
-        eventNotifierRepository.deleteAll();
+        Toast.makeText(getApplication(), "settings changed", Toast.LENGTH_SHORT).show();
     }
 
     public LiveData<List<EventNotifier>> getAllNotifiers() {
-        return settingNotifiers;
+        return eventNotifiers;
     }
 
     public INotifier getOnCreateNotifier() {

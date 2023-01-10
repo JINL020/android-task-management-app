@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,11 +18,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.databinding.ActivityMainBinding;
@@ -29,7 +28,6 @@ import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
-import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
 import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-
         setContentView(binding.getRoot());
 
         configureBottomNavBar();
@@ -64,6 +61,26 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         taskViewModel.attachObserver(this);
         Log.d(TAG, "attached observer to taskViewModel(MainActivity)");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+        taskViewModel.detachObserver(this);
+        Log.d(TAG, "detached observer from taskViewModel(MainActivity)");
+    }
+
+    private void configureBottomNavBar() {
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_list, R.id.navigation_calendar, R.id.navigation_settings).build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.bottomNavView, navController);
+    }
+
+    private void initViewModels() {
+        eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
             @Override
@@ -85,6 +102,14 @@ public class MainActivity extends AppCompatActivity implements IObserver {
                 Log.d(TAG, "Saved settings: " + eventNotifiers);
             }
         });
+    }
+
+    private void initNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(notificationChannel);
+        }
     }
 
     @Override
@@ -115,35 +140,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        taskViewModel.detachObserver(this);
-        Log.d(TAG, "detached observer from taskViewModel(MainActivity)");
-
-    }
-
-    private void configureBottomNavBar() {
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_list, R.id.navigation_calendar, R.id.navigation_settings).build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.bottomNavView, navController);
-    }
-
-    private void initViewModels() {
-        eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-    }
-
-    private void initNotificationChannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(notificationChannel);
-        }
-    }
-
-    private void setAlarm(TaskAppointment appointment) {
+    private void setAlarm(@NonNull TaskAppointment appointment) {
         Date deadline = appointment.getDeadline();
 
         Date currentTime = Calendar.getInstance().getTime();
@@ -173,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         Log.d(TAG, "set alarm for " + appointment);
     }
 
-    private void cancelAlarm(TaskAppointment appointment) {
+    private void cancelAlarm(@NonNull TaskAppointment appointment) {
         Intent intent = new Intent(this, AlarmReceiver.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
