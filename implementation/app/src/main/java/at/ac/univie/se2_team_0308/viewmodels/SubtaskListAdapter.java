@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
@@ -25,13 +26,15 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
 
     public static final String TAG = "SubtaskListAdapter";
 
-    private List<ASubtask> tasks;
+    private List<ASubtask> tasks = new ArrayList<>();;
     private Context context;
     private boolean hasAnotherLevelOfSubtasks = true;
 
     public SubtaskListAdapter(Context context, List<ASubtask> tasks) {
         this.context = context;
-        this.tasks = tasks;
+        if(tasks != null){
+            this.tasks = tasks;
+        }
     }
 
     public void setHasAnotherLevelOfSubtasks(boolean value){
@@ -102,9 +105,6 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
 
     @Override
     public int getItemCount() {
-        if (tasks == null) {
-            return 0;
-        }
         return tasks.size();
     }
 

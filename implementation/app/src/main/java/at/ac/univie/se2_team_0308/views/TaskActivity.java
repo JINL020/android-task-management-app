@@ -6,33 +6,41 @@ import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_KE
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.navigation.NavController;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
+import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
@@ -46,7 +54,7 @@ import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
-public class TaskActivity extends AppCompatActivity {
+public class TaskActivity extends AppCompatActivity implements SketchFragment.SendDataFromSketchDialog, AttachmentsAdapter.OpenFileListener {
 
     public static final String TAG = "TaskActivity";
 
@@ -77,6 +85,10 @@ public class TaskActivity extends AppCompatActivity {
     private Button btnAddAttachment;
     private RecyclerView filesListRecView;
     private AttachmentsAdapter attachmentsAdapter;
+
+    private Button btnCreateSketch;
+    private ImageView sketchPlacheholder;
+    private byte[] sketchData = new byte[0];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +122,13 @@ public class TaskActivity extends AppCompatActivity {
         addSubtaskButton.setOnClickListener(view -> {
             subtaskListAdapter.addTask(new SubtaskList(""));
         });
+
+        btnCreateSketch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SketchFragment(TaskActivity.this).show(getSupportFragmentManager(), "addsketch_fromactivity");
+            }
+        });
     }
 
     private void setViews(DisplayClass incomingTask) {
@@ -120,6 +139,15 @@ public class TaskActivity extends AppCompatActivity {
 
         if (incomingTask.getDescription() != null) {
             editTaskDescription.setText(incomingTask.getDescription());
+        }
+
+        if(incomingTask.getSketchData() != null){
+            sketchData = incomingTask.getSketchData();
+            if(sketchData.length > 0){
+                Bitmap bmp = BitmapFactory.decodeByteArray(sketchData, 0, sketchData.length);
+                sketchPlacheholder.setImageBitmap(bmp);
+                sketchPlacheholder.setVisibility(View.VISIBLE);
+            }
         }
 
         if (incomingTask.getPriority() != null) {
@@ -185,9 +213,7 @@ public class TaskActivity extends AppCompatActivity {
                 addSubtaskButton.setVisibility(View.VISIBLE);
                 deadlineRelLayout.setVisibility(View.GONE);
                 Log.d(TAG, "onBindViewHolder: the subtasks is not null");
-                if (incomingTask.getSubtasks() != null && !incomingTask.getSubtasks().isEmpty()) {
-                    setSubtasksView(incomingTask);
-                }
+                setSubtasksView(incomingTask);
                 break;
         }
 
@@ -223,12 +249,14 @@ public class TaskActivity extends AppCompatActivity {
                 incomingTask.setDescription(editTaskDescription.getText().toString());
                 incomingTask.setPriority(newPriority);
                 incomingTask.setStatus(newStatus);
+                incomingTask.setSketchData(sketchData);
 
                 if (incomingTask.getCategoryEnum() == ECategory.APPOINTMENT) {
                     incomingAppointment.setTaskName(incomingTask.getTaskName());
                     incomingAppointment.setDescription(incomingTask.getDescription());
                     incomingAppointment.setPriority(incomingTask.getPriority());
                     incomingAppointment.setStatus(incomingTask.getStatus());
+                    incomingAppointment.setSketchData(incomingTask.getSketchData());
 
                     int day = deadlineSpinnerPicker.getDayOfMonth();
                     int month = deadlineSpinnerPicker.getMonth();
@@ -254,6 +282,8 @@ public class TaskActivity extends AppCompatActivity {
                     incomingChecklist.setPriority(incomingTask.getPriority());
                     incomingChecklist.setStatus(incomingTask.getStatus());
                     incomingChecklist.setSubtasks(subtaskListAdapter.getTasks());
+                    incomingChecklist.setSketchData(incomingTask.getSketchData());
+
                     viewModel.updateChecklist(incomingChecklist);
                 }
                 Intent intentBack = new Intent(TaskActivity.this, MainActivity.class);
@@ -273,7 +303,7 @@ public class TaskActivity extends AppCompatActivity {
         subtasksRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
     private void setAttachmentsView(DisplayClass incomingTask){
-        attachmentsAdapter = new AttachmentsAdapter(this);
+        attachmentsAdapter = new AttachmentsAdapter(this, this);
         attachmentsAdapter.setAttachments(incomingTask.getAttachments());
         filesListRecView.setAdapter(attachmentsAdapter);
         filesListRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -301,27 +331,34 @@ public class TaskActivity extends AppCompatActivity {
         addSubtaskButton = findViewById(R.id.btnAddSubtask);
         filesListRecView = findViewById(R.id.filesListRecView);
         btnAddAttachment = findViewById(R.id.btnAddAttachment);
-    }
-
-    public static String getFilename(Uri uri, ContentResolver contentResolver) throws UnsupportedDocumentFormatException{
-        Cursor cursor = contentResolver.query(uri,null, null, null, null);
-        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        cursor.moveToFirst();
-        String filename =  cursor.getString(nameIndex);
-        return filename;
+        btnCreateSketch = findViewById(R.id.btnAddSketch);
+        sketchPlacheholder = findViewById(R.id.sketchPlaceholder);
     }
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    try {
-                        String fileName = getFilename(uri, getContentResolver());
-                        attachmentsAdapter.addAttachment(new Attachment(fileName));
-
-                    } catch (UnsupportedDocumentFormatException e) {
-                        e.printStackTrace();
-                    }
+                    File file = new File(uri.getPath());
+                    String fileName = file.getPath().split(":")[1];
+                    attachmentsAdapter.addAttachment(new Attachment(fileName));
                 }
             });
+
+    @Override
+    public void sendDataResult(Bitmap bitmap) {
+        // update sketch data
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        sketchData = bos.toByteArray();
+        // update image view
+        Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        sketchPlacheholder.setImageBitmap(mutableBitmap);
+        sketchPlacheholder.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void openFile(String sketchPath) {
+        // TODO open file
+    }
 }
