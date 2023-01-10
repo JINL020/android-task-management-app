@@ -79,7 +79,8 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
     }
 
     public void insertChecklist(TaskChecklist task) {
-        repository.insertTaskChecklist(task);
+        long insertedTaskId = repository.insertTaskChecklist(task);
+        task.setId((int)insertedTaskId);
         notifyObservers(ENotificationEvent.CREATE, task);
     }
 

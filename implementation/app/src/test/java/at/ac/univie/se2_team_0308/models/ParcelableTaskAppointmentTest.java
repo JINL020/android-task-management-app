@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
@@ -23,7 +24,8 @@ public class ParcelableTaskAppointmentTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
-                new Date(2020, 5, 12)
+                new Date(2020, 5, 12),
+                new ArrayList<>()
         );
 
         Parcel parcel = Parcel.obtain();

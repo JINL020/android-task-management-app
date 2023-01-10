@@ -15,7 +15,7 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 @Dao
 public interface TaskChecklistDao {
     @Insert
-    void insert(TaskChecklist task);
+    long insert(TaskChecklist task);
 
     @Insert
     void insertAll(TaskChecklist... tasks);

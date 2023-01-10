@@ -47,8 +47,19 @@ public class TaskRepository {
         return rowId;
     }
 
-    public void insertTaskChecklist(TaskChecklist taskChecklist) {
-        AppDatabase.databaseWriteExecutor.execute( () -> taskChecklistDao.insert(taskChecklist) );
+    public long insertTaskChecklist(TaskChecklist taskChecklist) {
+        Callable<Long> insertCallable = () -> taskChecklistDao.insert(taskChecklist);
+        long rowId = 0;
+
+        Future<Long> future = AppDatabase.databaseWriteExecutor.submit(insertCallable);
+        try {
+            rowId = future.get();
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return rowId;
     }
 
     public void updateTaskAppointment(TaskAppointment taskAppointment) {

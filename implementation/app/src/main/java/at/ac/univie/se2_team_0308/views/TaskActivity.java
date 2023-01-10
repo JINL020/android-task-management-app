@@ -2,17 +2,18 @@ package at.ac.univie.se2_team_0308.views;
 
 import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_CATEGORY;
 import static at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter.TASK_ITEM_KEY;
+import static at.ac.univie.se2_team_0308.views.MainActivity.APPOINTMENT_KEY;
+import static at.ac.univie.se2_team_0308.views.MainActivity.NOTIFIER_KEY;
 
-import android.content.ContentResolver;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,8 +28,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,22 +40,26 @@ import java.util.Date;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
-import at.ac.univie.se2_team_0308.models.ASubtask;
+import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.ECategory;
+import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.SubtaskList;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.DisplayClass;
-import at.ac.univie.se2_team_0308.utils.import_tasks.UnsupportedDocumentFormatException;
+import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
+import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
+import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
+import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
-public class TaskActivity extends AppCompatActivity implements SketchFragment.SendDataFromSketchDialog, AttachmentsAdapter.OpenFileListener {
-
+public class TaskActivity extends AppCompatActivity implements SketchFragment.SendDataFromSketchDialog, AttachmentsAdapter.OpenFileListener, IObserver {
     public static final String TAG = "TaskActivity";
 
     private EditText editTaskName;
@@ -76,6 +80,7 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
     private TimePicker timePicker;
 
     private TaskViewModel viewModel;
+    private EventNotifierViewModel eventNotifierViewModel;
 
     private SubtaskListAdapter subtaskListAdapter;
     private RecyclerView subtasksRecView;
@@ -96,6 +101,10 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
         setContentView(R.layout.activity_task);
         initViews();
         initViewModel();
+        initNotifierViewModel();
+
+        viewModel.attachObserver(this);
+        Log.d(TAG, "attached observer to taskViewModel(TaskActivity)");
 
         final Intent intent = getIntent();
         if (intent != null) {
@@ -360,5 +369,71 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
     @Override
     public void openFile(String sketchPath) {
         // TODO open file
+    }
+    private void initNotifierViewModel(){
+        eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
+        eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
+            @Override
+            public void onChanged(List<EventNotifier> eventNotifiers) {
+                for (EventNotifier notifier : eventNotifiers) {
+                    if (notifier.getEvent() == ENotificationEvent.CREATE) {
+                        eventNotifierViewModel.setOnCreateNotifier(notifier.getNotifier());
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.UPDATE) {
+                        eventNotifierViewModel.setOnUpdateNotifier(notifier.getNotifier());
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.DELETE) {
+                        eventNotifierViewModel.setOnDeleteNotifier(notifier.getNotifier());
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.APPOINTMENT) {
+                        eventNotifierViewModel.setOnAppointmentNotifier(notifier.getNotifier());
+                    }
+                }
+                Log.d(TAG, "Saved settings: " + eventNotifiers);
+            }
+        });
+    }
+
+    @Override
+    public void receivedUpdate(ENotificationEvent event, ATask... tasks) {
+        if (event == ENotificationEvent.UPDATE) {
+            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(this, event, tasks);
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    setAlarm((TaskAppointment) task);
+                }
+                Log.d(TAG, "received onUpdate update from taskViewModel: " + event.name() + " " + task.getTaskName());
+            }
+        }
+    }
+
+    private void setAlarm(TaskAppointment appointment) {
+        Date deadline = appointment.getDeadline();
+
+        Date currentTime = Calendar.getInstance().getTime();
+        if (currentTime.after(deadline)) {
+            Log.d(TAG, "deadline already passed");
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(deadline);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        Bundle extras = new Bundle();
+        INotifierTypeConverter notifierTypeConverter = new INotifierTypeConverter();
+        String notifier = notifierTypeConverter.fromINotifier(eventNotifierViewModel.getOnAppointmentNotifier());
+        extras.putString(NOTIFIER_KEY, notifier);
+        extras.putParcelable(APPOINTMENT_KEY, appointment);
+
+        intent.putExtras(extras);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Log.d(TAG, "set alarm for " + appointment);
     }
 }

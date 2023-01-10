@@ -59,7 +59,8 @@ public class AddTaskTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
-                new Date(2020, 5, 12)
+                new Date(2020, 5, 12),
+                new ArrayList<>()
         );
         taskAppointmentDao.insert(taskAppointment);
         taskAppointment.setId(taskAppointmentDao.getAllTasksList().get(0).getId());
@@ -77,6 +78,7 @@ public class AddTaskTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.CHECKLIST,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
         taskChecklistDao.insert(taskChecklist);

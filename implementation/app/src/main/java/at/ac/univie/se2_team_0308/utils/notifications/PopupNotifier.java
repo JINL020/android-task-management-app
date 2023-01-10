@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.ENotifier;
 import at.ac.univie.se2_team_0308.views.MainActivity;
@@ -18,10 +19,11 @@ public class PopupNotifier extends ADecoratorNotifier {
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, String message, Context context) {
-        super.sendNotification(event, message, context);
-        Toast.makeText(context, event.name() + "\n" + message, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "send out notification: " + event.name() + message);
+    public void sendNotification(Context context, ENotificationEvent event, ATask... tasks) {
+        super.sendNotification(context, event, tasks);
+        for(ATask task : tasks){
+            Toast.makeText(context, event.name() + "\n" + task.getTaskName(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

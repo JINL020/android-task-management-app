@@ -38,7 +38,8 @@ public class UpdateCommonPropertyTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
-                new Date(2020, 5, 12)
+                new Date(2020, 5, 12),
+                new ArrayList<>()
         );
 
         public static TaskAppointment taskAppointment2 = new TaskAppointment(
@@ -47,7 +48,8 @@ public class UpdateCommonPropertyTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
-                new Date(2020, 5, 12)
+                new Date(2020, 5, 12),
+                new ArrayList<>()
         );
 
         public static TaskAppointment taskAppointment3 = new TaskAppointment(
@@ -56,7 +58,8 @@ public class UpdateCommonPropertyTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
-                new Date(2020, 5, 12)
+                new Date(2020, 5, 12),
+                new ArrayList<>()
         );
 
         public static TaskChecklist taskChecklist1 = new TaskChecklist(
@@ -65,6 +68,7 @@ public class UpdateCommonPropertyTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.CHECKLIST,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -74,6 +78,7 @@ public class UpdateCommonPropertyTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.CHECKLIST,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -83,6 +88,7 @@ public class UpdateCommonPropertyTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.CHECKLIST,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 

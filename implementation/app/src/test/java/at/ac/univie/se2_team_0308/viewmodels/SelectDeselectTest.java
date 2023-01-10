@@ -63,7 +63,8 @@ public class SelectDeselectTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
-                new Date(2020, 5, 12)
+                new Date(2020, 5, 12),
+                new ArrayList<>()
         );
         firstTask.setId(0);
         secondTask = new TaskChecklist(
@@ -72,6 +73,7 @@ public class SelectDeselectTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
         secondTask.setId(1);
