@@ -1,6 +1,7 @@
 package at.ac.univie.se2_team_0308.utils.notifications;
 
 import static at.ac.univie.se2_team_0308.views.MainActivity.APPOINTMENT_KEY;
+import static at.ac.univie.se2_team_0308.views.MainActivity.NOTIFIER_KEY;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,8 +13,6 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    public static final String EVENT_KEY = "appointment";
-    public static final String NOTIFIER_KEY = "notifier";
 
     @Override
     public void onReceive(Context context, Intent intent) {
