@@ -34,6 +34,7 @@ import at.ac.univie.se2_team_0308.databinding.FragmentListBinding;
 import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
+import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
@@ -373,7 +374,7 @@ public class ListFragment extends ATaskListFragment {
     }
 
     @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
+    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
         Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
         Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
@@ -381,10 +382,10 @@ public class ListFragment extends ATaskListFragment {
         Log.d(TAG, "sendDataResult: deadline" + deadline.toString());
         if (isSelectedAppointment) {
             taskFactory = new TaskAppointmentFactory();
-            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks));
+            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks, attachments));
         } else if (isSelectedChecklist) {
             taskFactory = new TaskChecklistFactory();
-            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks));
+            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks, attachments));
         }
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }

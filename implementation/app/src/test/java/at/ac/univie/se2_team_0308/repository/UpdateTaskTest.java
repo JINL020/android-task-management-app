@@ -57,7 +57,8 @@ public class UpdateTaskTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
-                new Date(2020, 5, 12)
+                new Date(2020, 5, 12),
+                new ArrayList<>()
         );
         taskAppointmentDao.insert(taskAppointment);
         TaskAppointment updatedTaskAppointment = new TaskAppointment(
@@ -66,7 +67,8 @@ public class UpdateTaskTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.APPOINTMENT,
-                new Date(2020, 5, 12)
+                new Date(2020, 5, 12),
+                new ArrayList<>()
         );
         updatedTaskAppointment.setId(taskAppointmentDao.getAllTasksList().get(0).getId());
         taskAppointmentDao.update(updatedTaskAppointment);
@@ -84,6 +86,7 @@ public class UpdateTaskTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.CHECKLIST,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
         taskChecklistDao.insert(taskChecklist);
@@ -93,6 +96,7 @@ public class UpdateTaskTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.CHECKLIST,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
         updatedTaskChecklist.setId(taskChecklistDao.getAllTasksList().get(0).getId());

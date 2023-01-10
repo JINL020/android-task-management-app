@@ -23,6 +23,7 @@ public class ParcelableTaskChecklistTest {
                 EPriority.LOW,
                 EStatus.NOT_STARTED,
                 ECategory.CHECKLIST,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
