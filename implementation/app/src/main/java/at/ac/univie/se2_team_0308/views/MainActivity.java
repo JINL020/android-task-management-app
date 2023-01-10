@@ -40,7 +40,7 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 public class MainActivity extends AppCompatActivity implements IObserver {
 
     private static final String TAG = "MAIN_ACTIVITY";
-    public static final String EVENT_KEY = "appointment";
+    public static final String APPOINTMENT_KEY = "appointment";
     public static final String NOTIFIER_KEY = "notifier";
 
     private ActivityMainBinding binding;
@@ -89,35 +89,31 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
     @Override
     public void receivedUpdate(ENotificationEvent event, ATask... tasks) {
-        String message = "";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            message = Arrays.stream(tasks).map(ATask::getTaskName).collect(Collectors.joining("\n"));
-        }
-
-        Log.d(TAG, "received update from taskViewModel: " + event.name() + " " + message);
-
         if (event == ENotificationEvent.CREATE) {
-            eventNotifierViewModel.getOnCreateNotifier().sendNotification(event, message, this);
+            eventNotifierViewModel.getOnCreateNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    setAlarm((TaskAppointment)task, message);
+                    setAlarm((TaskAppointment)task);
                 }
+                Log.d(TAG, "received onCreate update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
         }
         if (event == ENotificationEvent.UPDATE) {
-            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(event, message, this);
+            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    setAlarm((TaskAppointment)task, message);
+                    setAlarm((TaskAppointment)task);
                 }
+                Log.d(TAG, "received onUpdate update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
         }
         if (event == ENotificationEvent.DELETE) {
-            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(event, message, this);
+            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
                     cancelAlarm((TaskAppointment) task);
                 }
+                Log.d(TAG, "received onDelete update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
         }
     }
@@ -150,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         }
     }
 
-    private void setAlarm(TaskAppointment appointment, String message) {
+    private void setAlarm(TaskAppointment appointment) {
         Date deadline = appointment.getDeadline();
 
         Date currentTime = Calendar.getInstance().getTime();
@@ -167,10 +163,10 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         Intent intent = new Intent(this, AlarmReceiver.class);
 
         Bundle extras = new Bundle();
-        extras.putString(EVENT_KEY, message);
         INotifierTypeConverter notifierTypeConverter = new INotifierTypeConverter();
         String notifier = notifierTypeConverter.fromINotifier(eventNotifierViewModel.getOnAppointmentNotifier());
         extras.putString(NOTIFIER_KEY, notifier);
+        extras.putParcelable(APPOINTMENT_KEY, appointment);
 
         intent.putExtras(extras);
 

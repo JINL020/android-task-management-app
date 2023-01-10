@@ -11,6 +11,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.List;
 
+import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.ENotifier;
 import at.ac.univie.se2_team_0308.views.MainActivity;
@@ -23,23 +24,20 @@ public class BasicNotifier extends ADecoratorNotifier {
     }
 
     @Override
-    public void sendNotification(ENotificationEvent event, String message, Context context) {
-        super.sendNotification(event, message, context);
+    public void sendNotification(Context context, ENotificationEvent event, ATask... tasks) {
+        super.sendNotification(context, event, tasks);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "notifications")
-                .setSmallIcon(android.R.drawable.stat_notify_sync)
-                .setStyle(new NotificationCompat
-                        .BigTextStyle()
-                        .setBigContentTitle(event.name())
-                        .bigText(message)
-                );
+        for(ATask task : tasks){
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "notifications")
+                    .setSmallIcon(android.R.drawable.stat_notify_sync)
+                    .setContentTitle(event.name())
+                    .setContentText(task.getTaskName());
 
-        Notification notification = notificationBuilder.build();
+            Notification notification = notificationBuilder.build();
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(1, notification);
-
-        Log.d(TAG, "send out notification: " + event.name() + message);
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+            notificationManagerCompat.notify(task.getId(), notification);
+        }
     }
 
     @Override
