@@ -19,7 +19,7 @@ public class EventNotifierViewModel extends AndroidViewModel {
     private static final String TAG = "VIEW_MODEL";
 
     private EventNotifierRepository eventNotifierRepository;
-    private LiveData<List<EventNotifier>> settingNotifiers;
+    private LiveData<List<EventNotifier>> eventNotifiers;
 
     private INotifier onCreateNotifier = new LoggerCore();
     private INotifier onUpdateNotifier = new LoggerCore();
@@ -29,7 +29,7 @@ public class EventNotifierViewModel extends AndroidViewModel {
     public EventNotifierViewModel(@NonNull Application application) {
         super(application);
         this.eventNotifierRepository = new EventNotifierRepository(application);
-        this.settingNotifiers = eventNotifierRepository.getAllEventNotifiers();
+        this.eventNotifiers = eventNotifierRepository.getAllEventNotifiers();
     }
 
     /*public void insert(SettingsNotifier settingsNotifier){
@@ -43,7 +43,7 @@ public class EventNotifierViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<EventNotifier>> getAllNotifiers() {
-        return settingNotifiers;
+        return eventNotifiers;
     }
 
     public INotifier getOnCreateNotifier() {
