@@ -101,9 +101,6 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         if (event == ENotificationEvent.UPDATE) {
             eventNotifierViewModel.getOnUpdateNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
-                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    setAlarm((TaskAppointment)task);
-                }
                 Log.d(TAG, "received onUpdate update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
         }
