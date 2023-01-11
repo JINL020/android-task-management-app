@@ -344,7 +344,7 @@ public class CalendarFragment extends ATaskListFragment {
     }
 
     @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist) {
+    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist, String taskColor) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
         Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
         Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
@@ -352,10 +352,10 @@ public class CalendarFragment extends ATaskListFragment {
         Log.d(TAG, "sendDataResult: deadline" + deadline.toString());
         if (isSelectedAppointment) {
             taskFactory = new TaskAppointmentFactory();
-            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks, attachments,sketchData));
+            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks, attachments,sketchData, taskColor));
         } else if (isSelectedChecklist) {
             taskFactory = new TaskChecklistFactory();
-            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks, attachments, sketchData));
+            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, subtasks, attachments, sketchData, taskColor));
         }
         recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }

@@ -38,7 +38,7 @@ public interface TaskAppointmentDao {
     @Query("DELETE FROM task_appointments WHERE id in (:idList)")
     void deleteTasksById(List<Integer> idList);
 
-    @Query("SELECT id, taskName, description, priority, status, category, isSelected, isHidden, deadline, creationDate, attachments, sketchData FROM task_appointments")
+    @Query("SELECT id, taskName, description, priority, status, category, isSelected, isHidden, deadline, creationDate, attachments, sketchData, taskColor FROM task_appointments")
     LiveData<List<TaskAppointment>> getAllTasks();
 
     @Query("SELECT * FROM task_appointments")
