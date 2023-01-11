@@ -1,13 +1,19 @@
 package at.ac.univie.se2_team_0308.views;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,6 +35,9 @@ public class SettingsFragment extends Fragment {
     private FragmentSettingsBinding binding;
     private EventNotifierViewModel eventNotifierViewModel;
 
+    private SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+
     private CheckBox onCreatePopupCheckBox;
     private CheckBox onCreateBasicCheckBox;
     private CheckBox onUpdatePopupCheckBox;
@@ -37,6 +46,7 @@ public class SettingsFragment extends Fragment {
     private CheckBox onDeleteBasicCheckBox;
     private CheckBox onAppointmentPopupCheckBox;
     private CheckBox onAppointmentBasicCheckBox;
+    private Switch switchDarkTheme;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
@@ -64,6 +74,7 @@ public class SettingsFragment extends Fragment {
         onDeleteBasicCheckBox = binding.checkBoxOnDeleteBasic;
         onAppointmentPopupCheckBox = binding.checkBoxOnAppointmentPopup;
         onAppointmentBasicCheckBox = binding.checkBoxOnAppointmentBasic;
+        switchDarkTheme = binding.switchDarkTheme;
     }
 
     private void initCheckboxListeners() {
@@ -130,6 +141,38 @@ public class SettingsFragment extends Fragment {
                 Log.d(TAG,"(!)selected and updated onAppointment popup Notification Settings");
             }
         });
+
+        switchDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked) {
+                    editor.putString("theme", "dark"); // here "theme" is key and "day" is value
+                    editor.apply();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                } else {
+                    editor.putString("theme", "light"); // here "theme" is key and "day" is value
+                    editor.apply();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+            }
+        });
+    }
+
+    private void setCurrentTheme() {
+        sharedPreferences = this.getActivity().getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+
+        String sTheme = sharedPreferences.getString("theme", ""); // "theme" is key and second "" is default value
+
+        switch(sTheme){
+            case "light":
+                switchDarkTheme.setChecked(false);
+                break;
+            case "dark":
+                switchDarkTheme.setChecked(true);
+                break;
+        }
     }
 
     private void initCheckboxLayout() {
@@ -158,6 +201,8 @@ public class SettingsFragment extends Fragment {
                 }
             }
         });
+
+        setCurrentTheme();
     }
 
     private void updateOnCreateNotifier() {

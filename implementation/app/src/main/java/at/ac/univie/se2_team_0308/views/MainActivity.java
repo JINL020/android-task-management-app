@@ -6,11 +6,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -46,9 +49,14 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     private EventNotifierViewModel eventNotifierViewModel;
     private TaskViewModel taskViewModel;
 
+    private SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setAppTheme();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -69,6 +77,23 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         binding = null;
         taskViewModel.detachObserver(this);
         Log.d(TAG, "detached observer from taskViewModel(MainActivity)");
+    }
+
+    private void setAppTheme() {
+        sharedPreferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+
+        String sTheme = sharedPreferences.getString("theme", ""); // "theme" is key and second "" is default value
+
+        switch(sTheme){
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+        }
     }
 
     private void configureBottomNavBar() {
