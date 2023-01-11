@@ -28,6 +28,7 @@ public class DisplayClass implements Parcelable {
     private Date deadline;
     private List<ASubtask> subtasks;
     private List<Attachment> attachments;
+    private String taskColor;
 
     public byte[] getSketchData() {
         return sketchData;
@@ -52,6 +53,7 @@ public class DisplayClass implements Parcelable {
         this.attachments = appointment.getAttachments();
         this.subtasks = new ArrayList<ASubtask>();
         this.sketchData = appointment.getSketchData();
+        this.taskColor = appointment.getTaskColor();
     }
 
     public DisplayClass(TaskChecklist checklist) {
@@ -67,6 +69,7 @@ public class DisplayClass implements Parcelable {
         this.subtasks = checklist.getSubtasks();
         this.attachments = checklist.getAttachments();
         this.sketchData = checklist.getSketchData();
+        this.taskColor = checklist.getTaskColor();
     }
 
     protected DisplayClass(Parcel in) {
@@ -83,6 +86,7 @@ public class DisplayClass implements Parcelable {
         attachments = in.readArrayList(Attachment.class.getClassLoader());
         sketchData = new byte[in.readInt()];
         in.readByteArray(sketchData);
+        taskColor = in.readString();
     }
 
     public int getId() {
@@ -157,6 +161,10 @@ public class DisplayClass implements Parcelable {
         this.deadline = deadline;
     }
 
+    public String getTaskColor() { return taskColor; }
+
+    public void setTaskColor(String color) { this.taskColor = color; }
+
     public List<ASubtask> getSubtasks() {
         return subtasks;
     }
@@ -204,5 +212,6 @@ public class DisplayClass implements Parcelable {
         parcel.writeList(attachments);
         parcel.writeInt(sketchData.length);
         parcel.writeByteArray(sketchData);
+        parcel.writeString(taskColor);
     }
 }

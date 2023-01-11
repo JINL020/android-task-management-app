@@ -4,10 +4,10 @@
     android:id="@+id/parent_card"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:backgroundTint="#E1E1E1"
     android:elevation="10dp"
     android:paddingVertical="10dp"
     android:theme="@style/Theme.MaterialComponents.Light"
+    app:cardBackgroundColor="#E1E1E1"
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
 

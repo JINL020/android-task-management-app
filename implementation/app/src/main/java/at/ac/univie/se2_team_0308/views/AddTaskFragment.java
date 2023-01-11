@@ -60,7 +60,7 @@ public class AddTaskFragment extends DialogFragment implements SketchFragment.Se
     public static final String TAG = "addtaskfragment";
 
     public interface SendDataFromAddDialog {
-        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist);
+        void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist, String taskColor);
     }
 
     public interface AddTaskDialogListener {
@@ -232,7 +232,8 @@ public class AddTaskFragment extends DialogFragment implements SketchFragment.Se
                         attachmentsAdapter.getAttachments(),
                         sketchData,
                         isSelectedAppointment,
-                        isSelectedChecklist
+                        isSelectedChecklist,
+                        "#E1E1E1"
                 );
 
                 if (!isSelectedAppointment && !isSelectedChecklist) {

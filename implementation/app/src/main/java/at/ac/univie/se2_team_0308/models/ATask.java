@@ -22,15 +22,15 @@ public abstract class ATask {
     private boolean isSelected = false;
     private ECategory category;
     private boolean isHidden = false;
-    private String taskColor = "#E1E1E1"; //default light grey color
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     private byte[] sketchData;
     @TypeConverters(AttachmentConverter.class)
     private List<Attachment> attachments;
+    private String taskColor; //default light grey color #E1E1E1
     // @TypeConverters(DateConverter.class)
     private Date creationDate;
 
-    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category, List<Attachment> attachments, byte[] sketchData) {
+    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category, List<Attachment> attachments, byte[] sketchData, String taskColor) {
         this.taskName = taskName;
         this.description = description;
         this.priority = priority;
@@ -39,6 +39,7 @@ public abstract class ATask {
         this.creationDate = Calendar.getInstance().getTime();
         this.attachments = attachments;
         this.sketchData = sketchData;
+        this.taskColor = taskColor;
     }
 
     public byte[] getSketchData() {

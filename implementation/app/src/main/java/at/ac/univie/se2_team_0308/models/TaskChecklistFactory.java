@@ -6,7 +6,7 @@ import java.util.List;
 public class TaskChecklistFactory extends ATaskFactory {
 
     @Override
-    public ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData) {
-        return new TaskChecklist(taskName, description, priority, status, ECategory.CHECKLIST, subtasks, attachments, sketchData);
+    public ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, String taskColor) {
+        return new TaskChecklist(taskName, description, priority, status, ECategory.CHECKLIST, subtasks, attachments, sketchData, taskColor);
     }
 }

@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class ATaskFactory {
-    public ATask getNewTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData) {
-        return createTask(taskName, description, priority, status, deadline, subtasks, attachments, sketchData);
+    public ATask getNewTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, String taskColor) {
+        return createTask(taskName, description, priority, status, deadline, subtasks, attachments, sketchData, taskColor);
     }
-    public abstract ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData);
+    public abstract ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, String taskColor);
 }

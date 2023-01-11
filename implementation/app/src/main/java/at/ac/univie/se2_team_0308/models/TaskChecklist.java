@@ -18,14 +18,14 @@ public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
     List<ASubtask> subtasks;
 
-    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData){
-        super(taskName, description, priority, status, category, attachments, sketchData);
+    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, String taskColor){
+        super(taskName, description, priority, status, category, attachments, sketchData, taskColor);
         this.subtasks = new ArrayList<>();
         setSubtasks(subtasks);
     }
 
     protected TaskChecklist(Parcel in) {
-        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST, new ArrayList<>(), new byte[0]);
+        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST, new ArrayList<>(), new byte[0], "#E1E1E1");
         setId(in.readInt());
         setTaskName(in.readString());
         setDescription(in.readString());
@@ -38,6 +38,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         byte[] arr = new byte[in.readInt()];
         in.readByteArray(arr);
         setSketchData(arr);
+        setTaskColor(in.readString());
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {
@@ -70,6 +71,7 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeList(getAttachments());
         parcel.writeInt(getSketchData().length);
         parcel.writeByteArray(getSketchData());
+        parcel.writeString(getTaskColor());
     }
 
     @Override

@@ -9,8 +9,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +34,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.thoughtworks.xstream.mapper.Mapper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,6 +62,7 @@ import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
+import top.defaults.colorpicker.ColorPickerPopup;
 
 public class TaskActivity extends AppCompatActivity implements SketchFragment.SendDataFromSketchDialog, AttachmentsAdapter.OpenFileListener, IObserver {
     public static final String TAG = "TaskActivity";
@@ -78,6 +83,8 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
     private RelativeLayout deadlineRelLayout;
     private DatePicker deadlineSpinnerPicker;
     private TimePicker timePicker;
+
+    private Button editTaskColor;
 
     private TaskViewModel viewModel;
     private EventNotifierViewModel eventNotifierViewModel;
@@ -132,6 +139,30 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
             subtaskListAdapter.addTask(new SubtaskList(""));
         });
 
+        //Color picker popup
+        editTaskColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ColorPickerPopup.Builder(TaskActivity.this).initialColor(
+                                Color.RED)
+                        .enableBrightness(true)
+                        .enableAlpha(false)
+                        .okTitle("Choose")
+                        .cancelTitle("Cancel")
+                        .showIndicator(true)
+                        .showValue(false)
+                        .build()
+                        .show(view,
+                                new ColorPickerPopup.ColorPickerObserver() {
+                                    @Override
+                                    public void
+                                    onColorPicked(int color) {
+                                        editTaskColor.setBackgroundTintList(ColorStateList.valueOf(color));
+                                    }
+                                });
+            }
+        });
+
         btnCreateSketch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,6 +172,9 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
     }
 
     private void setViews(DisplayClass incomingTask) {
+
+        Log.d(TAG, "Color: " + incomingTask.getTaskColor());
+        editTaskColor.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(incomingTask.getTaskColor())));
 
         if (incomingTask.getTaskName() != null) {
             editTaskName.setText(incomingTask.getTaskName());
@@ -281,9 +315,11 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
                     calendar.set(year, month, day, hour, minute, 0);
                     incomingTask.setDeadline(new Date(calendar.getTimeInMillis()));
 
+                    String taskColor = String.format("#%06X", (0xFFFFFF & editTaskColor.getBackgroundTintList().getDefaultColor()));
+                    incomingAppointment.setTaskColor(taskColor);
+
                     incomingAppointment.setDeadline(incomingTask.getDeadline());
                     viewModel.updateAppointment(incomingAppointment);
-
                 }
                 if (incomingTask.getCategoryEnum() == ECategory.CHECKLIST){
                     incomingChecklist.setTaskName(incomingTask.getTaskName());
@@ -292,6 +328,9 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
                     incomingChecklist.setStatus(incomingTask.getStatus());
                     incomingChecklist.setSubtasks(subtaskListAdapter.getTasks());
                     incomingChecklist.setSketchData(incomingTask.getSketchData());
+
+                    String taskColor = String.format("#%06X", (0xFFFFFF & editTaskColor.getBackgroundTintList().getDefaultColor()));
+                    incomingChecklist.setTaskColor(taskColor);
 
                     viewModel.updateChecklist(incomingChecklist);
                 }
@@ -342,6 +381,7 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
         btnAddAttachment = findViewById(R.id.btnAddAttachment);
         btnCreateSketch = findViewById(R.id.btnAddSketch);
         sketchPlacheholder = findViewById(R.id.sketchPlaceholder);
+        editTaskColor = findViewById(R.id.editTaskColor);
     }
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),

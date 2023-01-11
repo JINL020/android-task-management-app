@@ -34,7 +34,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         void onItemSelected(ATask taskModel);
     }
 
-    public static final String TAG = "";
+    public static final String TAG = "Task list adapter";
     public static final String TASK_ITEM_KEY = "clicked_task";
     public static final String TASK_ITEM_CATEGORY = "clicked_task_category";
 
@@ -147,9 +147,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.taskTypeImageAppointment.setVisibility(View.GONE);
         }
         //TODO
-
-        //Set task color
-        holder.parent.setCardBackgroundColor(Color.parseColor(tasks.get(position).getTaskColor()));
+        Log.d(TAG, "Color: " + tasks.get(holder.getAdapterPosition()).getTaskColor());
+        holder.parent.setCardBackgroundColor(Color.parseColor(tasks.get(holder.getAdapterPosition()).getTaskColor()));
     }
 
     @Override
