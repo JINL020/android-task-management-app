@@ -14,8 +14,6 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 public class Exporter {
     private static final String TAG = "Exporter";
-    private static int currVersion = 0;
-
     public void exportTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists, EFormat format){
         Log.d(TAG, "Export tasks");
 
@@ -45,8 +43,6 @@ public class Exporter {
 
         StringBuilder fileNameBuilder = new StringBuilder();
         fileNameBuilder.append("tasks");
-        fileNameBuilder.append("_");
-        fileNameBuilder.append(currVersion++);
         fileNameBuilder.append(".");
         fileNameBuilder.append(extension);
 
