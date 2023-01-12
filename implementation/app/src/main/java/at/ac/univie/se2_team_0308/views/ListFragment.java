@@ -394,8 +394,10 @@ public class ListFragment extends ATaskListFragment {
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    Log.d(TAG, "File Uri: " + uri.toString());
-                    importerFacade.importTasks(uri);
+                    if(uri != null) {
+                        Log.d(TAG, "File Uri: " + uri.toString());
+                        importerFacade.importTasks(uri);
+                    }
                 }
             });
 
