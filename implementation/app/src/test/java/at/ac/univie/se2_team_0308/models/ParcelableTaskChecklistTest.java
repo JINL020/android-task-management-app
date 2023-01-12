@@ -25,7 +25,8 @@ public class ParcelableTaskChecklistTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         Parcel parcel = Parcel.obtain();

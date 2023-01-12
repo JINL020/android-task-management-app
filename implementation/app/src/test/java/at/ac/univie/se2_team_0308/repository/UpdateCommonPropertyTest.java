@@ -40,7 +40,8 @@ public class UpdateCommonPropertyTest {
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         public static TaskAppointment taskAppointment2 = new TaskAppointment(
@@ -51,7 +52,8 @@ public class UpdateCommonPropertyTest {
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         public static TaskAppointment taskAppointment3 = new TaskAppointment(
@@ -62,7 +64,8 @@ public class UpdateCommonPropertyTest {
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         public static TaskChecklist taskChecklist1 = new TaskChecklist(
@@ -73,7 +76,8 @@ public class UpdateCommonPropertyTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         public static TaskChecklist taskChecklist2 = new TaskChecklist(
@@ -84,7 +88,8 @@ public class UpdateCommonPropertyTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         public static TaskChecklist taskChecklist3 = new TaskChecklist(
@@ -95,7 +100,8 @@ public class UpdateCommonPropertyTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         public static List<TaskAppointment> appointmentList = new ArrayList<>();

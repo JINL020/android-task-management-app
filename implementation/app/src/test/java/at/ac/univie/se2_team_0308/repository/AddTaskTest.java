@@ -61,7 +61,8 @@ public class AddTaskTest {
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
         taskAppointmentDao.insert(taskAppointment);
         taskAppointment.setId(taskAppointmentDao.getAllTasksList().get(0).getId());
@@ -81,7 +82,8 @@ public class AddTaskTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
         taskChecklistDao.insert(taskChecklist);
         taskChecklist.setId(taskChecklistDao.getAllTasksList().get(0).getId());

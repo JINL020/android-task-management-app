@@ -26,7 +26,8 @@ public class ParcelableTaskAppointmentTest {
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         Parcel parcel = Parcel.obtain();
