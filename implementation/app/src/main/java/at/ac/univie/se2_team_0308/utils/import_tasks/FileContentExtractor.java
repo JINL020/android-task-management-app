@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class FileContentRetriever {
-    public static final String TAG = "FileContentRetriever";
+public class FileContentExtractor {
+    public static final String TAG = "FileContentExtractor";
     private final ContentResolver contentResolver;
 
-    public FileContentRetriever(ContentResolver contentResolver){
+    public FileContentExtractor(ContentResolver contentResolver){
         this.contentResolver = contentResolver;
     }
 

@@ -29,7 +29,7 @@ public class ImporterFacade {
 
     public void importTasks(Uri uri){
         Log.d(TAG, "Importing tasks");
-        FileContentRetriever contentRetriever = new FileContentRetriever(contentResolver);
+        FileContentExtractor contentRetriever = new FileContentExtractor(contentResolver);
 
         try{
             String fileContent = contentRetriever.getFile(uri);
