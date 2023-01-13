@@ -440,20 +440,23 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
             eventNotifierViewModel.getOnUpdateNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    setAlarm((TaskAppointment) task);
+                    try {
+                        setAlarm((TaskAppointment) task);
+                    } catch (DeadlinePassedException e) {
+                        Log.d(TAG, e.getErrorMessage());
+                    }
                 }
                 Log.d(TAG, "received onUpdate update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
         }
     }
 
-    private void setAlarm(TaskAppointment appointment) {
+    private void setAlarm(TaskAppointment appointment) throws DeadlinePassedException {
         Date deadline = appointment.getDeadline();
 
         Date currentTime = Calendar.getInstance().getTime();
         if (currentTime.after(deadline)) {
-            Log.d(TAG, "deadline already passed");
-            return;
+            throw new DeadlinePassedException(currentTime, deadline);
         }
 
         Calendar calendar = Calendar.getInstance();

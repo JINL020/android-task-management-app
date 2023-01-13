@@ -143,7 +143,11 @@ public class MainActivity extends AppCompatActivity implements IObserver {
             eventNotifierViewModel.getOnCreateNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    setAlarm((TaskAppointment)task);
+                    try {
+                        setAlarm((TaskAppointment)task);
+                    } catch (DeadlinePassedException e) {
+                        Log.d(TAG, e.getErrorMessage());
+                    }
                 }
                 Log.d(TAG, "received onCreate update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
@@ -165,13 +169,12 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         }
     }
 
-    private void setAlarm(@NonNull TaskAppointment appointment) {
-        Date deadline = appointment.getDeadline();
+    private void setAlarm(@NonNull TaskAppointment appointment) throws DeadlinePassedException {
 
+        Date deadline = appointment.getDeadline();
         Date currentTime = Calendar.getInstance().getTime();
         if(currentTime.after(deadline)){
-            Log.d(TAG, "deadline already passed");
-            return;
+            throw new DeadlinePassedException(currentTime, deadline);
         }
 
         Calendar calendar = Calendar.getInstance();
