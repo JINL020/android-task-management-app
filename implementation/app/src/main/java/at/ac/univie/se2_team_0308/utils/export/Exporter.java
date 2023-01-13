@@ -18,36 +18,36 @@ public class Exporter {
         Log.d(TAG, "Export tasks");
 
         ITaskConverter taskConverter;
-        String fileName;
+        String filename;
 
         if(format == EFormat.XML){
             Log.d(TAG, "Format is XML");
             taskConverter = new TaskToXMLConverter();
-            fileName = composeName("xml");
+            filename = composeName("xml");
         }
         else{
             assert format == EFormat.JSON;
 
             Log.d(TAG, "Format is JSON");
             taskConverter = new TaskToJSONConverter();
-            fileName = composeName("json");
+            filename = composeName("json");
         }
 
         String convertedFile = taskConverter.convertTasks(taskAppointment, taskChecklists);
         Log.d(TAG, "Content of converted file: " + convertedFile);
-        writeToFile(convertedFile, fileName);
+        writeToFile(convertedFile, filename);
     }
 
     private String composeName(String extension){
         Log.d(TAG, "Compose file name");
 
-        StringBuilder fileNameBuilder = new StringBuilder();
-        fileNameBuilder.append("tasks");
-        fileNameBuilder.append(".");
-        fileNameBuilder.append(extension);
+        StringBuilder filenameBuilder = new StringBuilder();
+        filenameBuilder.append("tasks");
+        filenameBuilder.append(".");
+        filenameBuilder.append(extension);
 
-        Log.d(TAG, "File name is " + fileNameBuilder);
-        return fileNameBuilder.toString();
+        Log.d(TAG, "File name is " + filenameBuilder);
+        return filenameBuilder.toString();
     }
 
     // TODO: fix this so that I can create new files with the same name

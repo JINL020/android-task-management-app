@@ -19,8 +19,8 @@ public class XmlTaskRetriever {
         String regexChecklist = "<at.ac.univie.se2__team__0308.models.TaskChecklist>.*?</at.ac.univie.se2__team__0308.models.TaskChecklist>";
 
         boolean dotall = true;
-        List<String> taskAppointmentStrings = MatchRetriever.retrieveTasks(regexAppointment, fileContent, dotall);
-        List<String> taskChecklistStrings = MatchRetriever.retrieveTasks(regexChecklist, fileContent, dotall);
+        List<String> taskAppointmentStrings = MatchRetriever.retrieveMatch(regexAppointment, fileContent, dotall);
+        List<String> taskChecklistStrings = MatchRetriever.retrieveMatch(regexChecklist, fileContent, dotall);
 
         return new Pair<>(taskAppointmentStrings, taskChecklistStrings);
     }

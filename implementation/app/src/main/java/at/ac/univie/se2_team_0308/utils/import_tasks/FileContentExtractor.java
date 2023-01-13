@@ -26,10 +26,10 @@ public class FileContentExtractor {
 
     /**
      * Method used to extract content from a file. If the extraction throws an error,
-     * the content returned will be empty
+     * the content returned will be an empty string
      *
-     * @param uri to the file that we should extract the content from
-     * @return a String that represents the content of the file
+     * @param  uri to the file that we should extract the content from
+     * @return content of the file as a String
      */
     public String extractContent(Uri uri) {
         InputStream inputStream;
@@ -52,8 +52,8 @@ public class FileContentExtractor {
     /**
      * The method takes an InputStream object and retrieves its String content
      *
-     * @param inputStream resulted from the Uri and ContentResolver
-     * @return String that contains the content of the file retrived from the InputStream
+     * @param  inputStream resulted from the Uri and ContentResolver
+     * @return the content of the file retrived from the InputStream as a String
      * @see <a href="https://stackoverflow.com/questions/12910503/read-file-as-string"> The code was inspired from here </a>
      * @throws IOException if the file is not found or an error occurred while reading or trying to close the file
      *

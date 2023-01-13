@@ -12,6 +12,8 @@ import java.util.List;
 public class FilenameRetriever {
     public static final String TAG = "FilenameRetriever";
     /**
+     * Retrieves the name of a file from an Uri
+     *
      * @param uri               the identifier to the file to be imported
      * @param contentResolver   facilitates the interaction with the data outside the app
      * @param supportedFormats  a list of strings that specifies which document formats are supported

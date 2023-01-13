@@ -17,8 +17,8 @@ public class JsonTaskRetriever {
         String regexChecklist = "\\{.*\"category\":\"CHECKLIST\".*\\}";
 
         boolean dotall = false;
-        List<String> taskAppointmentStrings = MatchRetriever.retrieveTasks(regexAppointment, fileContent, dotall);
-        List<String> taskChecklistStrings = MatchRetriever.retrieveTasks(regexChecklist, fileContent, dotall);
+        List<String> taskAppointmentStrings = MatchRetriever.retrieveMatch(regexAppointment, fileContent, dotall);
+        List<String> taskChecklistStrings = MatchRetriever.retrieveMatch(regexChecklist, fileContent, dotall);
 
         return new Pair<>(taskAppointmentStrings, taskChecklistStrings);
     }
