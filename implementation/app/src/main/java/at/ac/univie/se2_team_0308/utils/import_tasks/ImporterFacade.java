@@ -36,16 +36,16 @@ public class ImporterFacade {
 
         try{
             String fileContent = contentExtractor.extractContent(uri);
-            String fileName = FilenameRetriever.getFilename(uri, contentResolver, supportedFormats);
+            String filename = FilenameRetriever.getFilename(uri, contentResolver, supportedFormats);
             Pair<List<TaskAppointment>, List<TaskChecklist>> importedTasks;
 
-            Log.d(TAG, "File name is " + fileName);
-            if(fileName.contains("xml")){
+
+            if(filename.contains("xml")){
                 Log.d(TAG, "Importing xml");
                 XmlTaskRetriever xmlTaskRetriever = new XmlTaskRetriever(fileContent);
                 importer = new XmlImporter(xmlTaskRetriever);
             }
-            else if(fileName.contains("json")){
+            else if(filename.contains("json")){
                 Log.d(TAG, "Importing json");
                 JsonTaskRetriever jsonTaskRetriever = new JsonTaskRetriever(fileContent);
                 importer = new JsonImporter(jsonTaskRetriever);
