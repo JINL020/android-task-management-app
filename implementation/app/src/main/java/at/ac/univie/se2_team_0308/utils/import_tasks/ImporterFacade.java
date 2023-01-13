@@ -32,7 +32,7 @@ public class ImporterFacade {
         FileContentExtractor contentRetriever = new FileContentExtractor(contentResolver);
 
         try{
-            String fileContent = contentRetriever.getFile(uri);
+            String fileContent = contentRetriever.extractContent(uri);
             String fileName = FilenameRetriever.getFilename(uri, contentResolver);
             Pair<List<TaskAppointment>, List<TaskChecklist>> importedTasks;
 
