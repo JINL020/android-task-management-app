@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         String sTheme = sharedPreferences.getString("theme", ""); // "theme" is key and second "" is default value
 
-        switch(sTheme){
+        switch (sTheme) {
             case "light":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
@@ -138,16 +137,12 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     }
 
     @Override
-    public void receivedUpdate(ENotificationEvent event, ATask... tasks) {
+    public void receivedUpdate(ENotificationEvent event, ATask... tasks) throws DeadlinePassedException {
         if (event == ENotificationEvent.CREATE) {
             eventNotifierViewModel.getOnCreateNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    try {
-                        setAlarm((TaskAppointment)task);
-                    } catch (DeadlinePassedException e) {
-                        Log.d(TAG, e.getErrorMessage());
-                    }
+                    setAlarm((TaskAppointment) task);
                 }
                 Log.d(TAG, "received onCreate update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
@@ -173,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         Date deadline = appointment.getDeadline();
         Date currentTime = Calendar.getInstance().getTime();
-        if(currentTime.after(deadline)){
+        if (currentTime.after(deadline)) {
             throw new DeadlinePassedException(currentTime, deadline);
         }
 

@@ -25,6 +25,7 @@ import at.ac.univie.se2_team_0308.utils.notifications.ISubject;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.repository.TaskRepository;
+import at.ac.univie.se2_team_0308.views.DeadlinePassedException;
 
 
 public class TaskViewModel extends AndroidViewModel implements ISubject {
@@ -202,7 +203,11 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
     @Override
     public void notifyObservers(ENotificationEvent event, ATask... tasks) {
         for(IObserver observer : taskViewModelObservers){
-            observer.receivedUpdate(event, tasks);
+            try {
+                observer.receivedUpdate(event, tasks);
+            } catch (DeadlinePassedException e) {
+                    Log.d(TAG, e.getErrorMessage());
+            }
         }
     }
 
