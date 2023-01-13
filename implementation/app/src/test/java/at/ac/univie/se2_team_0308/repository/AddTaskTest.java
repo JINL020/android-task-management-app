@@ -52,7 +52,7 @@ public class AddTaskTest {
     }
 
     @Test
-    public void addTaskAppointment_ReadInList() throws ExecutionException, InterruptedException {
+    public void AddTaskAppointment_ReadInList() throws ExecutionException, InterruptedException {
         TaskAppointment taskAppointment = new TaskAppointment(
                 "taskName",
                 "taskName",
@@ -71,7 +71,7 @@ public class AddTaskTest {
     }
 
     @Test
-    public void addTaskChecklist_ReadInList() throws ExecutionException, InterruptedException {
+    public void AddTaskChecklist_ReadInList() throws ExecutionException, InterruptedException {
         TaskChecklist taskChecklist = new TaskChecklist(
                 "taskName",
                 "taskName",

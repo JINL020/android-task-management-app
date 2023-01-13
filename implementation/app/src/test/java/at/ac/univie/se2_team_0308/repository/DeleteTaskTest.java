@@ -51,7 +51,7 @@ public class DeleteTaskTest {
     }
 
     @Test
-    public void deleteTaskAppointment_RemoveFromDb() throws ExecutionException, InterruptedException {
+    public void DeleteTaskAppointment_RemoveFromDb() throws ExecutionException, InterruptedException {
         TaskAppointment taskAppointment = new TaskAppointment(
                 "taskName",
                 "taskName",
@@ -71,7 +71,7 @@ public class DeleteTaskTest {
     }
 
     @Test
-    public void deleteTaskChecklist_RemoveFromDb() throws ExecutionException, InterruptedException {
+    public void DeleteTaskChecklist_RemoveFromDb() throws ExecutionException, InterruptedException {
         TaskViewModel viewModel = mock(TaskViewModel.class);
         TaskChecklist taskChecklist = new TaskChecklist(
                 "taskName",
