@@ -68,8 +68,6 @@ public class AddTaskTest {
         taskAppointment.setId(taskAppointmentDao.getAllTasksList().get(0).getId());
         assertThat(taskAppointmentDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("taskName", taskAppointmentDao.getAllTasksList().get(0).getTaskName());
-        //assertThat(taskAppointmentDao.getAllTasksList(), containsInAnyOrder(taskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
     }
 
     @Test
@@ -89,9 +87,6 @@ public class AddTaskTest {
         taskChecklist.setId(taskChecklistDao.getAllTasksList().get(0).getId());
         assertThat(taskChecklistDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("taskName", taskChecklistDao.getAllTasksList().get(0).getTaskName());
-        //assertThat(taskChecklistDao.getAllTasksList(), containsInAnyOrder(taskChecklist));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
-
     }
 
     @After

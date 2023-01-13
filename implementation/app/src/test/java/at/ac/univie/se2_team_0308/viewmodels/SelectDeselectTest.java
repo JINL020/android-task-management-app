@@ -85,11 +85,6 @@ public class SelectDeselectTest {
 
     }
 
-//    @Test
-//    public void itemCount() {
-//        Assert.assertEquals(2, adapter.getItemCount());
-//    }
-
     @Test
     public void SelectTaskDeselectTask_SelectedTasksListGetsUpdated() {
 

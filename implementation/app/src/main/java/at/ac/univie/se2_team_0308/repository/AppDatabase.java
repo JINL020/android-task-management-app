@@ -44,12 +44,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static final String TAG = "";
 
-    static AppDatabase getDatabase(final Context context) {
+    static AppDatabase getDatabase(final Context context) throws SingletonDbDoubleInitException {
         if (INSTANCE == null) {
             Log.d(TAG, "getInstance: ");
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "task_management_database").fallbackToDestructiveMigration().addCallback(roomCallback).build();
+                } else {
+                    throw new SingletonDbDoubleInitException();
                 }
             }
         }

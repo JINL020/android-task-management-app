@@ -78,8 +78,6 @@ public class UpdateTaskTest {
         taskAppointmentDao.update(updatedTaskAppointment);
         assertThat(taskAppointmentDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("Modified", taskAppointmentDao.getAllTasksList().get(0).getTaskName());
-        // assertThat(toReturn, containsInAnyOrder(updatedTaskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
     }
 
     @Test
@@ -111,8 +109,6 @@ public class UpdateTaskTest {
         taskChecklistDao.update(updatedTaskChecklist);
         assertThat(taskChecklistDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("Modified", taskChecklistDao.getAllTasksList().get(0).getTaskName());
-        // assertThat(toReturn, containsInAnyOrder(updatedTaskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
         }
 
     @After

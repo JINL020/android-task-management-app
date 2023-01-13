@@ -360,6 +360,12 @@ public class ListFragment extends ATaskListFragment {
         }
     }
 
+    /**
+     * This method is called when the user clicks on the positive PropertyToBeUpdated dialog button.
+     * It sends the property to be updated from the PropertyToBeUpdated dialog back to the ListFragment
+     * where the viewModel uses it to update the respective task in the database.
+     * @param propertyName the property to be updated
+     */
     @Override
     public void sendDataResult(String propertyName) {
         if ((viewModel.getSelectedTaskAppointmentIds() != null) && (viewModel.getSelectedTaskChecklistIds() != null)) {
@@ -373,6 +379,22 @@ public class ListFragment extends ATaskListFragment {
         }
     }
 
+    /**
+     * This method is called when the user clicks on the positive AddTaskFragment dialog button.
+     * It sends the data from the AddTaskFragment back to the ListFragment where the viewModel
+     * uses it to insert the new task into the database.
+     * @param taskName
+     * @param taskDescription
+     * @param priorityEnum
+     * @param statusEnum
+     * @param deadline
+     * @param subtasks
+     * @param attachments
+     * @param sketchData
+     * @param isSelectedAppointment
+     * @param isSelectedChecklist
+     * @param taskColor
+     */
     @Override
     public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist, String taskColor) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
