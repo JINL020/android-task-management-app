@@ -8,6 +8,8 @@ import android.util.Pair;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,11 +31,12 @@ public class ImporterFacade {
 
     public void importTasks(Uri uri){
         Log.d(TAG, "Importing tasks");
-        FileContentExtractor contentRetriever = new FileContentExtractor(contentResolver);
+        FileContentExtractor contentExtractor = new FileContentExtractor(contentResolver);
+        List<String> supportedFormats = Arrays.asList("xml", "json");
 
         try{
-            String fileContent = contentRetriever.extractContent(uri);
-            String fileName = FilenameRetriever.getFilename(uri, contentResolver);
+            String fileContent = contentExtractor.extractContent(uri);
+            String fileName = FilenameRetriever.getFilename(uri, contentResolver, supportedFormats);
             Pair<List<TaskAppointment>, List<TaskChecklist>> importedTasks;
 
             Log.d(TAG, "File name is " + fileName);
