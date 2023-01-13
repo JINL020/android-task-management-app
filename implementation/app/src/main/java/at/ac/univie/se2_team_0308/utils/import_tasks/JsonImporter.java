@@ -10,7 +10,7 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
-public class JsonImporter implements TaskImporter{
+public class JsonImporter implements ITaskImporter {
     private static final String TAG = "TaskImporter";
     private final JsonTaskRetriever jsonTaskRetriever;
 

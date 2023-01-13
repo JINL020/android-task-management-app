@@ -6,13 +6,8 @@ import android.util.Pair;
 
 import com.thoughtworks.xstream.XStream;
 
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
@@ -20,7 +15,7 @@ import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
-public class XmlImporter implements TaskImporter{
+public class XmlImporter implements ITaskImporter {
     private final static String TAG = "XmlImpoter";
     private final XmlTaskRetriever xmlTaskRetriever;
 

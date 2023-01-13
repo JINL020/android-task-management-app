@@ -20,7 +20,7 @@ public class ImporterFacade {
     public static final String TAG = "ImporterFacade";
     private final TaskViewModel taskViewModel;
     private final ContentResolver contentResolver;
-    private TaskImporter importer;
+    private ITaskImporter importer;
 
     public ImporterFacade(TaskViewModel taskViewModel, ContentResolver contentResolver){
         this.taskViewModel = taskViewModel;
