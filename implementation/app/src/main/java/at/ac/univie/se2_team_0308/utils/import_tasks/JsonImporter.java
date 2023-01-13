@@ -36,7 +36,7 @@ public class JsonImporter implements ITaskImporter {
             try{
                 TaskChecklist taskChecklist = gson.fromJson(eachChecklistString, TaskChecklist.class);
                 importedTasks.second.add(taskChecklist);
-                // Log.d(TAG, taskChecklist.toString());
+                 Log.d(TAG, taskChecklist.toString());
             }
             catch(Exception e){
                 Log.e(TAG, e.toString());
