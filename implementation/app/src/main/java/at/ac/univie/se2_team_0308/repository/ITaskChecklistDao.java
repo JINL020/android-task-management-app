@@ -13,7 +13,7 @@ import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 @Dao
-public interface TaskChecklistDao {
+public interface ITaskChecklistDao {
     @Insert
     long insert(TaskChecklist task);
 

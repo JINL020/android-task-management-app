@@ -27,9 +27,9 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 public class UpdateCommonPropertyTest {
     private AppDatabase database;
 
-    private TaskAppointmentDao taskAppointmentDao;
+    private ITaskAppointmentDao taskAppointmentDao;
 
-    private TaskChecklistDao taskChecklistDao;
+    private ITaskChecklistDao taskChecklistDao;
 
     private static class utils {
         public static TaskAppointment taskAppointment1 = new TaskAppointment(

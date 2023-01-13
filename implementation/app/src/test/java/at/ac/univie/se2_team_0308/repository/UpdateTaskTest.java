@@ -31,9 +31,9 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 public class UpdateTaskTest {
     private AppDatabase database;
 
-    private TaskAppointmentDao taskAppointmentDao;
+    private ITaskAppointmentDao taskAppointmentDao;
 
-    private TaskChecklistDao taskChecklistDao;
+    private ITaskChecklistDao taskChecklistDao;
 
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =

@@ -10,8 +10,8 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
-public interface TaskList {
+public interface ITaskList {
     LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllTasks(Application application);
-    TaskAppointmentDao getAppointmentDao();
-    TaskChecklistDao getChecklistDao();
+    ITaskAppointmentDao getAppointmentDao();
+    ITaskChecklistDao getChecklistDao();
 }

@@ -13,7 +13,7 @@ import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 
 @Dao
-public interface TaskAppointmentDao {
+public interface ITaskAppointmentDao {
     @Insert
     long insert(TaskAppointment task);
 

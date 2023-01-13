@@ -32,8 +32,8 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 @RunWith(AndroidJUnit4.class)
 public class AddTaskTest {
     private AppDatabase database;
-    private TaskAppointmentDao taskAppointmentDao;
-    private TaskChecklistDao taskChecklistDao;
+    private ITaskAppointmentDao taskAppointmentDao;
+    private ITaskChecklistDao taskChecklistDao;
 
     private Observer observer;
 

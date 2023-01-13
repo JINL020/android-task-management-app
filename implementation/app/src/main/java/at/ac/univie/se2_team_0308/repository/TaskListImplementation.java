@@ -11,10 +11,10 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.CombinedLiveData;
 
-public class TaskListImplementation implements TaskList {
+public class TaskListImplementation implements ITaskList {
 
-    private static TaskAppointmentDao appointmentDao;
-    private static TaskChecklistDao checklistDao;
+    private static ITaskAppointmentDao appointmentDao;
+    private static ITaskChecklistDao checklistDao;
 
     public static final String TAG = "TaskListImpl";
 
@@ -27,12 +27,12 @@ public class TaskListImplementation implements TaskList {
     }
 
     @Override
-    public TaskAppointmentDao getAppointmentDao() {
+    public ITaskAppointmentDao getAppointmentDao() {
         return appointmentDao;
     }
 
     @Override
-    public TaskChecklistDao getChecklistDao() {
+    public ITaskChecklistDao getChecklistDao() {
         return checklistDao;
     }
 

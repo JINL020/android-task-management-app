@@ -10,9 +10,9 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
-public class TaskListProxy implements TaskList {
+public class TaskListProxy implements ITaskList {
 
-    private TaskList taskList;
+    private ITaskList taskList;
 
     @Override
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllTasks(Application application) {
@@ -23,12 +23,12 @@ public class TaskListProxy implements TaskList {
     }
 
     @Override
-    public TaskAppointmentDao getAppointmentDao() {
+    public ITaskAppointmentDao getAppointmentDao() {
         return taskList.getAppointmentDao();
     }
 
     @Override
-    public TaskChecklistDao getChecklistDao() {
+    public ITaskChecklistDao getChecklistDao() {
         return taskList.getChecklistDao();
     }
 

@@ -33,8 +33,8 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 @RunWith(AndroidJUnit4.class)
 public class DeleteTaskTest {
     private AppDatabase database;
-    private TaskAppointmentDao taskAppointmentDao;
-    private TaskChecklistDao taskChecklistDao;
+    private ITaskAppointmentDao taskAppointmentDao;
+    private ITaskChecklistDao taskChecklistDao;
 
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =

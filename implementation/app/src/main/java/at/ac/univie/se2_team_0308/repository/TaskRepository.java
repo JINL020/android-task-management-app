@@ -15,14 +15,14 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 public class TaskRepository {
-    private static TaskAppointmentDao taskAppointmentDao;
-    private static TaskChecklistDao taskChecklistDao;
+    private static ITaskAppointmentDao taskAppointmentDao;
+    private static ITaskChecklistDao taskChecklistDao;
     private LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> allTasks;
 
     public static final String TAG = "TaskRepository";
 
     public TaskRepository(Application application) {
-        TaskList taskListProxy = new TaskListProxy();
+        ITaskList taskListProxy = new TaskListProxy();
         this.allTasks = taskListProxy.getAllTasks(application);
         taskAppointmentDao = taskListProxy.getAppointmentDao();
         taskChecklistDao = taskListProxy.getChecklistDao();
