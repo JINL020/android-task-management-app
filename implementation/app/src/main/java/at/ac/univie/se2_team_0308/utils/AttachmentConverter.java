@@ -8,6 +8,7 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.Attachment;
 
 public class AttachmentConverter {
+
     @TypeConverter
     public String attachmentsToJson(List<Attachment> subtasks) {
         Gson gson = new Gson();

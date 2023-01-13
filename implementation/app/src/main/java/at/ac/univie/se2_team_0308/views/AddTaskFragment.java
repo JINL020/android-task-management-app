@@ -1,17 +1,10 @@
 package at.ac.univie.se2_team_0308.views;
 
 import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +31,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,8 +42,8 @@ import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.SubtaskList;
-import at.ac.univie.se2_team_0308.utils.import_tasks.UnsupportedDocumentFormatException;
 import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
+import at.ac.univie.se2_team_0308.viewmodels.OpenAttachmentException;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
@@ -293,6 +284,7 @@ public class AddTaskFragment extends DialogFragment implements SketchFragment.Se
         addSubtaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "Add subtask");
                 subtaskListAdapter.addTask(new SubtaskList(""));
             }
         });
@@ -311,6 +303,7 @@ public class AddTaskFragment extends DialogFragment implements SketchFragment.Se
                 public void onActivityResult(Uri uri) {
                     File file = new File(uri.getPath());
                     String fileName = file.getPath().split(":")[1];
+                    Log.d(TAG, "Add new attachment: " + fileName);
                     attachmentsAdapter.addAttachment(new Attachment(fileName));
                 }
             });
@@ -321,14 +314,18 @@ public class AddTaskFragment extends DialogFragment implements SketchFragment.Se
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
         sketchData = bos.toByteArray();
-        // update image view
+        // update image view to display sketch in task fragment
         Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         sketchPlacheholder.setImageBitmap(mutableBitmap);
         sketchPlacheholder.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void openFile(String sketchPath) {
+    public void openFile(String sketchPath) throws OpenAttachmentException {
+        File file = new File(sketchPath);
+        if(!file.exists()){
+            throw new OpenAttachmentException("Attachment file doesn't exist");
+        }
         // TODO open file
     }
 

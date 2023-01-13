@@ -1,5 +1,7 @@
 package at.ac.univie.se2_team_0308.utils;
 
+import android.util.Log;
+
 import androidx.room.TypeConverter;
 
 import org.json.JSONArray;
@@ -15,7 +17,7 @@ import at.ac.univie.se2_team_0308.models.SubtaskItem;
 import at.ac.univie.se2_team_0308.models.SubtaskList;
 
 public class SubtasksConverter {
-
+    public static final String TAG = "SubtasksConverter";
     private EStatusTypeConverter statusConverter;
     public SubtasksConverter(){
         statusConverter = new EStatusTypeConverter();
@@ -44,7 +46,7 @@ public class SubtasksConverter {
         try{
             subtasksArr = getJsonArrSubtasks(subtasks);
         } catch (JSONException e){
-            // TODO
+            Log.d(TAG, "Error on converting a list of ASubtask to JSON: " + e.getMessage());
         }
         return subtasksArr.toString();
     }
@@ -77,7 +79,7 @@ public class SubtasksConverter {
             JSONArray subtasksArr = new JSONArray(json);
             subtasks = resolveSubtasks(subtasksArr);
         } catch (JSONException e){
-            // TODO log error while deserializing
+            Log.d(TAG, "Error on deserializing a list of ASubtask: " + e.getMessage());
         }
         return subtasks;
     }

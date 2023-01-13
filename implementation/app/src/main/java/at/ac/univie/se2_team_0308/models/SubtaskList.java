@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubtaskList extends ASubtask {
+
     private List<ASubtask> subtasks;
 
     public SubtaskList(String name) {
@@ -35,6 +36,7 @@ public class SubtaskList extends ASubtask {
 
     @Override
     public void setState(EStatus state) {
+        // set parent state to all children subtasks
         for (ASubtask s: subtasks){
             s.setState(state);
         }
@@ -57,6 +59,7 @@ public class SubtaskList extends ASubtask {
     }
     @Override
     public void removeSubtask(ASubtask subtask){
+        // for every task which contains subtasks, remove all children
         if(subtask instanceof SubtaskList){
             ((SubtaskList) subtask).removeAllSubtasks();
         }

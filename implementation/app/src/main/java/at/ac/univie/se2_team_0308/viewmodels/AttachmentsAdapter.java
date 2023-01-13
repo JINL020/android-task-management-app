@@ -1,5 +1,6 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,13 @@ import at.ac.univie.se2_team_0308.views.TaskActivity;
 
 public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter.ViewHolder> {
     public static final String TAG = "AttachmentsAdapter";
+
     private Context context;
     List<Attachment> attachments;
 
     private AttachmentsAdapter.OpenFileListener listener;
     public interface OpenFileListener {
-        void openFile(String sketchPath);
+        void openFile(String sketchPath) throws OpenAttachmentException;
     }
 
     public AttachmentsAdapter(Context context, TaskActivity activity){
@@ -31,16 +33,16 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
         try {
             this.listener = (OpenFileListener) activity;
         } catch (ClassCastException e){
-            // tODO
+            throw new ClassCastException(activity.toString());
         }
         this.attachments = new ArrayList<>();
     }
-    public AttachmentsAdapter(Context context, AddTaskFragment activity){
+    public AttachmentsAdapter(Context context, AddTaskFragment fragment){
         this.context = context;
         try {
-            this.listener = (OpenFileListener) activity;
+            this.listener = (OpenFileListener) fragment;
         } catch (ClassCastException e){
-            // TODO
+            throw new ClassCastException(fragment.toString());
         }
         this.attachments = new ArrayList<>();
     }
@@ -83,9 +85,17 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
     public void onBindViewHolder(@NonNull AttachmentsAdapter.ViewHolder holder, int position) {
         holder.txtFileName.setText(this.attachments.get(position).getBaseName());
         holder.textExtension.setText(this.attachments.get(position).getExtension().toUpperCase(Locale.ROOT));
-        holder.deleteFileBtn.setOnClickListener(view -> removeAttachment(holder.getAdapterPosition()));
+        holder.deleteFileBtn.setOnClickListener(view -> {
+            Log.d(TAG, "Remove attachment button clicked");
+            removeAttachment(holder.getAdapterPosition());
+        });
         holder.openFileBtn.setOnClickListener(view -> {
-            listener.openFile(this.attachments.get(position).getFilePath());
+            Log.d(TAG, "Open attachment button clicked");
+            try {
+                listener.openFile(this.attachments.get(position).getFilePath());
+            } catch (OpenAttachmentException e) {
+                Log.d(TAG, "Cannot open attachment: " + e.getMessage());
+            }
         });
     }
 

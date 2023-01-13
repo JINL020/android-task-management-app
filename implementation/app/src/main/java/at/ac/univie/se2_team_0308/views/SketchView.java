@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SketchView extends View {
+    public static final String TAG = "SketchView";
+
     public SketchView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setFocusable(true);
