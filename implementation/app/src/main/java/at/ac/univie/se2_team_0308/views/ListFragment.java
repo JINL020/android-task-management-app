@@ -321,16 +321,13 @@ public class ListFragment extends ATaskListFragment {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 int fromPos = viewHolder.getAdapterPosition();
                 int toPos = target.getAdapterPosition();
-                Collections.swap(Objects.requireNonNull(viewModel.getAllTasks()), fromPos, toPos);
-                adapter.notifyItemMoved(fromPos, toPos);
-                adapter.notifyItemRangeChanged(fromPos, toPos);
+
+                adapter.onTaskMove(fromPos, toPos);
                 return false;
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);

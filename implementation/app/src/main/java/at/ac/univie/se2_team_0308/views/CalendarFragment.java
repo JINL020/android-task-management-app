@@ -284,32 +284,6 @@ public class CalendarFragment extends ATaskListFragment {
     protected void initUtils() {
         importerFacade = new ImporterFacade(viewModel, getActivity().getContentResolver());
         exporter = new Exporter();
-
-        initDragAndDrop();
-    }
-
-    private void initDragAndDrop() {
-        // START https://androidapps-development-blogs.medium.com/drag-and-drop-reorder-in-recyclerview-android-2a3093d16ba2
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP| ItemTouchHelper.DOWN|ItemTouchHelper.START | ItemTouchHelper.END, 0) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                int fromPos = viewHolder.getAdapterPosition();
-                int toPos = target.getAdapterPosition();
-                Collections.swap(Objects.requireNonNull(viewModel.getAllTasks()), fromPos, toPos);
-                adapter.notifyItemMoved(fromPos, toPos);
-                adapter.notifyItemRangeChanged(fromPos, toPos);
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recViewTasks);
-        // END
     }
 
     // Choose which view elements/layouts to make visible
