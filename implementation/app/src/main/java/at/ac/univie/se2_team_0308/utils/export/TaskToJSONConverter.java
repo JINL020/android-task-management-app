@@ -1,8 +1,11 @@
 package at.ac.univie.se2_team_0308.utils.export;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
+
+import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
@@ -20,7 +23,9 @@ public class TaskToJSONConverter implements ITaskConverter {
     */
     @Override
     public String convertTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().registerTypeAdapter(TaskChecklist.class, new TaskChecklistSerializer()).create();
+
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{\"AllTasks\": {");
         stringBuilder.append(System.getProperty("line.separator"));
