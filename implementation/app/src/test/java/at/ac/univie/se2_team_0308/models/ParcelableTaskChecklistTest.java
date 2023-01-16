@@ -16,7 +16,7 @@ public class ParcelableTaskChecklistTest {
 
     // START https://stackoverflow.com/questions/12829700/android-unit-testing-bundle-parcelable
     @Test
-    public void compareParcelableTaskChecklistToNormalTaskChecklist_getSameValues() {
+    public void CompareParcelableTaskChecklistToNormalTaskChecklist_getSameValues() {
         TaskChecklist test = new TaskChecklist(
                 "taskName",
                 "taskName",
@@ -25,7 +25,8 @@ public class ParcelableTaskChecklistTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
 
         Parcel parcel = Parcel.obtain();

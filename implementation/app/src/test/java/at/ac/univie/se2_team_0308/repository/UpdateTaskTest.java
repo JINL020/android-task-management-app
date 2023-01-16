@@ -31,9 +31,9 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 public class UpdateTaskTest {
     private AppDatabase database;
 
-    private TaskAppointmentDao taskAppointmentDao;
+    private ITaskAppointmentDao taskAppointmentDao;
 
-    private TaskChecklistDao taskChecklistDao;
+    private ITaskChecklistDao taskChecklistDao;
 
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
@@ -59,7 +59,8 @@ public class UpdateTaskTest {
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
         taskAppointmentDao.insert(taskAppointment);
         TaskAppointment updatedTaskAppointment = new TaskAppointment(
@@ -70,14 +71,13 @@ public class UpdateTaskTest {
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
         updatedTaskAppointment.setId(taskAppointmentDao.getAllTasksList().get(0).getId());
         taskAppointmentDao.update(updatedTaskAppointment);
         assertThat(taskAppointmentDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("Modified", taskAppointmentDao.getAllTasksList().get(0).getTaskName());
-        // assertThat(toReturn, containsInAnyOrder(updatedTaskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
     }
 
     @Test
@@ -90,7 +90,8 @@ public class UpdateTaskTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
         taskChecklistDao.insert(taskChecklist);
         TaskChecklist updatedTaskChecklist = new TaskChecklist(
@@ -101,14 +102,13 @@ public class UpdateTaskTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
         updatedTaskChecklist.setId(taskChecklistDao.getAllTasksList().get(0).getId());
         taskChecklistDao.update(updatedTaskChecklist);
         assertThat(taskChecklistDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("Modified", taskChecklistDao.getAllTasksList().get(0).getTaskName());
-        // assertThat(toReturn, containsInAnyOrder(updatedTaskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
         }
 
     @After

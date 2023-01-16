@@ -49,10 +49,18 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 public class AddTaskFragment extends DialogFragment implements SketchFragment.SendDataFromSketchDialog, AttachmentsAdapter.OpenFileListener {
     public static final String TAG = "addtaskfragment";
 
+    /**
+     * An interface to send back data from a dialog
+     * to either a parent or a fragment activity.
+     */
     public interface SendDataFromAddDialog {
         void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist, String taskColor);
     }
 
+    /**
+     * A listener to dismiss the dialog when the user clicks on either
+     * the positive or the negative button.
+     */
     public interface AddTaskDialogListener {
         void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
         void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);

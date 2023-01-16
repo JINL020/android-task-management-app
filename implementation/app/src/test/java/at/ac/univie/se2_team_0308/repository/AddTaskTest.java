@@ -32,8 +32,8 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 @RunWith(AndroidJUnit4.class)
 public class AddTaskTest {
     private AppDatabase database;
-    private TaskAppointmentDao taskAppointmentDao;
-    private TaskChecklistDao taskChecklistDao;
+    private ITaskAppointmentDao taskAppointmentDao;
+    private ITaskChecklistDao taskChecklistDao;
 
     private Observer observer;
 
@@ -52,7 +52,7 @@ public class AddTaskTest {
     }
 
     @Test
-    public void addTaskAppointment_ReadInList() throws ExecutionException, InterruptedException {
+    public void AddTaskAppointment_ReadInList() throws ExecutionException, InterruptedException {
         TaskAppointment taskAppointment = new TaskAppointment(
                 "taskName",
                 "taskName",
@@ -61,18 +61,17 @@ public class AddTaskTest {
                 ECategory.APPOINTMENT,
                 new Date(2020, 5, 12),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
         taskAppointmentDao.insert(taskAppointment);
         taskAppointment.setId(taskAppointmentDao.getAllTasksList().get(0).getId());
         assertThat(taskAppointmentDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("taskName", taskAppointmentDao.getAllTasksList().get(0).getTaskName());
-        //assertThat(taskAppointmentDao.getAllTasksList(), containsInAnyOrder(taskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
     }
 
     @Test
-    public void addTaskChecklist_ReadInList() throws ExecutionException, InterruptedException {
+    public void AddTaskChecklist_ReadInList() throws ExecutionException, InterruptedException {
         TaskChecklist taskChecklist = new TaskChecklist(
                 "taskName",
                 "taskName",
@@ -81,15 +80,13 @@ public class AddTaskTest {
                 ECategory.CHECKLIST,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new byte[0]
+                new byte[0],
+                ""
         );
         taskChecklistDao.insert(taskChecklist);
         taskChecklist.setId(taskChecklistDao.getAllTasksList().get(0).getId());
         assertThat(taskChecklistDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("taskName", taskChecklistDao.getAllTasksList().get(0).getTaskName());
-        //assertThat(taskChecklistDao.getAllTasksList(), containsInAnyOrder(taskChecklist));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
-
     }
 
     @After

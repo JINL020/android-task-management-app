@@ -10,10 +10,17 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
-public class TaskListProxy implements TaskList {
+public class TaskListProxy implements ITaskList {
 
-    private TaskList taskList;
+    private ITaskList taskList;
 
+    /**
+     * The first time the app is started, the taskList is null so
+     * the real TaskListImplementation is called for initialization.
+     * When the taskList is not null, the proxy class is used.
+     * @param application
+     * @return a LiveData object that contains both types of Tasks as Pairs
+     */
     @Override
     public LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> getAllTasks(Application application) {
         if (taskList == null) {
@@ -23,12 +30,12 @@ public class TaskListProxy implements TaskList {
     }
 
     @Override
-    public TaskAppointmentDao getAppointmentDao() {
+    public ITaskAppointmentDao getAppointmentDao() {
         return taskList.getAppointmentDao();
     }
 
     @Override
-    public TaskChecklistDao getChecklistDao() {
+    public ITaskChecklistDao getChecklistDao() {
         return taskList.getChecklistDao();
     }
 
