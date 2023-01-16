@@ -3,12 +3,14 @@ package at.ac.univie.se2_team_0308.utils.import_tasks;
 import android.util.Log;
 import android.util.Pair;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
+import at.ac.univie.se2_team_0308.utils.export.TaskChecklistSerializer;
 
 
 /**
@@ -40,7 +42,8 @@ public class JsonImporter implements ITaskImporter {
         
         Pair<List<TaskAppointment>, List<TaskChecklist>> importedTasks = new Pair<>(new ArrayList<>(), new ArrayList<>());
         Pair<List<String>, List<String>> tasks = jsonTaskRetriever.getTasks();
-        Gson gson = new Gson();
+
+        Gson gson = new GsonBuilder().registerTypeAdapter(TaskChecklist.class, new TaskChecklistDeserializer()).create();
 
         for(String eachAppointmentString: tasks.first){
             TaskAppointment taskAppointment = gson.fromJson(eachAppointmentString, TaskAppointment.class);

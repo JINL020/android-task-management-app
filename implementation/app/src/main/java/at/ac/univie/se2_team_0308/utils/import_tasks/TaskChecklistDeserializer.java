@@ -1,4 +1,4 @@
-package at.ac.univie.se2_team_0308.utils.export;
+package at.ac.univie.se2_team_0308.utils.import_tasks;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -29,7 +29,6 @@ public class TaskChecklistDeserializer implements JsonDeserializer<TaskChecklist
         EPriority priority = EPriority.valueOf(jsonObject.get("priority").getAsString());
         EStatus status = EStatus.valueOf(jsonObject.get("status").getAsString());
         ECategory category = ECategory.valueOf(jsonObject.get("category").getAsString());
-//        Date creationDate = new Date(jsonObject.get("creationDate").getAsLong());
 
         SubtasksConverter subtasksConverter = new SubtasksConverter();
         List<ASubtask> subtasks = subtasksConverter.jsonToSubtasks(jsonObject.get("subtasks").getAsString());
@@ -38,6 +37,12 @@ public class TaskChecklistDeserializer implements JsonDeserializer<TaskChecklist
         byte[] sketchData = context.deserialize(jsonObject.get("sketchData"), byte[].class);
         String taskColor = jsonObject.get("taskColor").getAsString();
 
-        return new TaskChecklist(taskName,description,priority,status,category,subtasks,attachments,sketchData,taskColor);
+        TaskChecklist taskChecklist = new TaskChecklist(taskName,description,priority,status,category,subtasks,attachments,sketchData,taskColor);
+
+        Date creationDate = context.deserialize(jsonObject.get("creationDate"), Date.class);
+        taskChecklist.setCreationDate(creationDate);
+        taskChecklist.setId(id);
+
+        return taskChecklist;
     }
 }
