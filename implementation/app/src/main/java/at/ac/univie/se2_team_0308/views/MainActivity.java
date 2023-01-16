@@ -1,117 +1,207 @@
 package at.ac.univie.se2_team_0308.views;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.R;
-import at.ac.univie.se2_team_0308.models.ATaskFactory;
-import at.ac.univie.se2_team_0308.models.EPriority;
-import at.ac.univie.se2_team_0308.models.EStatus;
+import at.ac.univie.se2_team_0308.databinding.ActivityMainBinding;
+import at.ac.univie.se2_team_0308.models.ATask;
+import at.ac.univie.se2_team_0308.models.ECategory;
+import at.ac.univie.se2_team_0308.models.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
-import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
-import at.ac.univie.se2_team_0308.models.TaskChecklist;
-import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
-import at.ac.univie.se2_team_0308.viewmodels.TaskListAdapter;
+import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
+import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
+import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
+import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
-public class MainActivity extends AppCompatActivity implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog{
+public class MainActivity extends AppCompatActivity implements IObserver {
 
-    public static final String TAG = "main act";
+    private static final String TAG = "MAIN_ACTIVITY";
+    public static final String APPOINTMENT_KEY = "appointment";
+    public static final String NOTIFIER_KEY = "notifier";
 
-    private RecyclerView recViewTasks;
-    private FloatingActionButton fabAdd;
-    private TaskListAdapter adapter;
-    private TaskViewModel viewModel;
+    private ActivityMainBinding binding;
 
-    private static ATaskFactory taskFactory;
+    private EventNotifierViewModel eventNotifierViewModel;
+    private TaskViewModel taskViewModel;
+
+    private SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        initViews();
-        initViewModel();
-        initRecyclerViews();
+        setAppTheme();
 
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment fragment = new AddTaskFragment();
-                fragment.show(getSupportFragmentManager(), "addtask");
-            }
-        });
-    }
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-    private void initViewModel() {
-        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        viewModel.init(getApplication());
-        viewModel.getAllLiveTasks().observe(this, new Observer<Pair<List<TaskAppointment>, List<TaskChecklist>>>() {
-            @Override
-            public void onChanged(Pair<List<TaskAppointment>, List<TaskChecklist>> taskModels) {
-                adapter.setTasks(viewModel.getAllTasks());
-                adapter.notifyDataSetChanged();
-            }
-        });
-    }
+        configureBottomNavBar();
 
-    private void initRecyclerViews() {
-        adapter = new TaskListAdapter(this, viewModel.getAllTasks());
-        recViewTasks.setAdapter(adapter);
-        recViewTasks.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-    }
+        initViewModels();
 
-    private void initViews() {
-        fabAdd = findViewById(R.id.fabAdd);
-        recViewTasks = findViewById(R.id.recViewTasks);
+        initNotificationChannel();
+
+        taskViewModel.attachObserver(this);
+        Log.d(TAG, "attached observer to taskViewModel(MainActivity)");
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialogFragment) {
-        //Toast.makeText(this, "Clicked on Add" , Toast.LENGTH_SHORT).show();
-        dialogFragment.dismiss();
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+        taskViewModel.detachObserver(this);
+        Log.d(TAG, "detached observer from taskViewModel(MainActivity)");
     }
 
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialogFragment) {
-        //Toast.makeText(this, "Clicked on Cancel", Toast.LENGTH_SHORT).show();
-        dialogFragment.dismiss();
-    }
+    private void setAppTheme() {
+        sharedPreferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
 
-    @Override
-    public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, Boolean isSelectedAppointment) {
-        Log.d(TAG, "sendDataResult: taskName" + taskName);
-        Log.d(TAG, "sendDataResult: taskDescription" + taskDescription);
-        Log.d(TAG, "sendDataResult: priorityEnum" + priorityEnum.toString());
-        Log.d(TAG, "sendDataResult: statusEnum" + statusEnum.toString());
-        Log.d(TAG, "sendDataResult: deadline" + deadline.toString());
-        if (isSelectedAppointment) {
-            taskFactory = new TaskAppointmentFactory();
-            viewModel.insertAppointment((TaskAppointment) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
-        } else {
-            taskFactory = new TaskChecklistFactory();
-//            viewModel.insertChecklist((TaskChecklist) taskFactory.getNewTask(taskName, taskDescription, priorityEnum, statusEnum, deadline, new ArrayList<>()));
+        String sTheme = sharedPreferences.getString("theme", ""); // "theme" is key and second "" is default value
+
+        switch(sTheme){
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
         }
-        recViewTasks.smoothScrollToPosition(viewModel.getAllTasks().size());
     }
 
+    private void configureBottomNavBar() {
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_list, R.id.navigation_calendar, R.id.navigation_settings).build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.bottomNavView, navController);
+    }
+
+    private void initViewModels() {
+        eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+
+        eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
+            @Override
+            public void onChanged(List<EventNotifier> eventNotifiers) {
+                for (EventNotifier notifier : eventNotifiers) {
+                    if (notifier.getEvent() == ENotificationEvent.CREATE) {
+                        eventNotifierViewModel.setOnCreateNotifier(notifier.getNotifier());
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.UPDATE) {
+                        eventNotifierViewModel.setOnUpdateNotifier(notifier.getNotifier());
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.DELETE) {
+                        eventNotifierViewModel.setOnDeleteNotifier(notifier.getNotifier());
+                    }
+                    if (notifier.getEvent() == ENotificationEvent.APPOINTMENT) {
+                        eventNotifierViewModel.setOnAppointmentNotifier(notifier.getNotifier());
+                    }
+                }
+                Log.d(TAG, "Saved settings: " + eventNotifiers);
+            }
+        });
+    }
+
+    private void initNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("notifications", "Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    @Override
+    public void receivedUpdate(ENotificationEvent event, ATask... tasks) {
+        if (event == ENotificationEvent.CREATE) {
+            eventNotifierViewModel.getOnCreateNotifier().sendNotification(this, event, tasks);
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    setAlarm((TaskAppointment)task);
+                }
+                Log.d(TAG, "received onCreate update from taskViewModel: " + event.name() + " " + task.getTaskName());
+            }
+        }
+        if (event == ENotificationEvent.UPDATE) {
+            eventNotifierViewModel.getOnUpdateNotifier().sendNotification(this, event, tasks);
+            for (ATask task : tasks) {
+                Log.d(TAG, "received onUpdate update from taskViewModel: " + event.name() + " " + task.getTaskName());
+            }
+        }
+        if (event == ENotificationEvent.DELETE) {
+            eventNotifierViewModel.getOnDeleteNotifier().sendNotification(this, event, tasks);
+            for (ATask task : tasks) {
+                if (task.getCategory().equals(ECategory.APPOINTMENT)) {
+                    cancelAlarm((TaskAppointment) task);
+                }
+                Log.d(TAG, "received onDelete update from taskViewModel: " + event.name() + " " + task.getTaskName());
+            }
+        }
+    }
+
+    private void setAlarm(@NonNull TaskAppointment appointment) {
+        Date deadline = appointment.getDeadline();
+
+        Date currentTime = Calendar.getInstance().getTime();
+        if(currentTime.after(deadline)){
+            Log.d(TAG, "deadline already passed");
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(deadline);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        Bundle extras = new Bundle();
+        INotifierTypeConverter notifierTypeConverter = new INotifierTypeConverter();
+        String notifier = notifierTypeConverter.fromINotifier(eventNotifierViewModel.getOnAppointmentNotifier());
+        extras.putString(NOTIFIER_KEY, notifier);
+        extras.putParcelable(APPOINTMENT_KEY, appointment);
+
+        intent.putExtras(extras);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Log.d(TAG, "set alarm for " + appointment);
+    }
+
+    private void cancelAlarm(@NonNull TaskAppointment appointment) {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, appointment.getId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        Log.d(TAG, "cancel alarm for " + appointment);
+    }
 }

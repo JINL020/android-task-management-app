@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:layout_margin="20dp">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.SettingsFragment">
+
+    <TextView
+        android:id="@+id/textViewNotifyMeWhen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notify me when"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTaskIsCreated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Task is created"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewNotifyMeWhen" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnCreatePopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Popup Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTaskIsCreated" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnCreateBasic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Basic Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxOnCreatePopup"
+        app:layout_constraintBottom_toTopOf="@id/textViewTaskIsUpdated"/>
+
+    <TextView
+        android:id="@+id/textViewTaskIsUpdated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Task is updated"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnCreateBasic" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnUpdatePopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Popup Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewTaskIsUpdated" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnUpdateBasic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Basic Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnUpdatePopup" />
+
+    <TextView
+        android:id="@+id/textViewTaskIsDeleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Task is deleted"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnUpdateBasic" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnDeletePopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Popup Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewTaskIsDeleted" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnDeleteBasic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Basic Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnDeletePopup" />
+
+    <TextView
+        android:id="@+id/textViewOnAppointment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upcoming appointment"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnDeleteBasic" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnAppointmentPopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Popup Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewOnAppointment" />
+
+    <CheckBox
+        android:id="@+id/checkBoxOnAppointmentBasic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Basic Notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnAppointmentPopup" />
+
+    <TextView
+        android:id="@+id/textViewAppTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App Theme"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxOnAppointmentBasic" />
+
+    <Switch
+        android:id="@+id/switchDarkTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dark Theme"
+        android:textSize="15sp"
+        android:layout_margin="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewAppTheme"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

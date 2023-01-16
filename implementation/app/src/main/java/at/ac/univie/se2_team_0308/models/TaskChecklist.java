@@ -1,28 +1,31 @@
 package at.ac.univie.se2_team_0308.models;
-import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.TypeConverters;
 import androidx.room.Entity;
+import androidx.room.TypeConverters;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
 
 @Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {
     @TypeConverters(SubtasksConverter.class)
-    List<String> subtasks;
+    List<ASubtask> subtasks;
 
-    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, ArrayList<String> subtasks){
-        super(taskName, description, priority, status, category);
-        this.subtasks = subtasks;
+    public TaskChecklist(String taskName, String description,  EPriority priority, EStatus status, ECategory category, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, String taskColor){
+        super(taskName, description, priority, status, category, attachments, sketchData, taskColor);
+        this.subtasks = new ArrayList<>();
+        setSubtasks(subtasks);
     }
 
-
     protected TaskChecklist(Parcel in) {
-        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST);
+        super("","", EPriority.LOW, EStatus.NOT_STARTED, ECategory.CHECKLIST, new ArrayList<>(), new byte[0], "#E1E1E1");
         setId(in.readInt());
         setTaskName(in.readString());
         setDescription(in.readString());
@@ -30,8 +33,12 @@ public class TaskChecklist extends ATask implements Parcelable {
         setStatus(EStatus.valueOf(in.readString()));
         setCategory(ECategory.valueOf(in.readString()));
         setCreationDate(new Date(in.readLong()));
-        subtasks = in.createStringArrayList();
-
+        setSubtasks(in.readArrayList(ASubtask.class.getClassLoader()));
+        setAttachments(in.readArrayList(Attachment.class.getClassLoader()));
+        byte[] arr = new byte[in.readInt()];
+        in.readByteArray(arr);
+        setSketchData(arr);
+        setTaskColor(in.readString());
     }
 
     public static final Creator<TaskChecklist> CREATOR = new Creator<TaskChecklist>() {
@@ -60,15 +67,53 @@ public class TaskChecklist extends ATask implements Parcelable {
         parcel.writeString(String.valueOf(getStatus()));
         parcel.writeString(ECategory.CHECKLIST.name());
         parcel.writeLong(getCreationDate().getTime());
-        parcel.writeStringList(subtasks);
+        parcel.writeList(subtasks);
+        parcel.writeList(getAttachments());
+        parcel.writeInt(getSketchData().length);
+        parcel.writeByteArray(getSketchData());
+        parcel.writeString(getTaskColor());
     }
 
-    public List<String> getSubtasks() {
+    @Override
+    public String toString() {
+        return "TaskChecklist{" +
+                super.toString() +
+                "subtasks=" + subtasks.toString() +
+                '}';
+    }
+
+    public List<ASubtask> getSubtasks() {
         return subtasks;
     }
-
-    public void setSubtasks(List<String> subtasks) {
-        this.subtasks = subtasks;
+    public void setSubtasks(List<ASubtask> subtasks) {
+        if(subtasks != null) {
+            this.subtasks = subtasks;
+        }
     }
 
+    void removeAllSubtasks(){
+        this.subtasks.clear();
+    }
+
+    void addSubtask(ASubtask subtask){
+        this.subtasks.add(subtask);
+    }
+
+    void removeSubtask(ASubtask subtask){
+        subtask.removeAllSubtasks();
+        this.subtasks.remove(subtask);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskChecklist that = (TaskChecklist) o;
+        return Objects.equals(subtasks, that.subtasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(subtasks);
+    }
 }

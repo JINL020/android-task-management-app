@@ -1,11 +1,11 @@
 package at.ac.univie.se2_team_0308.models;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public abstract class ATaskFactory {
-    public ATask getNewTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, ArrayList<String> subtasks) {
-        return createTask(taskName, description, priority, status, deadline, subtasks);
+    public ATask getNewTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, String taskColor) {
+        return createTask(taskName, description, priority, status, deadline, subtasks, attachments, sketchData, taskColor);
     }
-    public abstract ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, ArrayList<String> subtasks);
+    public abstract ATask createTask(String taskName, String description, EPriority priority, EStatus status, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, String taskColor);
 }

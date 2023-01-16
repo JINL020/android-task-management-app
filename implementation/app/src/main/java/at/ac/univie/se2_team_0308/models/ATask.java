@@ -1,9 +1,17 @@
 package at.ac.univie.se2_team_0308.models;
+import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import at.ac.univie.se2_team_0308.utils.AttachmentConverter;
 
 public abstract class ATask {
+    public static final String TAG ="Task";
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -13,21 +21,34 @@ public abstract class ATask {
     private EStatus status;
     private boolean isSelected = false;
     private ECategory category;
-
-   // @TypeConverters(DateConverter.class)
+    private boolean isHidden = false;
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    private byte[] sketchData;
+    @TypeConverters(AttachmentConverter.class)
+    private List<Attachment> attachments;
+    private String taskColor; //default light grey color #E1E1E1
+    // @TypeConverters(DateConverter.class)
     private Date creationDate;
 
-    public static final String TAG ="Task";
-
-    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category) {
+    public ATask(String taskName, String description, EPriority priority, EStatus status, ECategory category, List<Attachment> attachments, byte[] sketchData, String taskColor) {
         this.taskName = taskName;
         this.description = description;
         this.priority = priority;
         this.status = status;
         this.category = category;
         this.creationDate = Calendar.getInstance().getTime();
+        this.attachments = attachments;
+        this.sketchData = sketchData;
+        this.taskColor = taskColor;
     }
 
+    public byte[] getSketchData() {
+        return sketchData;
+    }
+
+    public void setSketchData(byte[] sketchData) {
+        this.sketchData = sketchData;
+    }
 
     public int getId() {
         return id;
@@ -92,6 +113,59 @@ public abstract class ATask {
         this.creationDate = creationDate;
     }
 
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
 
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
 
+    public void addAttachment(Attachment a){
+        this.attachments.add(a);
+    }
+
+    public void removeAttachment(Attachment a){
+        this.attachments.remove(a);
+    }
+
+    public boolean isHidden() { return isHidden; }
+
+    public void setHidden(boolean isHidden) { this.isHidden = isHidden; }
+
+    public String getTaskColor() { return taskColor; }
+
+    public void setTaskColor(String color) { this.taskColor = color; }
+
+    public String toString() {
+        return "ATask{" +
+                "id=" + id +
+                ", taskName='" + taskName + '\'' +
+                ", description='" + description + '\'' +
+                ", priority=" + priority +
+                ", status=" + status +
+                ", isSelected=" + isSelected +
+                ", isHidden=" + isHidden +
+                ", category=" + category +
+                ", creationDate=" + creationDate +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ATask task = (ATask) o;
+        return id == task.id
+                && isSelected == task.isSelected
+                && Objects.equals(taskName, task.taskName)
+                && Objects.equals(description, task.description)
+                && priority == task.priority && status == task.status && category == task.category
+                && Objects.equals(creationDate, task.creationDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, taskName, description, priority, status, isSelected, category, creationDate);
+    }
 }

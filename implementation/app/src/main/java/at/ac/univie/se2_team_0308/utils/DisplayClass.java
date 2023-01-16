@@ -8,12 +8,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import at.ac.univie.se2_team_0308.models.ASubtask;
+import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+/**
+ * This class is used only as a common way to display
+ * two different types of tasks: TaskAppointment and TaskChecklist
+ */
 public class DisplayClass implements Parcelable {
     private int id;
     private String taskName;
@@ -24,7 +30,19 @@ public class DisplayClass implements Parcelable {
     private ECategory categoryEnum;
     private Date creationDate;
     private Date deadline;
-    private List<String> subtasks;
+    private List<ASubtask> subtasks;
+    private List<Attachment> attachments;
+    private String taskColor;
+
+    public byte[] getSketchData() {
+        return sketchData;
+    }
+
+    public void setSketchData(byte[] sketchData) {
+        this.sketchData = sketchData;
+    }
+
+    private byte[] sketchData;
 
     public DisplayClass(TaskAppointment appointment) {
         this.id = appointment.getId();
@@ -36,7 +54,10 @@ public class DisplayClass implements Parcelable {
         this.categoryEnum = appointment.getCategory();
         this.creationDate = appointment.getCreationDate();
         this.deadline = appointment.getDeadline();
-        this.subtasks = new ArrayList<>();
+        this.attachments = appointment.getAttachments();
+        this.subtasks = new ArrayList<ASubtask>();
+        this.sketchData = appointment.getSketchData();
+        this.taskColor = appointment.getTaskColor();
     }
 
     public DisplayClass(TaskChecklist checklist) {
@@ -50,6 +71,9 @@ public class DisplayClass implements Parcelable {
         this.creationDate = checklist.getCreationDate();
         this.deadline = Calendar.getInstance().getTime();
         this.subtasks = checklist.getSubtasks();
+        this.attachments = checklist.getAttachments();
+        this.sketchData = checklist.getSketchData();
+        this.taskColor = checklist.getTaskColor();
     }
 
     protected DisplayClass(Parcel in) {
@@ -62,7 +86,11 @@ public class DisplayClass implements Parcelable {
         categoryEnum = ECategory.valueOf(in.readString());
         creationDate = new Date(in.readLong());
         deadline = new Date(in.readLong());
-        subtasks = in.createStringArrayList();
+        subtasks = in.readArrayList(ASubtask.class.getClassLoader());
+        attachments = in.readArrayList(Attachment.class.getClassLoader());
+        sketchData = new byte[in.readInt()];
+        in.readByteArray(sketchData);
+        taskColor = in.readString();
     }
 
     public int getId() {
@@ -137,11 +165,15 @@ public class DisplayClass implements Parcelable {
         this.deadline = deadline;
     }
 
-    public List<String> getSubtasks() {
+    public String getTaskColor() { return taskColor; }
+
+    public void setTaskColor(String color) { this.taskColor = color; }
+
+    public List<ASubtask> getSubtasks() {
         return subtasks;
     }
 
-    public void setSubtasks(List<String> subtasks) {
+    public void setSubtasks(List<ASubtask> subtasks) {
         this.subtasks = subtasks;
     }
 
@@ -156,6 +188,14 @@ public class DisplayClass implements Parcelable {
             return new DisplayClass[size];
         }
     };
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
 
     @Override
     public int describeContents() {
@@ -172,6 +212,10 @@ public class DisplayClass implements Parcelable {
         parcel.writeString(categoryEnum.toString());
         parcel.writeLong(deadline.getTime());
         parcel.writeLong(creationDate.getTime());
-        parcel.writeStringList(subtasks);
+        parcel.writeList(subtasks);
+        parcel.writeList(attachments);
+        parcel.writeInt(sketchData.length);
+        parcel.writeByteArray(sketchData);
+        parcel.writeString(taskColor);
     }
 }
