@@ -1,5 +1,6 @@
 package at.ac.univie.se2_team_0308.utils.export;
 
+import android.annotation.SuppressLint;
 import android.os.Environment;
 import android.util.Log;
 
@@ -9,7 +10,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
@@ -36,47 +36,29 @@ public class Exporter {
         ITaskConverter taskConverter;
         String filename;
 
+        @SuppressLint("SimpleDateFormat") String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+
+        String extension;
+
         if(format == EFormat.XML){
             Log.d(TAG, "Format is XML");
             taskConverter = new TaskToXMLConverter();
-            filename = composeName("xml");
+            extension = "xml";
         }
         else{
             assert format == EFormat.JSON;
 
             Log.d(TAG, "Format is JSON");
             taskConverter = new TaskToJSONConverter();
-            filename = composeName("json");
+            extension = "json";
         }
 
+        filename = FilenameComposer.composeName(extension, date);
         String convertedFile = taskConverter.convertTasks(taskAppointment, taskChecklists);
         Log.d(TAG, "Content of converted file: " + convertedFile);
         writeToFile(convertedFile, filename);
     }
 
-    /**
-     Composes a file name using the specified extension.
-     @param extension The extension to be used in the file name (e.g. "xml" or "json")
-     @return The composed file name
-     */
-    // TODO: move this to separate classes - one for the date, one for the name
-    private String composeName(String extension){
-        Log.d(TAG, "Compose file name");
-
-        String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-
-        StringBuilder filenameBuilder = new StringBuilder();
-        filenameBuilder.append("tasks");
-        filenameBuilder.append("_");
-        filenameBuilder.append(date);
-        filenameBuilder.append(".");
-        filenameBuilder.append(extension);
-
-        Log.d(TAG, "File name is " + filenameBuilder);
-        return filenameBuilder.toString();
-    }
-
-    // TODO: fix this so that I can create new files with the same name
     // TODO: add java doc??
     private void writeToFile(String convertedFile, String fileName){
         try {
