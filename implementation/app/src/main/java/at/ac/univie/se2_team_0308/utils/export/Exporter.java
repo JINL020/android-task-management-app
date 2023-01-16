@@ -7,13 +7,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 /**
-
  The Exporter class is responsible for exporting tasks in the specified format.
  It can export the tasks in either XML or JSON format.
  It uses the ITaskConverter interface to convert the tasks into the specified format.
@@ -57,11 +59,16 @@ public class Exporter {
      @param extension The extension to be used in the file name (e.g. "xml" or "json")
      @return The composed file name
      */
+    // TODO: move this to separate classes - one for the date, one for the name
     private String composeName(String extension){
         Log.d(TAG, "Compose file name");
 
+        String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+
         StringBuilder filenameBuilder = new StringBuilder();
         filenameBuilder.append("tasks");
+        filenameBuilder.append("_");
+        filenameBuilder.append(date);
         filenameBuilder.append(".");
         filenameBuilder.append(extension);
 
