@@ -6,7 +6,18 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+
+/**
+ TaskToJSONConverter class converts the given list of TaskAppointment and TaskChecklist objects to a JSON format string.
+ This class is an implementation of ITaskConverter interface.
+ */
 public class TaskToJSONConverter implements ITaskConverter {
+    /**
+     Converts the given list of TaskAppointment and TaskChecklist objects to a JSON format string.
+     @param taskAppointment list of TaskAppointment objects
+     @param taskChecklists list of TaskChecklist objects
+     @return the converted JSON format string
+    */
     @Override
     public String convertTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists) {
         Gson gson = new Gson();

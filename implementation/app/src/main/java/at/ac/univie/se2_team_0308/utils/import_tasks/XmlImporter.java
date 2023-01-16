@@ -13,6 +13,10 @@ import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+/**
+ XmlImporter is a class that imports tasks from an xml file and converts them into task objects.
+ It implements the ITaskImporter interface.
+ */
 public class XmlImporter implements ITaskImporter {
     private final static String TAG = "XmlImpoter";
     private final XmlTaskRetriever xmlTaskRetriever;
@@ -21,6 +25,12 @@ public class XmlImporter implements ITaskImporter {
         this.xmlTaskRetriever = xmlTaskRetriever;
     }
 
+    /**
+     * Imports tasks from an xml file and converts them into task objects.
+     *
+     * @return a Pair object containing two lists of task objects. The first list contains TaskAppointment objects and
+     * the second list contains TaskChecklist objects.
+     */
     @Override
     public Pair<List<TaskAppointment>, List<TaskChecklist>> importTasks() {
         Log.d(TAG, "Converting imported tasks from xml to task objects");
@@ -43,6 +53,14 @@ public class XmlImporter implements ITaskImporter {
         return importedTasks;
     }
 
+    // TODO: check if private methods should have javadocs as well
+    /**
+     * Converts the string representation of a task in the xml file to a task object.
+     *
+     * @param xml a string representation of the task in the xml file
+     * @param t the class of the task object to be converted. This can be either TaskAppointment.class or TaskChecklist.class
+     * @return a task object of the specified class
+     */
     private ATask convertATask(String xml, Class<?> t) {
         XStream xstream = new XStream();
 

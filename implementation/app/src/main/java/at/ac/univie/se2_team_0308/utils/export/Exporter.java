@@ -12,8 +12,22 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+/**
+
+ The Exporter class is responsible for exporting tasks in the specified format.
+ It can export the tasks in either XML or JSON format.
+ It uses the ITaskConverter interface to convert the tasks into the specified format.
+ It then writes the converted tasks to a file in the downloads directory of the device.
+ */
 public class Exporter {
     private static final String TAG = "Exporter";
+
+    /**
+     Exports the provided taskAppointment and taskChecklists in the specified format.
+     @param taskAppointment A list of TaskAppointment objects to be exported
+     @param taskChecklists A list of TaskChecklist objects to be exported
+     @param format The format in which the tasks should be exported (XML or JSON)
+     */
     public void exportTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists, EFormat format){
         Log.d(TAG, "Export tasks");
 
@@ -38,6 +52,11 @@ public class Exporter {
         writeToFile(convertedFile, filename);
     }
 
+    /**
+     Composes a file name using the specified extension.
+     @param extension The extension to be used in the file name (e.g. "xml" or "json")
+     @return The composed file name
+     */
     private String composeName(String extension){
         Log.d(TAG, "Compose file name");
 
@@ -51,6 +70,7 @@ public class Exporter {
     }
 
     // TODO: fix this so that I can create new files with the same name
+    // TODO: add java doc??
     private void writeToFile(String convertedFile, String fileName){
         try {
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);

@@ -9,7 +9,17 @@ import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+/**
+ TaskToXMLConverter class converts the given list of TaskAppointment and TaskChecklist objects to a XML format string.
+ This class is an implementation of ITaskConverter interface.
+ */
 public class TaskToXMLConverter implements ITaskConverter{
+    /**
+     Converts the given list of TaskAppointment and TaskChecklist objects to a XML format string.
+     @param taskAppointment list of TaskAppointment objects
+     @param taskChecklists list of TaskChecklist objects
+     @return the converted XML format string
+     */
     @Override
     public String convertTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists) {
         StringBuilder stringBuilder = new StringBuilder();

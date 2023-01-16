@@ -10,14 +10,30 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+
+/**
+ JsonImporter is a class that imports tasks from a json file and converts them into task objects.
+ It implements the ITaskImporter interface.
+ */
 public class JsonImporter implements ITaskImporter {
     private static final String TAG = "TaskImporter";
     private final JsonTaskRetriever jsonTaskRetriever;
 
+    /**
+     * Constructor for JsonImporter class.
+     *
+     * @param jsonTaskRetriever an object of the JsonTaskRetriever class.
+     */
     public JsonImporter(JsonTaskRetriever jsonTaskRetriever){
         this.jsonTaskRetriever = jsonTaskRetriever;
     }
 
+    /**
+     * Imports tasks from a json file and converts them into task objects.
+     *
+     * @return a Pair object containing two lists of task objects. The first list contains TaskAppointment objects and
+     * the second list contains TaskChecklist objects.
+     */
     @Override
     public Pair<List<TaskAppointment>, List<TaskChecklist>> importTasks() {
         Log.d(TAG, "Converting imported tasks from json to task objects");
