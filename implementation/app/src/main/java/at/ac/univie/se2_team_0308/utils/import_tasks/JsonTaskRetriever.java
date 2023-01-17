@@ -31,6 +31,8 @@ public class JsonTaskRetriever {
      * @return a Pair object containing two lists of strings representing the tasks in the json file. The first list
      * contains tasks of the "APPOINTMENT" category and the second list contains tasks of the "CHECKLIST" category.
      */
+
+    // TODO: maybe remove these classes and simply use the MatchRetriever with the right arguments??
     public Pair<List<String>, List<String>> getTasks(){
         Log.d(TAG, "Retrieve individual strings containing tasks from json file");
         String regexAppointment = "\\{.*\"category\":\"APPOINTMENT\".*\\}";

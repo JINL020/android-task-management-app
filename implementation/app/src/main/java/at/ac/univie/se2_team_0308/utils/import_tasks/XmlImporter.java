@@ -39,15 +39,15 @@ public class XmlImporter implements ITaskImporter {
         Pair<List<String>, List<String>> tasks = xmlTaskRetriever.getTasks();
 
         for(String eachAppointmentString: tasks.first){
-            TaskAppointment taskAppointment = (TaskAppointment) convertATask(eachAppointmentString, TaskAppointment.class);
+            TaskAppointment taskAppointment = (TaskAppointment) convertString(eachAppointmentString, TaskAppointment.class);
             importedTasks.first.add(taskAppointment);
-            Log.d(TAG, taskAppointment.toString());
+//            Log.d(TAG, taskAppointment.toString());
         }
 
         for(String eachChecklistString: tasks.second){
-            TaskChecklist taskChecklist = (TaskChecklist) convertATask(eachChecklistString, TaskChecklist.class);
+            TaskChecklist taskChecklist = (TaskChecklist) convertString(eachChecklistString, TaskChecklist.class);
             importedTasks.second.add(taskChecklist);
-            Log.d(TAG, taskChecklist.toString());
+//            Log.d(TAG, taskChecklist.toString());
         }
 
         return importedTasks;
@@ -61,7 +61,7 @@ public class XmlImporter implements ITaskImporter {
      * @param t the class of the task object to be converted. This can be either TaskAppointment.class or TaskChecklist.class
      * @return a task object of the specified class
      */
-    private ATask convertATask(String xml, Class<?> t) {
+    private ATask convertString(String xml, Class<?> t) {
         XStream xstream = new XStream();
 
         ATask task;

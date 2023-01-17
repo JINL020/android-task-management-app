@@ -1,11 +1,10 @@
-package at.ac.univie.se2_team_0308.utils.export;
+package at.ac.univie.se2_team_0308.utils.export_tasks;
 
 import com.thoughtworks.xstream.XStream;
 
 import java.util.List;
-import at.ac.univie.se2_team_0308.models.ECategory;
-import at.ac.univie.se2_team_0308.models.EPriority;
-import at.ac.univie.se2_team_0308.models.EStatus;
+
+import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
@@ -22,41 +21,47 @@ public class TaskToXMLConverter implements ITaskConverter{
      */
     @Override
     public String convertTasks(List<TaskAppointment> taskAppointment, List<TaskChecklist> taskChecklists) {
+        // Create and append beginning of xml array to xml string
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<AllTasks>");
+
+        // Convert and append TaskAppointment objects to xml string
         for(TaskAppointment eachTask : taskAppointment){
-            String xml = convertTaskAppointment(eachTask);
-            stringBuilder.append(xml);
-            stringBuilder.append(System.getProperty("line.separator"));
+          String convertedTask = composeTask(eachTask);
+            stringBuilder.append(convertedTask);
         }
 
+        // Add new line between different types of tasks
         stringBuilder.append(System.getProperty("line.separator"));
 
+        // Convert and append TaskChecklist objects to xml string
         for(TaskChecklist eachTask : taskChecklists){
-            String xml = convertTaskChecklist(eachTask);
-            stringBuilder.append(xml);
-            stringBuilder.append(System.getProperty("line.separator"));
+            String convertedTask = composeTask(eachTask);
+            stringBuilder.append(convertedTask);
         }
+
+        // Create and append end of xml array to xml string
         stringBuilder.append("</AllTasks>");
+
         return stringBuilder.toString();
     }
 
-    // TODO: remove repetitive code
-    private String convertTaskAppointment(TaskAppointment task) {
-        XStream xstream = new XStream();
-        xstream.alias("category", ECategory.class);
-        xstream.alias("status", EStatus.class);
-        xstream.alias("priority", EPriority.class);
-        String xml = xstream.toXML(task);
-        return xml;
+    // Compose the xml string with new line
+    private String composeTask(ATask task){
+        StringBuilder stringBuilder = new StringBuilder();
+        String xml = convertATask(task);
+        stringBuilder.append(xml);
+        stringBuilder.append(System.getProperty("line.separator"));
+
+        return stringBuilder.toString();
     }
 
-    private String convertTaskChecklist(TaskChecklist task){
+    // Convert ATask representation to TaskChecklist/TaskAppointment
+    // representation in xml
+    private String convertATask(ATask task){
         XStream xstream = new XStream();
-        xstream.alias("category", ECategory.class);
-        xstream.alias("status", EStatus.class);
-        xstream.alias("priority", EPriority.class);
         String xml = xstream.toXML(task);
+
         return xml;
     }
 }

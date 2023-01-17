@@ -1,4 +1,4 @@
-package at.ac.univie.se2_team_0308.utils.export;
+package at.ac.univie.se2_team_0308.utils.export_tasks;
 
 import static org.mockito.Mockito.when;
 
@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.TaskAppointment;

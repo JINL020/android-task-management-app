@@ -1,4 +1,4 @@
-package at.ac.univie.se2_team_0308.utils.export;
+package at.ac.univie.se2_team_0308.utils.export_tasks;
 
 import static org.mockito.Mockito.when;
 
@@ -16,6 +16,7 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 public class ConvertTaskTest extends TestCase {
+    private ITaskConverter taskConverter;
     @Mock
     private TaskChecklistSerializer taskChecklistSerializer;
     @Mock
@@ -24,11 +25,11 @@ public class ConvertTaskTest extends TestCase {
     private TaskChecklist taskChecklist;
     @Mock
     private TaskAppointment taskAppointment;
-    private ITaskConverter taskConverter;
 
     @Test
     public void testConvertTasksJson_validInput_validOutput() {
         taskConverter = new TaskToJSONConverter();
+
         List<TaskAppointment> taskAppointments = new ArrayList<>();
         taskAppointments.add(taskAppointment);
         List<TaskChecklist> taskChecklists = new ArrayList<>();
@@ -45,7 +46,7 @@ public class ConvertTaskTest extends TestCase {
     public void testConvertTasksJson_nullInput_validOutput() {
         taskConverter = new TaskToJSONConverter();
 
-        String expected = "{\"AllTasks\": {\n}";
+        String expected = "{\"AllTasks\": [\n]}";
         String result = taskConverter.convertTasks(null, null);
         assertEquals(expected, result);
     }
