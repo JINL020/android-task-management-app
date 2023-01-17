@@ -16,6 +16,10 @@ import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+/**
+ * This class is used only as a common way to display
+ * two different types of tasks: TaskAppointment and TaskChecklist
+ */
 public class DisplayClass implements Parcelable {
     private int id;
     private String taskName;

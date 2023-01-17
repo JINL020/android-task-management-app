@@ -1,7 +1,6 @@
 package at.ac.univie.se2_team_0308.repository;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -31,9 +30,9 @@ import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 @Database(entities = {TaskAppointment.class, TaskChecklist.class, EventNotifier.class}, version = 1, exportSchema = false)
 @TypeConverters({EPriorityTypeConverter.class, EStatusTypeConverter.class, ECategoryTypeConverter.class, SubtasksConverter.class, DateConverter.class, ENotificationEventTypeConverter.class, INotifierTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract TaskAppointmentDao taskAppointmentDao();
+    public abstract ITaskAppointmentDao taskAppointmentDao();
 
-    public abstract TaskChecklistDao taskChecklistDao();
+    public abstract ITaskChecklistDao taskChecklistDao();
 
     public abstract IEventNotifierDao eventNotifierDao();
 
@@ -45,12 +44,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static final String TAG = "";
 
-    static AppDatabase getDatabase(final Context context) {
+    static AppDatabase getDatabase(final Context context) throws SingletonDbDoubleInitException {
         if (INSTANCE == null) {
             Log.d(TAG, "getInstance: ");
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "task_management_database").fallbackToDestructiveMigration().addCallback(roomCallback).build();
+                } else {
+                    throw new SingletonDbDoubleInitException();
                 }
             }
         }

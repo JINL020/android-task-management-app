@@ -33,8 +33,8 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 @RunWith(AndroidJUnit4.class)
 public class DeleteTaskTest {
     private AppDatabase database;
-    private TaskAppointmentDao taskAppointmentDao;
-    private TaskChecklistDao taskChecklistDao;
+    private ITaskAppointmentDao taskAppointmentDao;
+    private ITaskChecklistDao taskChecklistDao;
 
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
@@ -51,7 +51,7 @@ public class DeleteTaskTest {
     }
 
     @Test
-    public void deleteTaskAppointment_RemoveFromDb() throws ExecutionException, InterruptedException {
+    public void DeleteTaskAppointment_RemoveFromDb() throws ExecutionException, InterruptedException {
         TaskAppointment taskAppointment = new TaskAppointment(
                 "taskName",
                 "taskName",
@@ -71,7 +71,7 @@ public class DeleteTaskTest {
     }
 
     @Test
-    public void deleteTaskChecklist_RemoveFromDb() throws ExecutionException, InterruptedException {
+    public void DeleteTaskChecklist_RemoveFromDb() throws ExecutionException, InterruptedException {
         TaskViewModel viewModel = mock(TaskViewModel.class);
         TaskChecklist taskChecklist = new TaskChecklist(
                 "taskName",

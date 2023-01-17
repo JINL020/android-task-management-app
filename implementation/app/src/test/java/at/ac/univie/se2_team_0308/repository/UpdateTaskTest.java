@@ -31,9 +31,9 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 public class UpdateTaskTest {
     private AppDatabase database;
 
-    private TaskAppointmentDao taskAppointmentDao;
+    private ITaskAppointmentDao taskAppointmentDao;
 
-    private TaskChecklistDao taskChecklistDao;
+    private ITaskChecklistDao taskChecklistDao;
 
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
@@ -78,8 +78,6 @@ public class UpdateTaskTest {
         taskAppointmentDao.update(updatedTaskAppointment);
         assertThat(taskAppointmentDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("Modified", taskAppointmentDao.getAllTasksList().get(0).getTaskName());
-        // assertThat(toReturn, containsInAnyOrder(updatedTaskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
     }
 
     @Test
@@ -111,8 +109,6 @@ public class UpdateTaskTest {
         taskChecklistDao.update(updatedTaskChecklist);
         assertThat(taskChecklistDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("Modified", taskChecklistDao.getAllTasksList().get(0).getTaskName());
-        // assertThat(toReturn, containsInAnyOrder(updatedTaskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
         }
 
     @After

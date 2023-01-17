@@ -16,7 +16,7 @@ public class AttachmentConverter {
     }
 
     @TypeConverter
-    public ArrayList<Attachment> jsonToAttachements(String json)  {
+    public ArrayList<Attachment> jsonToAttachments(String json)  {
         Gson gson = new Gson();
         Type type = new TypeToken<List<Attachment>>() {}.getType();
         return gson.fromJson(json, type);

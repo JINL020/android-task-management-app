@@ -6,21 +6,18 @@ import android.util.Pair;
 
 import com.thoughtworks.xstream.XStream;
 
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import at.ac.univie.se2_team_0308.models.ECategory;
-import at.ac.univie.se2_team_0308.models.EPriority;
-import at.ac.univie.se2_team_0308.models.EStatus;
+import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
-public class XmlImporter implements TaskImporter{
+/**
+ XmlImporter is a class that imports tasks from an xml file and converts them into task objects.
+ It implements the ITaskImporter interface.
+ */
+public class XmlImporter implements ITaskImporter {
     private final static String TAG = "XmlImpoter";
     private final XmlTaskRetriever xmlTaskRetriever;
 
@@ -28,6 +25,12 @@ public class XmlImporter implements TaskImporter{
         this.xmlTaskRetriever = xmlTaskRetriever;
     }
 
+    /**
+     * Imports tasks from an xml file and converts them into task objects.
+     *
+     * @return a Pair object containing two lists of task objects. The first list contains TaskAppointment objects and
+     * the second list contains TaskChecklist objects.
+     */
     @Override
     public Pair<List<TaskAppointment>, List<TaskChecklist>> importTasks() {
         Log.d(TAG, "Converting imported tasks from xml to task objects");
@@ -36,13 +39,13 @@ public class XmlImporter implements TaskImporter{
         Pair<List<String>, List<String>> tasks = xmlTaskRetriever.getTasks();
 
         for(String eachAppointmentString: tasks.first){
-            TaskAppointment taskAppointment = convertTaskAppointment(eachAppointmentString);
+            TaskAppointment taskAppointment = (TaskAppointment) convertATask(eachAppointmentString, TaskAppointment.class);
             importedTasks.first.add(taskAppointment);
             Log.d(TAG, taskAppointment.toString());
         }
 
         for(String eachChecklistString: tasks.second){
-            TaskChecklist taskChecklist = convertTaskChecklist(eachChecklistString);
+            TaskChecklist taskChecklist = (TaskChecklist) convertATask(eachChecklistString, TaskChecklist.class);
             importedTasks.second.add(taskChecklist);
             Log.d(TAG, taskChecklist.toString());
         }
@@ -50,23 +53,27 @@ public class XmlImporter implements TaskImporter{
         return importedTasks;
     }
 
-    private TaskAppointment convertTaskAppointment(String xml) {
+    // TODO: check if private methods should have javadocs as well
+    /**
+     * Converts the string representation of a task in the xml file to a task object.
+     *
+     * @param xml a string representation of the task in the xml file
+     * @param t the class of the task object to be converted. This can be either TaskAppointment.class or TaskChecklist.class
+     * @return a task object of the specified class
+     */
+    private ATask convertATask(String xml, Class<?> t) {
         XStream xstream = new XStream();
-        xstream.alias("at.ac.univie.se2__team__0308.models.TaskAppointment", TaskAppointment.class);
-        xstream.alias("category", ECategory.class);
-        xstream.alias("status", EStatus.class);
-        xstream.alias("priority", EPriority.class);
-        TaskAppointment task = (TaskAppointment) xstream.fromXML(xml);
-        return task;
-    }
 
-    private TaskChecklist convertTaskChecklist(String xml){
-        XStream xstream = new XStream();
-        xstream.alias("at.ac.univie.se2__team__0308.models.TaskChecklist", TaskChecklist.class);
-        xstream.aliasField("category", ECategory.class, "category");
-        xstream.aliasField("status", EStatus.class, "status");
-        xstream.aliasField("priority", EPriority.class, "priority");
-        TaskChecklist task = (TaskChecklist) xstream.fromXML(xml);
+        ATask task;
+        if(t == TaskAppointment.class) {
+            task = (TaskAppointment) xstream.fromXML(xml);
+        }
+        else {
+            assert t == TaskChecklist.class;
+
+            task = (TaskChecklist) xstream.fromXML(xml);
+        }
+
         return task;
     }
 }

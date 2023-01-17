@@ -14,15 +14,19 @@ import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+/**
+ * The Repository acts like a layer between
+ * the real database and the viewmodels.
+ */
 public class TaskRepository {
-    private static TaskAppointmentDao taskAppointmentDao;
-    private static TaskChecklistDao taskChecklistDao;
+    private static ITaskAppointmentDao taskAppointmentDao;
+    private static ITaskChecklistDao taskChecklistDao;
     private LiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> allTasks;
 
     public static final String TAG = "TaskRepository";
 
     public TaskRepository(Application application) {
-        TaskList taskListProxy = new TaskListProxy();
+        ITaskList taskListProxy = new TaskListProxy();
         this.allTasks = taskListProxy.getAllTasks(application);
         taskAppointmentDao = taskListProxy.getAppointmentDao();
         taskChecklistDao = taskListProxy.getChecklistDao();
@@ -84,7 +88,14 @@ public class TaskRepository {
         AppDatabase.databaseWriteExecutor.execute( () -> taskChecklistDao.deleteTasksById(taskIds));
     }
 
-    // Update common property Priority
+    /**
+     * Updates priority given in argument
+     * on both TaskAppointment and TaskChecklist
+     * types of selected tasks
+     * @param taskIdsAppointment current selected ids of TaskAppointment type
+     * @param taskIdsChecklist current selected ids of TaskChecklist type
+     * @param priorityEnum common priority to be updated
+     */
     public void updateSelectedTasksPriority(List<Integer> taskIdsAppointment, List<Integer> taskIdsChecklist, EPriority priorityEnum) {
         updateAppointmentTasksPriority(taskIdsAppointment, priorityEnum);
         updateChecklistTasksPriority(taskIdsChecklist, priorityEnum);
@@ -98,7 +109,14 @@ public class TaskRepository {
         AppDatabase.databaseWriteExecutor.execute( () -> taskChecklistDao.updateTaskPriority(taskIds, priorityEnum));
     }
 
-    // Update isHidden property
+    /**
+     * Updates isHidden property
+     * on both TaskAppointment and TaskChecklist
+     * types of selected tasks
+     * @param taskIdsAppointment current selected ids of TaskAppointment type
+     * @param taskIdsChecklist current selected ids of TaskChecklist type
+     * @param isHidden new boolean value for isHidden
+     */
     public void updateSelectedTasksHiddenStatus(List<Integer> taskIdsAppointment, List<Integer> taskIdsChecklist, boolean isHidden) {
         updateAppointmentTasksHiddenStatus(taskIdsAppointment, isHidden);
         updateChecklistTasksHiddenStatus(taskIdsChecklist, isHidden);
@@ -113,6 +131,15 @@ public class TaskRepository {
     }
 
     //Update task color property
+
+    /**
+     * Updates task color property
+     * on both TaskAppointment and TaskChecklist
+     * types of selected tasks
+     * @param taskIdsAppointment current selected ids of TaskAppointment type
+     * @param taskIdsChecklist current selected ids of TaskChecklist type
+     * @param color new string value for task color
+     */
     public void updateSelectedTasksColor(List<Integer> taskIdsAppointment, List<Integer> taskIdsChecklist, String color) {
         updateAppointmentTasksColor(taskIdsAppointment, color);
         updateChecklistTasksColor(taskIdsChecklist, color);

@@ -1,7 +1,6 @@
 package at.ac.univie.se2_team_0308.views;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,6 +33,10 @@ public class PropertyToBeUpdated extends DialogFragment {
         void sendDataResult(String propertyName);
     }
 
+    /**
+     * A listener to dismiss the dialog when the user clicks on either
+     * the positive or the negative button.
+     */
     public interface SelectPropertyToUpdateDialogListener {
         void onDialogPositiveClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);
         void onDialogNegativeClick(DialogFragment dialogFragment, Boolean wantToCloseDialog);

@@ -17,7 +17,7 @@ public class ParcelableTaskAppointmentTest {
 
     // START https://stackoverflow.com/questions/12829700/android-unit-testing-bundle-parcelable
     @Test
-    public void compareParcelableTaskAppointmentToNormalTaskAppointment_getSameValues() {
+    public void CompareParcelableTaskAppointmentToNormalTaskAppointment_getSameValues() {
         TaskAppointment test = new TaskAppointment(
                 "taskName",
                 "taskName",

@@ -10,6 +10,9 @@ import java.util.List;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+/**
+ * This class combines two sources of LiveData into one.
+ */
 public class CombinedLiveData extends MediatorLiveData<Pair<List<TaskAppointment>, List<TaskChecklist>>> {
     private List<TaskAppointment> taskAppointmentList = Collections.emptyList();
     private List<TaskChecklist> taskChecklistList = Collections.emptyList();

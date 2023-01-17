@@ -321,16 +321,13 @@ public class ListFragment extends ATaskListFragment {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 int fromPos = viewHolder.getAdapterPosition();
                 int toPos = target.getAdapterPosition();
-                Collections.swap(Objects.requireNonNull(viewModel.getAllTasks()), fromPos, toPos);
-                adapter.notifyItemMoved(fromPos, toPos);
-                adapter.notifyItemRangeChanged(fromPos, toPos);
+
+                adapter.onTaskMove(fromPos, toPos);
                 return false;
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
@@ -360,6 +357,12 @@ public class ListFragment extends ATaskListFragment {
         }
     }
 
+    /**
+     * This method is called when the user clicks on the positive PropertyToBeUpdated dialog button.
+     * It sends the property to be updated from the PropertyToBeUpdated dialog back to the ListFragment
+     * where the viewModel uses it to update the respective task in the database.
+     * @param propertyName the property to be updated
+     */
     @Override
     public void sendDataResult(String propertyName) {
         if ((viewModel.getSelectedTaskAppointmentIds() != null) && (viewModel.getSelectedTaskChecklistIds() != null)) {
@@ -373,6 +376,22 @@ public class ListFragment extends ATaskListFragment {
         }
     }
 
+    /**
+     * This method is called when the user clicks on the positive AddTaskFragment dialog button.
+     * It sends the data from the AddTaskFragment back to the ListFragment where the viewModel
+     * uses it to insert the new task into the database.
+     * @param taskName
+     * @param taskDescription
+     * @param priorityEnum
+     * @param statusEnum
+     * @param deadline
+     * @param subtasks
+     * @param attachments
+     * @param sketchData
+     * @param isSelectedAppointment
+     * @param isSelectedChecklist
+     * @param taskColor
+     */
     @Override
     public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist, String taskColor) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);
