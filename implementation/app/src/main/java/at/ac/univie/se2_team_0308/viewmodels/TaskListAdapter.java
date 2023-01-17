@@ -147,8 +147,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.taskTypeImageChecklist.setVisibility(View.VISIBLE);
             holder.taskTypeImageAppointment.setVisibility(View.GONE);
         }
-        //TODO
-        Log.d(TAG, "Color: " + tasks.get(holder.getAdapterPosition()).getTaskColor());
+
         holder.parent.setCardBackgroundColor(Color.parseColor(tasks.get(holder.getAdapterPosition()).getTaskColor()));
     }
 

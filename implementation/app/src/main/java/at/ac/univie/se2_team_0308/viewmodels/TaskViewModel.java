@@ -206,6 +206,7 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
         }
     }
 
+    //Getting appointment tasks based on deadline for later use in Calendar Fragment
     public List<ATask> getAppointmentTasks(Date deadline){
         List<ATask> tasks = new ArrayList<>();
         for (TaskAppointment task : allTasks.getValue().first) {
