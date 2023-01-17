@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         Log.d(TAG, "detached observer from taskViewModel(MainActivity)");
     }
 
+    //Getting current app theme and setting Shared Preferences value to it for later use in Setting Fragment
     private void setAppTheme() {
         sharedPreferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -88,9 +89,11 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         switch(sTheme){
             case "light":
+                Log.d(TAG, "Current app theme: light");
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
             case "dark":
+                Log.d(TAG, "Current app theme: dark");
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 break;
         }

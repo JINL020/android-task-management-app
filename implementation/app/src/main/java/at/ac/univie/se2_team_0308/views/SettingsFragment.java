@@ -142,6 +142,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        //Based on the switch mode relevant theme is set in Shared Preferences
         switchDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -149,15 +150,18 @@ public class SettingsFragment extends Fragment {
                     editor.putString("theme", "dark"); // here "theme" is key and "day" is value
                     editor.apply();
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    Log.d(TAG, "App theme is set to: dark");
                 } else {
                     editor.putString("theme", "light"); // here "theme" is key and "day" is value
                     editor.apply();
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    Log.d(TAG, "App theme is set to: light");
                 }
             }
         });
     }
 
+    //Setting switch mode based on current theme of app
     private void setCurrentTheme() {
         sharedPreferences = this.getActivity().getSharedPreferences("myPref", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();

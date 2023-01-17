@@ -139,7 +139,7 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
             subtaskListAdapter.addTask(new SubtaskList(""));
         });
 
-        //Color picker popup
+        //Color picker popup https://github.com/duanhong169/ColorPicker
         editTaskColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +173,6 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
 
     private void setViews(DisplayClass incomingTask) {
 
-        Log.d(TAG, "Color: " + incomingTask.getTaskColor());
         editTaskColor.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(incomingTask.getTaskColor())));
 
         if (incomingTask.getTaskName() != null) {
