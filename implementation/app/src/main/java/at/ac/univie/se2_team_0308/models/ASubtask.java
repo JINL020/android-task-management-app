@@ -27,7 +27,7 @@ public abstract class ASubtask implements Parcelable {
     public ASubtask(int id, String name, EStatus state){
         this.name = name;
         this.id = id;
-        setState(state);
+        this.state = state;
     }
 
     abstract public void addSubtask(ASubtask subtask);
