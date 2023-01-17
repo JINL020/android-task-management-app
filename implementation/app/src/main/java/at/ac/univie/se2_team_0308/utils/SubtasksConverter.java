@@ -16,6 +16,9 @@ import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.SubtaskItem;
 import at.ac.univie.se2_team_0308.models.SubtaskList;
 
+/**
+ * This is responsible for converting a complex subtask tree structure into json.
+ */
 public class SubtasksConverter {
     public static final String TAG = "SubtasksConverter";
     private EStatusTypeConverter statusConverter;

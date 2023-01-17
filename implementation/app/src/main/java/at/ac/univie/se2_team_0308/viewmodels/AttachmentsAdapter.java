@@ -17,6 +17,9 @@ import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.views.AddTaskFragment;
 import at.ac.univie.se2_team_0308.views.TaskActivity;
 
+/**
+ * This class is used to provide data for the attachments recycle view
+ */
 public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter.ViewHolder> {
     public static final String TAG = "AttachmentsAdapter";
 

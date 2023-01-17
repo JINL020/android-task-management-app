@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import at.ac.univie.se2_team_0308.R;
 
+/**
+ * This Fragment holds the view for drawing
+ */
 public class SketchFragment extends DialogFragment {
     public static final String TAG = "SketchFragment";
 

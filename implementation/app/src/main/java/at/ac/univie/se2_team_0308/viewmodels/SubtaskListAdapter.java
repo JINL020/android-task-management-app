@@ -92,6 +92,9 @@ public class SubtaskListAdapter extends RecyclerView.Adapter<SubtaskListAdapter.
             notifyDataSetChanged();
         });
 
+        /**
+         * Subtask should also contain another list of subtasks. Use the same adapter
+         */
         if(hasAnotherLevelOfSubtasks){
 
             SubtaskListAdapter adapter = new SubtaskListAdapter(context, tasks.get(position).getSubtasks());

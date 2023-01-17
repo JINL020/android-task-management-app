@@ -3,6 +3,9 @@ package at.ac.univie.se2_team_0308.models;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to create a concrete Subtask iterator
+ */
 public class SubtaskIterableList implements IterableList<ASubtask> {
     private ASubtask[] subtasks;
 
