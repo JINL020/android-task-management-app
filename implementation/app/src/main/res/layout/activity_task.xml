@@ -270,7 +270,6 @@
 
                     </LinearLayout>
 
-                    <!--             TODO maybe try to display in flow layout-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/filesListRecView"
                         android:layout_width="match_parent"

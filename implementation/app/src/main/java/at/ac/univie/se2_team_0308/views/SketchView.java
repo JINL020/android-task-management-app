@@ -12,7 +12,13 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This view is used for drawing in SketchFragment.
+ * It overrides onTouch event and uses it to draw a path
+ */
 public class SketchView extends View {
+    public static final String TAG = "SketchView";
+
     public SketchView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setFocusable(true);
@@ -46,20 +52,25 @@ public class SketchView extends View {
         float x = event.getX();
         float y = event.getY();
 
-        // check the action
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                // start new line
+                /**
+                 * Start a new line
+                 */
                 path.moveTo(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                // draw a line between the last two points
+                /**
+                 * Draw a line between the last 2 points
+                 */
                 path.lineTo(x, y);
                 break;
             default:
                 return false;
         }
-        // to redraw
+        /**
+         * This call is needed to redraw and update the view
+         */
         postInvalidate();
         return true;
     }
