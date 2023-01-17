@@ -1,39 +1,49 @@
-package at.ac.univie.se2_team_0308.utils.export;
+package at.ac.univie.se2_team_0308.utils.export_tasks;
+
+import static org.junit.Assert.assertEquals;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class ComposeFilenameTest extends TestCase {
+public class ComposeFilenameTest {
 
     @Test
-    public void validInput_validOutput() {
+    public void validInputJson_expectedOutput() {
+        String expected = "tasks_2023-16-01.json";
+
         String extension = "json";
-        String date = "2022-01-01";
-        String expected = "tasks_2022-01-01.json";
-        String result = FilenameComposer.composeName(extension, date);
-        assertEquals(expected, result);
+        String date = "2023-16-01";
+        String actual = FilenameComposer.composeName(extension, date);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void validInput_validOutput_emptyDate() {
+    public void validInputXml_expectedOutput() {
+        String expected = "tasks_2023-16-01.xml";
+
+        String extension = "xml";
+        String date = "2023-16-01";
+        String actual = FilenameComposer.composeName(extension, date);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyDate_throwIllegalArgumentException() {
         String extension = "json";
         String date = "";
-        String expected = "tasks_.json";
-        String result = FilenameComposer.composeName(extension, date);
-        assertEquals(expected, result);
+
+        FilenameComposer.composeName(extension, date);
     }
 
-    @Test
-    public void validInput_validOutput_emptyExtension() {
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyExtension_throwIllegalArgumentException() {
         String extension = "";
         String date = "2022-01-01";
-        String expected = "tasks_2022-01-01.";
-        String result = FilenameComposer.composeName(extension, date);
-        assertEquals(expected, result);
+
+        FilenameComposer.composeName(extension, date);
     }
 }
