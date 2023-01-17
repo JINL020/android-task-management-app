@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.R;
@@ -146,8 +147,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.taskTypeImageChecklist.setVisibility(View.VISIBLE);
             holder.taskTypeImageAppointment.setVisibility(View.GONE);
         }
-        //TODO
-        Log.d(TAG, "Color: " + tasks.get(holder.getAdapterPosition()).getTaskColor());
+
         holder.parent.setCardBackgroundColor(Color.parseColor(tasks.get(holder.getAdapterPosition()).getTaskColor()));
     }
 
@@ -159,6 +159,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     public void setTasks(List<ATask> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
+    }
+
+    public void onTaskMove(int fromPosition, int toPosition){
+        Collections.swap(tasks, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     public void setSelectModeOn(boolean mode) {

@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -78,8 +79,6 @@ public class UpdateTaskTest {
         taskAppointmentDao.update(updatedTaskAppointment);
         assertThat(taskAppointmentDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("Modified", taskAppointmentDao.getAllTasksList().get(0).getTaskName());
-        // assertThat(toReturn, containsInAnyOrder(updatedTaskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
     }
 
     @Test
@@ -111,9 +110,46 @@ public class UpdateTaskTest {
         taskChecklistDao.update(updatedTaskChecklist);
         assertThat(taskChecklistDao.getAllTasksList(), iterableWithSize(1));
         Assert.assertEquals("Modified", taskChecklistDao.getAllTasksList().get(0).getTaskName());
-        // assertThat(toReturn, containsInAnyOrder(updatedTaskAppointment));
-        //assertThat(toReturn, CoreMatchers.not(containsInAnyOrder(taskAppointment)));
-        }
+    }
+
+    @Test
+    public void UpdateTaskHiddenStatus_ChangeInDb() {
+        TaskAppointment taskAppointment = new TaskAppointment(
+                "taskName",
+                "taskName",
+                EPriority.LOW,
+                EStatus.NOT_STARTED,
+                ECategory.APPOINTMENT,
+                new Date(2020, 5, 12),
+                new ArrayList<>(),
+                new byte[0],
+                ""
+        );
+        TaskChecklist taskChecklist = new TaskChecklist(
+                "taskName",
+                "taskName",
+                EPriority.LOW,
+                EStatus.NOT_STARTED,
+                ECategory.CHECKLIST,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new byte[0],
+                ""
+        );
+        taskAppointmentDao.insert(taskAppointment);
+        taskChecklistDao.insert(taskChecklist);
+
+        List<Integer> idsList = new ArrayList<Integer>(){{
+            add(0);
+            add(1);
+        }};
+
+        taskAppointmentDao.updateHiddenStatus(idsList, true);
+        Assert.assertEquals(true, taskAppointmentDao.getAllTasksList().get(0).isHidden());
+
+        taskChecklistDao.updateHiddenStatus(idsList, true);
+        Assert.assertEquals(true, taskChecklistDao.getAllTasksList().get(0).isHidden());
+    }
 
     @After
     public void closeDb() {

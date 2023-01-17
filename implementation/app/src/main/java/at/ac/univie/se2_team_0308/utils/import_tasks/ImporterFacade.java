@@ -8,6 +8,7 @@ import android.util.Pair;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,33 +17,48 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
+/**
+ ImporterFacade is a class that acts as a facade for importing tasks from various file formats.
+ */
 public class ImporterFacade {
     public static final String TAG = "ImporterFacade";
     private final TaskViewModel taskViewModel;
     private final ContentResolver contentResolver;
-    private TaskImporter importer;
+    private ITaskImporter importer;
 
+    /**
+     * Constructor for ImporterFacade class.
+     *
+     * @param taskViewModel a viewmodel that holds the task data
+     * @param contentResolver a ContentResolver that is used to access the file to be imported
+     */
     public ImporterFacade(TaskViewModel taskViewModel, ContentResolver contentResolver){
         this.taskViewModel = taskViewModel;
         this.contentResolver = contentResolver;
     }
 
+    /**
+     * Imports tasks from a file specified by the uri and synchronizes them with the task data in the viewmodel.
+     *
+     * @param uri a Uri that points to the file to be imported
+     */
     public void importTasks(Uri uri){
         Log.d(TAG, "Importing tasks");
-        FileContentRetriever contentRetriever = new FileContentRetriever(contentResolver);
+        FileContentExtractor contentExtractor = new FileContentExtractor(contentResolver);
+        List<String> supportedFormats = Arrays.asList("xml", "json");
 
         try{
-            String fileContent = contentRetriever.getFile(uri);
-            String fileName = FilenameRetriever.getFilename(uri, contentResolver);
+            String fileContent = contentExtractor.extractContent(uri);
+            String filename = FilenameRetriever.getFilename(uri, contentResolver, supportedFormats);
             Pair<List<TaskAppointment>, List<TaskChecklist>> importedTasks;
 
-            Log.d(TAG, "File name is " + fileName);
-            if(fileName.contains("xml")){
+
+            if(filename.contains("xml")){
                 Log.d(TAG, "Importing xml");
                 XmlTaskRetriever xmlTaskRetriever = new XmlTaskRetriever(fileContent);
                 importer = new XmlImporter(xmlTaskRetriever);
             }
-            else if(fileName.contains("json")){
+            else if(filename.contains("json")){
                 Log.d(TAG, "Importing json");
                 JsonTaskRetriever jsonTaskRetriever = new JsonTaskRetriever(fileContent);
                 importer = new JsonImporter(jsonTaskRetriever);

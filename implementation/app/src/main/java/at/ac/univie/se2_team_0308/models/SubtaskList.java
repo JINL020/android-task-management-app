@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubtaskList extends ASubtask {
+
     private List<ASubtask> subtasks;
 
     public SubtaskList(String name) {
@@ -14,6 +15,7 @@ public class SubtaskList extends ASubtask {
     }
     public SubtaskList(int id, String name, EStatus state){
         super(id, name, state);
+        this.subtasks = new ArrayList<>();
     }
 
     protected SubtaskList(Parcel in) {
@@ -35,8 +37,15 @@ public class SubtaskList extends ASubtask {
 
     @Override
     public void setState(EStatus state) {
-        for (ASubtask s: subtasks){
-            s.setState(state);
+        /**
+         * When state changed in a parent subtask, iterate through children subtasks and set new state according to the parent
+         */
+        int subtasksCount = subtasks.size();
+        IterableList<ASubtask> subtaskList = new SubtaskIterableList(subtasks.toArray(new ASubtask[subtasksCount]));
+        Iterator<ASubtask> iterator = subtaskList.iterator();
+        while(iterator.hasNext()){
+            ASubtask nextSubtask = iterator.next();
+            nextSubtask.setState(state);
         }
         this.state = state;
     }
@@ -57,6 +66,9 @@ public class SubtaskList extends ASubtask {
     }
     @Override
     public void removeSubtask(ASubtask subtask){
+        /**
+         * Remove recursively all children of a subtask first
+         */
         if(subtask instanceof SubtaskList){
             ((SubtaskList) subtask).removeAllSubtasks();
         }

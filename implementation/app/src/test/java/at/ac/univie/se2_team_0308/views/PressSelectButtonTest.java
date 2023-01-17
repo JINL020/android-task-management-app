@@ -18,36 +18,33 @@ public class PressSelectButtonTest {
     @Test
     public void ClickOnBtnSelect_BtnUpdateAppears() {
         try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class)) {
-            controller.setup(); // Moves Activity to RESUMED state
+            controller.setup();
             MainActivity activity = controller.get();
 
             activity.findViewById(R.id.btnSelect).performClick();
             assertNotNull((TextView) activity.findViewById(R.id.btnUpdateCommonProperties));
-            //assertEquals(((TextView) activity.findViewById(R.id.btnUpdate)).getText(), "Update");
         }
     }
 
     @Test
     public void ClickOnBtnSelect_BtnDeleteAppears() {
         try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class)) {
-            controller.setup(); // Moves Activity to RESUMED state
+            controller.setup();
             MainActivity activity = controller.get();
 
             activity.findViewById(R.id.btnSelect).performClick();
             assertNotNull((TextView) activity.findViewById(R.id.btnDelete));
-            //assertEquals(((TextView) activity.findViewById(R.id.btnUpdate)).getText(), "Update");
         }
     }
 
     @Test
     public void ClickOnBtnSelect_BtnHide() {
         try (ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class)) {
-            controller.setup(); // Moves Activity to RESUMED state
+            controller.setup();
             MainActivity activity = controller.get();
 
             activity.findViewById(R.id.btnSelect).performClick();
             assertNotNull((TextView) activity.findViewById(R.id.btnHide));
-            //assertEquals(((TextView) activity.findViewById(R.id.btnUpdate)).getText(), "Update");
         }
     }
 }

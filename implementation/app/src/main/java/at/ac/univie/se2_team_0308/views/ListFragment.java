@@ -142,7 +142,7 @@ public class ListFragment extends ATaskListFragment {
             }
         });
 
-        //Switch hidden tasks
+        //Switch betweeen hidden and unhidden tasks
         switchHidden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -269,6 +269,7 @@ public class ListFragment extends ATaskListFragment {
         viewModel.getAllLiveTasks().observe(getViewLifecycleOwner(), new Observer<Pair<List<TaskAppointment>, List<TaskChecklist>>>() {
             @Override
             public void onChanged(Pair<List<TaskAppointment>, List<TaskChecklist>> taskModels) {
+                //Based on switch mode we use relevant filter
                 if(switchHidden.isChecked()) {
                     adapter.setTasks(new FilterManager().applyFilter(viewModel.getAllTasks(), new HiddenTasksFilter()));
                     adapter.notifyDataSetChanged();
@@ -314,6 +315,7 @@ public class ListFragment extends ATaskListFragment {
         initDragAndDrop();
     }
 
+    //Initializing drag and drop functionality on task list
     private void initDragAndDrop() {
         // START https://androidapps-development-blogs.medium.com/drag-and-drop-reorder-in-recyclerview-android-2a3093d16ba2
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP| ItemTouchHelper.DOWN|ItemTouchHelper.START | ItemTouchHelper.END, 0) {
@@ -321,16 +323,13 @@ public class ListFragment extends ATaskListFragment {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 int fromPos = viewHolder.getAdapterPosition();
                 int toPos = target.getAdapterPosition();
-                Collections.swap(Objects.requireNonNull(viewModel.getAllTasks()), fromPos, toPos);
-                adapter.notifyItemMoved(fromPos, toPos);
-                adapter.notifyItemRangeChanged(fromPos, toPos);
+
+                adapter.onTaskMove(fromPos, toPos);
                 return false;
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            }
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
@@ -360,6 +359,12 @@ public class ListFragment extends ATaskListFragment {
         }
     }
 
+    /**
+     * This method is called when the user clicks on the positive PropertyToBeUpdated dialog button.
+     * It sends the property to be updated from the PropertyToBeUpdated dialog back to the ListFragment
+     * where the viewModel uses it to update the respective task in the database.
+     * @param propertyName the property to be updated
+     */
     @Override
     public void sendDataResult(String propertyName) {
         if ((viewModel.getSelectedTaskAppointmentIds() != null) && (viewModel.getSelectedTaskChecklistIds() != null)) {
@@ -373,6 +378,22 @@ public class ListFragment extends ATaskListFragment {
         }
     }
 
+    /**
+     * This method is called when the user clicks on the positive AddTaskFragment dialog button.
+     * It sends the data from the AddTaskFragment back to the ListFragment where the viewModel
+     * uses it to insert the new task into the database.
+     * @param taskName
+     * @param taskDescription
+     * @param priorityEnum
+     * @param statusEnum
+     * @param deadline
+     * @param subtasks
+     * @param attachments
+     * @param sketchData
+     * @param isSelectedAppointment
+     * @param isSelectedChecklist
+     * @param taskColor
+     */
     @Override
     public void sendDataResult(String taskName, String taskDescription, EPriority priorityEnum, EStatus statusEnum, Date deadline, List<ASubtask> subtasks, List<Attachment> attachments, byte[] sketchData, Boolean isSelectedAppointment, Boolean isSelectedChecklist, String taskColor) {
         Log.d(TAG, "sendDataResult: taskName" + taskName);

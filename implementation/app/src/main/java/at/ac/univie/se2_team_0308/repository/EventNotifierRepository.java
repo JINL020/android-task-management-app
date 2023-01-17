@@ -16,8 +16,13 @@ public class EventNotifierRepository implements IEventNotifierRepository {
     private LiveData<List<EventNotifier>> eventNotifiers;
 
     public EventNotifierRepository(Application application) {
-        AppDatabase database = AppDatabase.getDatabase(application);
-        this.eventNotifierDao = database.eventNotifierDao();
+        try {
+            AppDatabase database = AppDatabase.getDatabase(application);
+            eventNotifierDao = database.eventNotifierDao();
+        } catch (SingletonDbDoubleInitException e) {
+            Log.d(TAG, e.toString());
+        }
+
         this.eventNotifiers = eventNotifierDao.getAllEventNotifiers();
     }
 

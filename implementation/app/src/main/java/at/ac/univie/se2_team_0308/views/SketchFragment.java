@@ -20,9 +20,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import at.ac.univie.se2_team_0308.R;
 
+/**
+ * This Fragment holds the view for drawing
+ */
 public class SketchFragment extends DialogFragment {
+    public static final String TAG = "SketchFragment";
+
     private SketchView sketchView;
-    private Button undoBtn;
 
     private SendDataFromSketchDialog inputListener;
     public interface SendDataFromSketchDialog {
@@ -37,7 +41,6 @@ public class SketchFragment extends DialogFragment {
     }
     private void initViews(View view){
         sketchView = view.findViewById(R.id.sketchViewId);
-        undoBtn = view.findViewById(R.id.undoBtn);
     }
 
     @NonNull
@@ -52,7 +55,9 @@ public class SketchFragment extends DialogFragment {
         builder.setView(view).setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                Log.d(TAG, "Create sketch");
+                inputListener.sendDataResult(sketchView.getDrawingCache());
+                dismiss();
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -62,13 +67,6 @@ public class SketchFragment extends DialogFragment {
 
         final AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inputListener.sendDataResult(sketchView.getDrawingCache());
-                dismiss();
-            }
-        });
         return dialog;
     }
 }

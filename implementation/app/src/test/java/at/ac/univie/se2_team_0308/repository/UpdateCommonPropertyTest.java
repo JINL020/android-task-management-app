@@ -31,7 +31,7 @@ public class UpdateCommonPropertyTest {
 
     private ITaskChecklistDao taskChecklistDao;
 
-    private static class utils {
+    private static class Utils {
         public static TaskAppointment taskAppointment1 = new TaskAppointment(
                 "taskName",
                 "taskName",
@@ -145,16 +145,16 @@ public class UpdateCommonPropertyTest {
         ).allowMainThreadQueries().build();
         taskAppointmentDao = database.taskAppointmentDao();
         taskChecklistDao = database.taskChecklistDao();
-        utils.setAppointmentList();
-        utils.setChecklistList();
+        Utils.setAppointmentList();
+        Utils.setChecklistList();
     }
 
     @Test
-    public void updateTaskAppointment_ChangeInDb() throws ExecutionException, InterruptedException {
+    public void UpdateTaskAppointment_ChangeInDb() throws ExecutionException, InterruptedException {
 
-        taskAppointmentDao.insert(utils.taskAppointment1);
-        taskAppointmentDao.insert(utils.taskAppointment2);
-        taskAppointmentDao.insert(utils.taskAppointment3);
+        taskAppointmentDao.insert(Utils.taskAppointment1);
+        taskAppointmentDao.insert(Utils.taskAppointment2);
+        taskAppointmentDao.insert(Utils.taskAppointment3);
 
         List<Integer> selectedIds = new ArrayList<>();
 
@@ -165,20 +165,20 @@ public class UpdateCommonPropertyTest {
         }
 
         taskAppointmentDao.updateTaskPriority(selectedIds, EPriority.HIGH);
-        utils.taskAppointment1.setPriority(taskAppointmentDao.getAllTasksList().get(0).getPriority());
-        utils.taskAppointment2.setPriority(taskAppointmentDao.getAllTasksList().get(1).getPriority());
-        utils.taskAppointment3.setPriority(taskAppointmentDao.getAllTasksList().get(2).getPriority());
+        Utils.taskAppointment1.setPriority(taskAppointmentDao.getAllTasksList().get(0).getPriority());
+        Utils.taskAppointment2.setPriority(taskAppointmentDao.getAllTasksList().get(1).getPriority());
+        Utils.taskAppointment3.setPriority(taskAppointmentDao.getAllTasksList().get(2).getPriority());
 
-        Assert.assertEquals(utils.taskAppointment1.getPriority().toString(), taskAppointmentDao.getAllTasksList().get(0).getPriority().toString());
-        Assert.assertEquals(utils.taskAppointment2.getPriority().toString(), taskAppointmentDao.getAllTasksList().get(1).getPriority().toString());
-        Assert.assertEquals(utils.taskAppointment3.getPriority().toString(), taskAppointmentDao.getAllTasksList().get(2).getPriority().toString());
+        Assert.assertEquals(Utils.taskAppointment1.getPriority().toString(), taskAppointmentDao.getAllTasksList().get(0).getPriority().toString());
+        Assert.assertEquals(Utils.taskAppointment2.getPriority().toString(), taskAppointmentDao.getAllTasksList().get(1).getPriority().toString());
+        Assert.assertEquals(Utils.taskAppointment3.getPriority().toString(), taskAppointmentDao.getAllTasksList().get(2).getPriority().toString());
     }
 
     @Test
-    public void updateTaskChecklist_ChangeInDb() throws ExecutionException, InterruptedException {
-        taskChecklistDao.insert(utils.taskChecklist1);
-        taskChecklistDao.insert(utils.taskChecklist2);
-        taskChecklistDao.insert(utils.taskChecklist3);
+    public void UpdateTaskChecklist_ChangeInDb() throws ExecutionException, InterruptedException {
+        taskChecklistDao.insert(Utils.taskChecklist1);
+        taskChecklistDao.insert(Utils.taskChecklist2);
+        taskChecklistDao.insert(Utils.taskChecklist3);
 
         List<Integer> selectedIds = new ArrayList<>();
 
@@ -190,13 +190,13 @@ public class UpdateCommonPropertyTest {
         }
 
         taskChecklistDao.updateTaskPriority(selectedIds, EPriority.HIGH);
-        utils.taskChecklist1.setPriority(taskChecklistDao.getAllTasksList().get(0).getPriority());
-        utils.taskChecklist2.setPriority(taskChecklistDao.getAllTasksList().get(1).getPriority());
-        utils.taskChecklist3.setPriority(taskChecklistDao.getAllTasksList().get(2).getPriority());
+        Utils.taskChecklist1.setPriority(taskChecklistDao.getAllTasksList().get(0).getPriority());
+        Utils.taskChecklist2.setPriority(taskChecklistDao.getAllTasksList().get(1).getPriority());
+        Utils.taskChecklist3.setPriority(taskChecklistDao.getAllTasksList().get(2).getPriority());
 
-        Assert.assertEquals(utils.taskChecklist1.getPriority().toString(), taskChecklistDao.getAllTasksList().get(0).getPriority().toString());
-        Assert.assertEquals(utils.taskChecklist2.getPriority().toString(), taskChecklistDao.getAllTasksList().get(1).getPriority().toString());
-        Assert.assertEquals(utils.taskChecklist3.getPriority().toString(), taskChecklistDao.getAllTasksList().get(2).getPriority().toString());
+        Assert.assertEquals(Utils.taskChecklist1.getPriority().toString(), taskChecklistDao.getAllTasksList().get(0).getPriority().toString());
+        Assert.assertEquals(Utils.taskChecklist2.getPriority().toString(), taskChecklistDao.getAllTasksList().get(1).getPriority().toString());
+        Assert.assertEquals(Utils.taskChecklist3.getPriority().toString(), taskChecklistDao.getAllTasksList().get(2).getPriority().toString());
 
     }
 
