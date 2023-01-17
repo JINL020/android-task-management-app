@@ -9,6 +9,7 @@ import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
+// TODO: Rename both converters
 /**
  TaskToJSONConverter class converts the given list of TaskAppointment and TaskChecklist objects to a JSON format string.
  This class is an implementation of ITaskConverter interface.
@@ -25,7 +26,7 @@ public class TaskToJSONConverter implements ITaskConverter {
         // Create and append beginning of json array to json string
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{\"AllTasks\": [");
-        stringBuilder.append(System.getProperty("line.separator"));
+        stringBuilder.append("\n");
 
         // Convert and append TaskAppointment objects to json string
         for (TaskAppointment eachTask: taskAppointment) {
@@ -51,7 +52,7 @@ public class TaskToJSONConverter implements ITaskConverter {
         String json = convertATask(task);
         stringBuilder.append(json);
         stringBuilder.append(",");
-        stringBuilder.append(System.getProperty("line.separator"));
+        stringBuilder.append("\n");
 
         return stringBuilder.toString();
     }

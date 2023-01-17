@@ -31,9 +31,6 @@ public class TaskToXMLConverter implements ITaskConverter{
             stringBuilder.append(convertedTask);
         }
 
-        // Add new line between different types of tasks
-        stringBuilder.append(System.getProperty("line.separator"));
-
         // Convert and append TaskChecklist objects to xml string
         for(TaskChecklist eachTask : taskChecklists){
             String convertedTask = composeTask(eachTask);
@@ -51,7 +48,7 @@ public class TaskToXMLConverter implements ITaskConverter{
         StringBuilder stringBuilder = new StringBuilder();
         String xml = convertATask(task);
         stringBuilder.append(xml);
-        stringBuilder.append(System.getProperty("line.separator"));
+        stringBuilder.append("\n"); // Was using sys property line.separators but couldn't make test work because of that
 
         return stringBuilder.toString();
     }
