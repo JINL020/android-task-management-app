@@ -15,6 +15,7 @@ import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.SubtaskItem;
 import at.ac.univie.se2_team_0308.models.SubtaskList;
+import at.ac.univie.se2_team_0308.utils.typeConverters.SubtasksConverter;
 
 @RunWith(AndroidJUnit4.class)
 public class SubtaskConverterTest {

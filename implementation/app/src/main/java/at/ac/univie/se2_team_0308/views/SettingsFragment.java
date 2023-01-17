@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -21,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.databinding.FragmentSettingsBinding;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotificationEvent;
 import at.ac.univie.se2_team_0308.utils.notifications.BasicNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.INotifier;

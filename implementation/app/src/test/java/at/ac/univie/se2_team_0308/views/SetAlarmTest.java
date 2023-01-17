@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import at.ac.univie.se2_team_0308.models.ECategory;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;

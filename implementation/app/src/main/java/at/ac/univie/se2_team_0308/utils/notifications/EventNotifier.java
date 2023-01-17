@@ -5,10 +5,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
-import at.ac.univie.se2_team_0308.models.ENotifier;
-import at.ac.univie.se2_team_0308.utils.ENotificationEventTypeConverter;
-import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.ENotificationEventTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.INotifierTypeConverter;
 
 @Entity(tableName = "event_notifier")
 public class EventNotifier {

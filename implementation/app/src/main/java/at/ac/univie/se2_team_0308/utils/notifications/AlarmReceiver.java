@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import at.ac.univie.se2_team_0308.models.ATask;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
-import at.ac.univie.se2_team_0308.models.TaskAppointment;
-import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.INotifierTypeConverter;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private INotifierTypeConverter notifierTypeConverter = new INotifierTypeConverter();

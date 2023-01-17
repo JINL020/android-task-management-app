@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import at.ac.univie.se2_team_0308.utils.AttachmentConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.AttachmentConverter;
 
 public abstract class ATask {
     public static final String TAG ="Task";

@@ -1,7 +1,6 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.app.Application;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.core.util.Pair;
@@ -15,10 +14,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.models.ATask;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.utils.notifications.ISubject;

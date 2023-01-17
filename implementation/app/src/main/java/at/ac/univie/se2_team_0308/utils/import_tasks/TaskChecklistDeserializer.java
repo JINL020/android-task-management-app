@@ -17,7 +17,7 @@ import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
-import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.SubtasksConverter;
 
 public class TaskChecklistDeserializer implements JsonDeserializer<TaskChecklist> {
     @Override

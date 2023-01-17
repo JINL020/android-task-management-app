@@ -1,4 +1,4 @@
-package at.ac.univie.se2_team_0308.utils;
+package at.ac.univie.se2_team_0308.utils.typeConverters;
 
 import android.util.Log;
 
@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import at.ac.univie.se2_team_0308.models.ENotifier;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.BasicNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;

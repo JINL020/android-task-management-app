@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import at.ac.univie.se2_team_0308.utils.DateConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.DateConverter;
 
 @Entity(tableName = "task_appointments")
 public class TaskAppointment extends ATask implements Parcelable {

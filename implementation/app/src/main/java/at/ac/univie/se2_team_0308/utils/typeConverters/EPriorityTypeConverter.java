@@ -1,4 +1,4 @@
-package at.ac.univie.se2_team_0308.utils;
+package at.ac.univie.se2_team_0308.utils.typeConverters;
 
 import androidx.room.TypeConverter;
 
