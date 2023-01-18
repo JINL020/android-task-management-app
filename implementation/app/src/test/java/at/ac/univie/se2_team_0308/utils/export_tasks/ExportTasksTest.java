@@ -13,6 +13,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
@@ -33,8 +35,8 @@ public class ExporteTasksTest extends TestCase {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         exporter = new Exporter();
-        //taskAppointments = Arrays.asList(new TaskAppointment("Task 1"), new TaskAppointment("Task 2"));
-        //taskChecklists = Arrays.asList(new TaskChecklist("Task 3"), new TaskChecklist("Task 4"));
+        taskAppointments = new ArrayList<>();
+        taskChecklists = new ArrayList<>();
     }
 
     @Test

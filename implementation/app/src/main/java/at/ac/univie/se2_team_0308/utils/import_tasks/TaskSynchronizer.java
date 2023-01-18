@@ -28,7 +28,7 @@ public class TaskSynchronizer {
             boolean taskExists = false;
 
             for(ATask existingTask : allTasks){
-                if(existingTask.getId() == eachTask.getId()){
+                if(existingTask.getCreationDate() == eachTask.getCreationDate()){
                     taskExists = true;
                     break;
                 }
@@ -50,7 +50,7 @@ public class TaskSynchronizer {
             boolean taskExists = false;
 
             for(ATask existingTask : allTasks){
-                if(existingTask.getId() == eachTask.getId()){
+                if(existingTask.getCreationDate() == eachTask.getCreationDate()){
                     taskExists = true;
                     break;
                 }
