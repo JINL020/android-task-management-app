@@ -68,7 +68,7 @@ public class SynchronizeTasksTest {
                 ""
         );
         taskChecklist.setId(idChecklist);
-        taskChecklist.setCreationDate(new Date(2020, 5, 12));
+        taskChecklist.setCreationDate(new Date(2020, 5, 13));
 
         return taskChecklist;
     }
@@ -108,6 +108,7 @@ public class SynchronizeTasksTest {
 
         // Create and add to list a second task
         TaskAppointment taskAppointment2 = createTaskAppointment(1);
+        taskAppointment2.setCreationDate(new Date(2020, 5, 13));
         taskAppointments.add(taskAppointment2);
 
         // Perform synchronization
@@ -117,6 +118,7 @@ public class SynchronizeTasksTest {
         // Since taskAppointment2 was not in the viewModel before
         // it should have been inserted during synchronization
         verify(viewModel).insertAppointment(taskAppointment2);
+
 
         // Since taskAppointment was  in the viewModel before
         // it should have been updated during synchronization

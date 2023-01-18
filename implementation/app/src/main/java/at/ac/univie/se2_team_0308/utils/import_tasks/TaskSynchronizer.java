@@ -17,7 +17,6 @@ public class TaskSynchronizer {
 
     /**
      * Synchronizes imported tasks with the task data in the viewmodel.
-     *
      * @param viewModel        a TaskViewModel containing the task data
      * @param taskAppointments a list of TaskAppointment objects to be imported
      * @param taskChecklists   a list of TaskChecklist objects to be imported
@@ -28,9 +27,9 @@ public class TaskSynchronizer {
             boolean taskExists = false;
 
             for(ATask existingTask : allTasks){
-                if(existingTask.getCreationDate() == eachTask.getCreationDate()){
+                if(existingTask.getCreationDate().equals(eachTask.getCreationDate())){
                     taskExists = true;
-                    break;
+                  break;
                 }
             }
 
@@ -49,7 +48,7 @@ public class TaskSynchronizer {
             boolean taskExists = false;
 
             for(ATask existingTask : allTasks){
-                if(existingTask.getCreationDate() == eachTask.getCreationDate()){
+                if(existingTask.getCreationDate().equals(eachTask.getCreationDate())){
                     taskExists = true;
                     break;
                 }
