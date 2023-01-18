@@ -3,6 +3,8 @@ package at.ac.univie.se2_team_0308.utils;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -115,6 +117,15 @@ public class FilterManagerTest {
         taskChecklist.setHidden(true);
         filteredTaskList = new FilterManager().applyFilter(initialTaskList, new UnhiddenTasksFilter());
         assertEquals(0, filteredTaskList.size());
+    }
+
+    @Test
+    public void ApplyFilterToNull_getError() {
+        List<ATask> initialTaskList = null;
+
+        Exception message = assertThrows(NullPointerException.class, () -> {
+            new FilterManager().applyFilter(initialTaskList, new UnhiddenTasksFilter());
+        });
     }
 
 }

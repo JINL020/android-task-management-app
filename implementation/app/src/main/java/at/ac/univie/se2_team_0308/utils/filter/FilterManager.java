@@ -1,5 +1,7 @@
 package at.ac.univie.se2_team_0308.utils.filter;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class FilterManager {
      @return list of ATask with filter applied
      */
 
-    public List<ATask> applyFilter(List<ATask> taskList, IFilter filter) {
+    public List<ATask> applyFilter(@NonNull List<ATask> taskList, IFilter filter) {
         List<ATask> filteredList = new ArrayList<>(taskList);
         filteredList = filter.applyFilter(taskList);
         return filteredList;

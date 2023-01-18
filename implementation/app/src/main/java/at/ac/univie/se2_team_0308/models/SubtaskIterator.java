@@ -4,9 +4,9 @@ public class SubtaskIterator implements Iterator<ASubtask> {
     private ASubtask[] subtasks;
     private int position;
 
-    public SubtaskIterator(ASubtask[] topics)
+    public SubtaskIterator(ASubtask[] subtasks)
     {
-        this.subtasks = topics;
+        this.subtasks = subtasks;
         position = 0;
     }
 
