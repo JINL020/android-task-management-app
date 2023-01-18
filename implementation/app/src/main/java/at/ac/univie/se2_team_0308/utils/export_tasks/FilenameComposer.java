@@ -34,7 +34,7 @@ public class FilenameComposer {
         filenameBuilder.append(".");
         filenameBuilder.append(extension);
 
-        Log.d(TAG, "File name is " + filenameBuilder);
+        Log.d(TAG, "File name is " + filenameBuilder.toString());
         return filenameBuilder.toString();
     }
 }

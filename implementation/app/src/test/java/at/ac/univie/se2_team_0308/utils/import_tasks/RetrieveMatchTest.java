@@ -2,8 +2,6 @@ package at.ac.univie.se2_team_0308.utils.import_tasks;
 
 import static org.junit.Assert.assertEquals;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 
 import java.util.List;
@@ -77,8 +75,12 @@ public class RetrieveMatchTest {
     public void dotallFalse_oneMatchConsideredAcrossOneLine() {
         String regex = "\\{.*\"category\":\"APPOINTMENT\".*\\}";
         String start = "{\"AllTasks\": [\n";
-        String task1 = "{\"deadline\":\"Jan 17, 2023 2:33:00 PM\",\"attachments\":[],\"category\":\"APPOINTMENT\",\"creationDate\":\"Jan 17, 2023 2:33:24 PM\",\"description\":\"\",\"id\":1,\"isHidden\":false,\"isSelected\":true,\"priority\":\"LOW\",\"sketchData\":[],\"status\":\"NOT_STARTED\",\"taskColor\":\"#E1E1E1\",\"taskName\":\"dasd\"}";
-        String task2 = "{\"deadline\":\"Jan 17, 2023 7:52:00 PM\",\"attachments\":[],\"category\":\"APPOINTMENT\",\"creationDate\":\"Jan 17, 2023 7:52:32 PM\",\"description\":\"\",\"id\":2,\"isHidden\":false,\"isSelected\":true,\"priority\":\"LOW\",\"sketchData\":[],\"status\":\"NOT_STARTED\",\"taskColor\":\"#E1E1E1\",\"taskName\":\"dsfs\"}";
+        String task1 = "{\"deadline\":\"Jan 17, 2023 2:33:00 PM\",\"attachments\":[],\"category\":\"APPOINTMENT\"," +
+                "\"creationDate\":\"Jan 17, 2023 2:33:24 PM\",\"description\":\"\",\"id\":1,\"isHidden\":false,\"isSelected\":true," +
+                "\"priority\":\"LOW\",\"sketchData\":[],\"status\":\"NOT_STARTED\",\"taskColor\":\"#E1E1E1\",\"taskName\":\"dasd\"}";
+        String task2 = "{\"deadline\":\"Jan 17, 2023 7:52:00 PM\",\"attachments\":[],\"category\":\"APPOINTMENT\"," +
+                "\"creationDate\":\"Jan 17, 2023 7:52:32 PM\",\"description\":\"\",\"id\":2,\"isHidden\":false,\"isSelected\":true," +
+                "\"priority\":\"LOW\",\"sketchData\":[],\"status\":\"NOT_STARTED\",\"taskColor\":\"#E1E1E1\",\"taskName\":\"dsfs\"}";
         String end = "]}";
         String expected = start + task1 + ",\n" + task2 + "\n" + end;
 

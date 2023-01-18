@@ -147,8 +147,7 @@ public class CalendarFragment extends ATaskListFragment {
         btnImport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO add exception if not xml/json
-                mGetContent.launch( "*/*");
+               mGetContent.launch( "*/*");
             }
         });
 
@@ -156,7 +155,6 @@ public class CalendarFragment extends ATaskListFragment {
         btnExportJson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: perhaps move this code to another class
                 if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
                     showLayout(ELayout.ADD);
                     try {
@@ -182,6 +180,7 @@ public class CalendarFragment extends ATaskListFragment {
                     List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
                     List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
                     if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                        Log.d(TAG, "Export tasks as Xml");
                         exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
                         showToast("Tasks exported");
                     }

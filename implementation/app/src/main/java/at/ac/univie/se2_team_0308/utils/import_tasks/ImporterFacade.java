@@ -24,12 +24,11 @@ public class ImporterFacade {
     public static final String TAG = "ImporterFacade";
     private final TaskViewModel taskViewModel;
     private final ContentResolver contentResolver;
-    private ITaskImporter importer;
+    private IFileConverter importer;
 
     /**
      * Constructor for ImporterFacade class.
-     *
-     * @param taskViewModel a viewmodel that holds the task data
+     * @param taskViewModel   a TaskViewModel that holds the task data
      * @param contentResolver a ContentResolver that is used to access the file to be imported
      */
     public ImporterFacade(TaskViewModel taskViewModel, ContentResolver contentResolver){
@@ -38,8 +37,8 @@ public class ImporterFacade {
     }
 
     /**
-     * Imports tasks from a file specified by the uri and synchronizes them with the task data in the viewmodel.
-     *
+     * Imports tasks from a file specified by the uri and synchronizes them with the task data in the
+     * TaskViewModel.
      * @param uri a Uri that points to the file to be imported
      */
     public void importTasks(Uri uri){
@@ -56,15 +55,15 @@ public class ImporterFacade {
             if(filename.contains("xml")){
                 Log.d(TAG, "Importing xml");
                 XmlTaskRetriever xmlTaskRetriever = new XmlTaskRetriever(fileContent);
-                importer = new XmlImporter(xmlTaskRetriever);
+                importer = new XmlToTaskConverter(xmlTaskRetriever);
             }
             else if(filename.contains("json")){
                 Log.d(TAG, "Importing json");
                 JsonTaskRetriever jsonTaskRetriever = new JsonTaskRetriever(fileContent);
-                importer = new JsonImporter(jsonTaskRetriever);
+                importer = new JsonToTaskConverter(jsonTaskRetriever);
 
             }
-            importedTasks = importer.importTasks();
+            importedTasks = importer.convertTasks();
 
             TaskSynchronizer taskSynchronizer = new TaskSynchronizer();
             taskSynchronizer.synchronizeTasks(taskViewModel, importedTasks.first, importedTasks.second);

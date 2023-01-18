@@ -4,8 +4,6 @@ import android.util.Log;
 import android.util.Pair;
 import java.util.List;
 
-// TODO: check that the Json array is constructed correctly
-// TODO: check why there is not a single TaskRetriever with different arguments
 
 /**
  Retrieves individual tasks from a json array in the form of strings based on regex patterns.
@@ -16,23 +14,17 @@ public class JsonTaskRetriever {
 
     /**
      * Constructor for JsonTaskRetriever class.
-     *
      * @param fileContent a string representation of the json file
      */
     public JsonTaskRetriever(String fileContent){
         this.fileContent = fileContent;
     }
 
-
     /**
-     * Retrieves individual tasks from the json file in the form of strings. Tasks are separated into two categories:
-     * appointments and checklists.
-     *
-     * @return a Pair object containing two lists of strings representing the tasks in the json file. The first list
-     * contains tasks of the "APPOINTMENT" category and the second list contains tasks of the "CHECKLIST" category.
+     * Retrieves individual TaskAppointment and TaskChecklist tasks from the json file in the form of strings.
+     * @return a Pair object containing a list of TaskAppointment and a list of TaskChecklist as strings
+     * representing the tasks in the json file.
      */
-
-    // TODO: maybe remove these classes and simply use the MatchRetriever with the right arguments??
     public Pair<List<String>, List<String>> getTasks(){
         Log.d(TAG, "Retrieve individual strings containing tasks from json file");
         String regexAppointment = "\\{.*\"category\":\"APPOINTMENT\".*\\}";

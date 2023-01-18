@@ -1,36 +1,46 @@
 package at.ac.univie.se2_team_0308.utils.import_tasks;
 
-import android.net.Uri;
-import android.provider.MediaStore;
+import static org.mockito.Mockito.when;
 
-import androidx.test.platform.app.InstrumentationRegistry;
+import android.content.ContentResolver;
+import android.net.Uri;
 
 import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
+@RunWith(RobolectricTestRunner.class)
 public class ExtractContentTest extends TestCase {
+    private ContentResolver contentResolver;
     private FileContentExtractor fileContentExtractor;
-    private Uri fileUri;
 
     @Before
     public void setUp() {
-        fileContentExtractor = new FileContentExtractor(InstrumentationRegistry.getInstrumentation().getContext().getContentResolver());
-        fileUri = Uri.parse(MediaStore.Images.Media.EXTERNAL_CONTENT_URI + "/1");
+        contentResolver = Mockito.mock(ContentResolver.class);
+        fileContentExtractor = new FileContentExtractor(contentResolver);
     }
 
     @Test
-    public void testExtractContent() {
-        String content = fileContentExtractor.extractContent(fileUri);
-        assertNotNull(content);
+    public void fileContainsText_expectedOutput() throws IOException {
+        String expected = "{\"deadline\":\"Jan 17, 2023 2:33:00 PM\"," +
+                "\"attachments\":[],\"category\":\"APPOINTMENT\",\"creationDate\":\"Jan 17, 2023 2:33:24 PM\"," +
+                "\"description\":\"\",\"id\":1,\"isHidden\":false,\"isSelected\":true,\"priority\":\"LOW\"," +
+                "\"sketchData\":[],\"status\":\"NOT_STARTED\",\"taskColor\":\"#E1E1E1\",\"taskName\":\"dasd\"}\n";
+        InputStream inputStream = new ByteArrayInputStream(expected.getBytes());
+
+        Uri uri = Uri.parse("file://test.json");
+        when(contentResolver.openInputStream(uri)).thenReturn(inputStream);
+
+        String actual = fileContentExtractor.extractContent(uri);
+
+        assertEquals(expected, actual);
     }
-//    @Test
-//    public void testConvertStreamToString() {
-//        InputStream inputStream = InstrumentationRegistry.getInstrumentation().getContext().getContentResolver().openInputStream(fileUri);
-//        String content = fileContentExtractor.convertStreamToString(inputStream);
-//        assertNotNull(content);
-//    }
 }

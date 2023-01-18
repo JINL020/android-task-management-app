@@ -17,68 +17,7 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 public class ConvertTaskTest {
     private ITaskConverter taskConverter;
 
-    // TODO: add json as well
-//    @Test
-//    public void convertTaskAppointmentTaskChecklistJson_expectedOutput() {
-//        taskConverter = new TaskToJSONConverter();
-//
-//        List<TaskAppointment> taskAppointments = new ArrayList<>();
-//        List<TaskChecklist> taskChecklists = new ArrayList<>();
-//
-//        // Create a TaskChecklist and add it to list
-//        TaskChecklist taskChecklist = new TaskChecklist(
-//                "taskName",
-//                "description",
-//                EPriority.LOW,
-//                EStatus.NOT_STARTED,
-//                ECategory.CHECKLIST,
-//                new ArrayList<>(),
-//                new ArrayList<>(),
-//                new byte[0],
-//                ""
-//        );
-//        Integer idChecklist = 1;
-//        taskChecklist.setId(idChecklist);
-//        taskChecklist.setCreationDate(new Date(2020, 5, 12));
-//        taskChecklists.add(taskChecklist);
-//
-//        // Create a TaskAppointment and add it to list
-//        TaskAppointment taskAppointment = new TaskAppointment(
-//                "taskName",
-//                "description",
-//                EPriority.LOW,
-//                EStatus.NOT_STARTED,
-//                ECategory.APPOINTMENT,
-//                new Date(2022, 5, 12),
-//                new ArrayList<>(),
-//                new byte[0],
-//                ""
-//        );
-//        Integer idAppointment = 0;
-//        taskAppointment.setId(idAppointment);
-//        taskAppointment.setCreationDate(new Date(2020, 5, 12));
-//        taskAppointments.add(taskAppointment);
-//
-//        JSONArray jsonArrayMock = mock(JSONArray.class);
-//        when(jsonArrayMock.toString()).thenReturn("mocked toString value");
-//
-//
-//        String expected = "{\"AllTasks\": {\n{\"testAppointment\":\"test\"}\n{\"testChecklist\":\"test\"}\n}";
-//        String actual = taskConverter.convertTasks(taskAppointments, taskChecklists);
-//
-//        assertEquals(expected, actual);
-//    }
-
-
-
-    @Test
-    public void convertTaskAppointmentTaskChecklistXml_expectedOutput() {
-        taskConverter = new TaskToXMLConverter();
-
-        List<TaskAppointment> taskAppointments = new ArrayList<>();
-        List<TaskChecklist> taskChecklists = new ArrayList<>();
-
-        // Create a TaskAppointment and add it to list
+    public TaskAppointment createTaskAppointment(int idAppointment){
         TaskAppointment taskAppointment = new TaskAppointment(
                 "taskName",
                 "description",
@@ -90,12 +29,13 @@ public class ConvertTaskTest {
                 new byte[0],
                 ""
         );
-        Integer idAppointment = 0;
         taskAppointment.setId(idAppointment);
         taskAppointment.setCreationDate(new Date(2020, 5, 12));
-        taskAppointments.add(taskAppointment);
 
-        // Create a TaskChecklist and add it to list
+        return taskAppointment;
+    }
+
+    public TaskChecklist createTaskChecklist(int idChecklist){
         TaskChecklist taskChecklist = new TaskChecklist(
                 "taskName",
                 "description",
@@ -107,10 +47,26 @@ public class ConvertTaskTest {
                 new byte[0],
                 ""
         );
-        Integer idChecklist = 0;
         taskChecklist.setId(idChecklist);
         taskChecklist.setCreationDate(new Date(2020, 5, 12));
+
+        return taskChecklist;
+    }
+
+    @Test
+    public void convertTaskAppointmentTaskChecklistXml_expectedOutput() {
+        taskConverter = new TaskToXmlConverter();
+
+        List<TaskAppointment> taskAppointments = new ArrayList<>();
+        List<TaskChecklist> taskChecklists = new ArrayList<>();
+
+        // Create a TaskChecklist and add it to list
+        TaskChecklist taskChecklist = createTaskChecklist(0);
         taskChecklists.add(taskChecklist);
+
+        // Create a TaskAppointment and add it to list
+        TaskAppointment taskAppointment = createTaskAppointment(0);
+        taskAppointments.add(taskAppointment);
 
         String expected = "<AllTasks><at.ac.univie.se2__team__0308.models.TaskAppointment>\n" +
                 "  <id>0</id>\n" +
@@ -151,47 +107,22 @@ public class ConvertTaskTest {
 
     @Test
     public void convertMultipleTaskChecklistXml_expectedOutput() {
-        taskConverter = new TaskToXMLConverter();
+        taskConverter = new TaskToXmlConverter();
 
         List<TaskAppointment> taskAppointments = new ArrayList<>();
         List<TaskChecklist> taskChecklists = new ArrayList<>();
-        
+
         // Create a TaskChecklist and add it to list
-        TaskChecklist taskChecklist1 = new TaskChecklist(
-                "taskName",
-                "description",
-                EPriority.LOW,
-                EStatus.NOT_STARTED,
-                ECategory.CHECKLIST,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new byte[0],
-                ""
-        );
-        Integer idChecklist1 = 1;
-        taskChecklist1.setId(idChecklist1);
-        taskChecklist1.setCreationDate(new Date(2020, 5, 12));
+        TaskChecklist taskChecklist1 = createTaskChecklist(0);
         taskChecklists.add(taskChecklist1);
 
         // Create a TaskChecklist and add it to list
-        TaskChecklist taskChecklist2 = new TaskChecklist(
-                "taskName",
-                "description",
-                EPriority.LOW,
-                EStatus.NOT_STARTED,
-                ECategory.CHECKLIST,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new byte[0],
-                ""
-        );
-        Integer idChecklist2 = 0;
-        taskChecklist2.setId(idChecklist2);
-        taskChecklist2.setCreationDate(new Date(2020, 5, 12));
+        TaskChecklist taskChecklist2 = createTaskChecklist(1);
         taskChecklists.add(taskChecklist2);
 
+
         String expected = "<AllTasks><at.ac.univie.se2__team__0308.models.TaskChecklist>\n" +
-                "  <id>1</id>\n" +
+                "  <id>0</id>\n" +
                 "  <taskName>taskName</taskName>\n" +
                 "  <description>description</description>\n" +
                 "  <priority>LOW</priority>\n" +
@@ -206,7 +137,7 @@ public class ConvertTaskTest {
                 "  <subtasks/>\n" +
                 "</at.ac.univie.se2__team__0308.models.TaskChecklist>\n" +
                 "<at.ac.univie.se2__team__0308.models.TaskChecklist>\n" +
-                "  <id>0</id>\n" +
+                "  <id>1</id>\n" +
                 "  <taskName>taskName</taskName>\n" +
                 "  <description>description</description>\n" +
                 "  <priority>LOW</priority>\n" +
@@ -229,26 +160,13 @@ public class ConvertTaskTest {
 
     @Test
     public void convertTaskAppointmentXml_expectedOutput() {
-        taskConverter = new TaskToXMLConverter();
+        taskConverter = new TaskToXmlConverter();
 
         List<TaskAppointment> taskAppointments = new ArrayList<>();
         List<TaskChecklist> taskChecklists = new ArrayList<>();
 
         // Create a TaskAppointment and add it to list
-        TaskAppointment taskAppointment = new TaskAppointment(
-                "taskName",
-                "description",
-                EPriority.LOW,
-                EStatus.NOT_STARTED,
-                ECategory.APPOINTMENT,
-                new Date(2022, 5, 12),
-                new ArrayList<>(),
-                new byte[0],
-                ""
-        );
-        Integer idAppointment = 0;
-        taskAppointment.setId(idAppointment);
-        taskAppointment.setCreationDate(new Date(2020, 5, 12));
+        TaskAppointment taskAppointment = createTaskAppointment(0);
         taskAppointments.add(taskAppointment);
 
         String expected = "<AllTasks><at.ac.univie.se2__team__0308.models.TaskAppointment>\n" +

@@ -9,12 +9,11 @@ import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
-// TODO: Rename both converters
 /**
- TaskToJSONConverter class converts the given list of TaskAppointment and TaskChecklist objects to a JSON format string.
- This class is an implementation of ITaskConverter interface.
+ * TaskToJsonConverter class converts the given list of TaskAppointment and TaskChecklist objects to a JSON format string.
+ * This class is an implementation of ITaskConverter interface.
  */
-public class TaskToJSONConverter implements ITaskConverter {
+public class TaskToJsonConverter implements ITaskConverter {
     /**
      * Converts the given list of TaskAppointment and TaskChecklist objects to a JSON format string.
      * @param taskAppointment list of TaskAppointment objects

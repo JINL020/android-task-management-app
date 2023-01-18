@@ -8,7 +8,10 @@ import android.provider.OpenableColumns;
 import android.util.Log;
 
 import java.util.List;
-// TODO: add class doc here
+
+/**
+ * FilenameRetriever retrieves the name of the file to be imported as the Uri does not hold itself
+ */
 public class FilenameRetriever {
     public static final String TAG = "FilenameRetriever";
     /**

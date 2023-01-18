@@ -49,7 +49,6 @@ public class SynchronizeTasksTest {
                 new byte[0],
                 ""
         );
-        //TODO: remove Integer from all of them replace with int
         taskAppointment.setId(idAppointment);
         taskAppointment.setCreationDate(new Date(2020, 5, 12));
 

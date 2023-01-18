@@ -183,7 +183,6 @@ public class ListFragment extends ATaskListFragment {
         btnImport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO add exception if not xml/json
                 mGetContent.launch( "*/*");
             }
         });
@@ -220,6 +219,8 @@ public class ListFragment extends ATaskListFragment {
                     List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
                     List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
                     if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                        Log.d(TAG, "Export tasks as Xml");
+
                         exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
                         adapter.setSelectModeOn(false);
                         viewModel.deselectAllTaskAppointment();
