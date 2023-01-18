@@ -22,6 +22,9 @@ public class Attachment implements Parcelable {
         if (index > 0) {
             this.extension = fileName.substring(index + 1);
             this.baseName = fileName.substring(0, index);
+        } else {
+            this.extension = "";
+            this.baseName = "";
         }
     }
 
