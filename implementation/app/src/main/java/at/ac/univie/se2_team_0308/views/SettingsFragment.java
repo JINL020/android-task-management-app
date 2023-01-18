@@ -28,6 +28,15 @@ import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.utils.notifications.PopupNotifier;
 import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 
+/**
+ * The users can dynamically select what notification settings they want by checking the checkboxes
+ * and the settings are persistently saved in the room database.
+ * Every time a change occurs, the insert method of EventNotifierViewModel is called. Insert insinuates that
+ * a new entry is added into the database but in actuality the entry is updated because a entry with
+ * the same primary key is replaced when trying to insert.
+ *
+ * @author Jin-Jin Lee
+ */
 public class SettingsFragment extends Fragment {
     private static final String TAG = "SETTINGS_FRAGMENT";
 
@@ -76,6 +85,12 @@ public class SettingsFragment extends Fragment {
         switchDarkTheme = binding.switchDarkTheme;
     }
 
+    /**
+     * A listener for each CheckBox is set so that the settings are saved
+     * into the database everytime a CheckBox is clicked.
+     *
+     * @author Jin-Jin Lee
+     */
     private void initCheckboxListeners() {
         onCreatePopupCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,6 +193,12 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    /**
+     * The layout is initialized by fetching the settings from the database
+     * and checking all checkboxes to match the database entries.
+     *
+     * @author Jin-Jin Lee
+     */
     private void initCheckboxLayout() {
         eventNotifierViewModel.getAllNotifiers().observe(getViewLifecycleOwner(), new Observer<List<EventNotifier>>() {
             @Override
@@ -212,28 +233,28 @@ public class SettingsFragment extends Fragment {
         boolean onCreatePopup = onCreatePopupCheckBox.isChecked();
         boolean onCreateBasic = onCreateBasicCheckBox.isChecked();
         INotifier onCreateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
-        eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.CREATE, onCreateNotifier));
+        eventNotifierViewModel.insert(new EventNotifier(ENotificationEvent.CREATE, onCreateNotifier));
     }
 
     private void updateOnUpdateNotifier() {
         boolean onCreatePopup = onUpdatePopupCheckBox.isChecked();
         boolean onCreateBasic = onUpdateBasicCheckBox.isChecked();
         INotifier onUpdateNotifier = buildNotifier(onCreatePopup, onCreateBasic);
-        eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.UPDATE, onUpdateNotifier));
+        eventNotifierViewModel.insert(new EventNotifier(ENotificationEvent.UPDATE, onUpdateNotifier));
     }
 
     private void updateOnDeleteNotifier() {
         boolean onDeletePopup = onDeletePopupCheckBox.isChecked();
         boolean onDeleteBasic = onDeleteBasicCheckBox.isChecked();
         INotifier onDeleteNotifier = buildNotifier(onDeletePopup, onDeleteBasic);
-        eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.DELETE, onDeleteNotifier));
+        eventNotifierViewModel.insert(new EventNotifier(ENotificationEvent.DELETE, onDeleteNotifier));
     }
 
     private void updateOnAppointmentNotifier() {
         boolean onAppointmentPopup = onAppointmentPopupCheckBox.isChecked();
         boolean onAppointmentBasic = onAppointmentBasicCheckBox.isChecked();
         INotifier notifier = buildNotifier(onAppointmentPopup, onAppointmentBasic);
-        eventNotifierViewModel.update(new EventNotifier(ENotificationEvent.APPOINTMENT, notifier));
+        eventNotifierViewModel.insert(new EventNotifier(ENotificationEvent.APPOINTMENT, notifier));
     }
 
     private INotifier buildNotifier(boolean popup, boolean basic) {

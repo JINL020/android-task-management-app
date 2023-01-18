@@ -67,11 +67,11 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     private static void populateDb(IEventNotifierDao eventNotifierDao){
-        INotifier defaultObserver = new LoggerCore();
-        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.CREATE, defaultObserver));
-        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.UPDATE, defaultObserver));
-        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.DELETE, defaultObserver));
-        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.APPOINTMENT, defaultObserver));
+        INotifier defaultNotifier = new LoggerCore();
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.CREATE, defaultNotifier));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.UPDATE, defaultNotifier));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.DELETE, defaultNotifier));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.APPOINTMENT, defaultNotifier));
     }
 
 }

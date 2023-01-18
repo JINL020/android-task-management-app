@@ -15,6 +15,14 @@ import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 
+/**
+ * ViewModel for EventNotifiers
+ * All EventNotifiers are fetched from the EventNotifierRepository and saved in the ViewModel.
+ * Every change in the settings is saved in the database through the ViewModel.
+ * All Views acess the database only thorugh the ViewModel.
+ *
+ * @author Jin-Jin Lee
+ */
 public class EventNotifierViewModel extends AndroidViewModel {
     private static final String TAG = "VIEW_MODEL";
 
@@ -32,15 +40,17 @@ public class EventNotifierViewModel extends AndroidViewModel {
         this.eventNotifiers = eventNotifierRepository.getAllEventNotifiers();
     }
 
-    /*public void insert(SettingsNotifier settingsNotifier){
-        notifierRepository.insert(settingsNotifier);
-    }*/
-
-    public void update(EventNotifier eventNotifier) {
-        eventNotifierRepository.update(eventNotifier);
+    public void insert(EventNotifier eventNotifier){
+        eventNotifierRepository.insert(eventNotifier);
         Log.d(TAG, "EventNotifierViewModel updated" + eventNotifier.toString());
         Toast.makeText(getApplication(), "settings changed", Toast.LENGTH_SHORT).show();
     }
+
+    /*public void update(EventNotifier eventNotifier) {
+        eventNotifierRepository.update(eventNotifier);
+        Log.d(TAG, "EventNotifierViewModel updated" + eventNotifier.toString());
+        Toast.makeText(getApplication(), "settings changed", Toast.LENGTH_SHORT).show();
+    }*/
 
     public LiveData<List<EventNotifier>> getAllNotifiers() {
         return eventNotifiers;

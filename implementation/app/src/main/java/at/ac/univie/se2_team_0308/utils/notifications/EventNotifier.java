@@ -8,6 +8,16 @@ import androidx.room.TypeConverters;
 import at.ac.univie.se2_team_0308.utils.typeConverters.ENotificationEventTypeConverter;
 import at.ac.univie.se2_team_0308.utils.typeConverters.INotifierTypeConverter;
 
+/**
+ * The settings chosen by the user in the settings fragment are saved in room database.
+ * Each row has a ENotificationEvent and a INotifier that tells us what type of notification
+ * the user wants to receive for the corresponding event (CREATE, UPDATE, DELETE, APPOINTMENT).
+ *
+ * @param event a ENotificationEvent must  always be provided since it is the
+ *              primary key which also means that for each event only one notification setting is possible
+ *
+ * @author Jin-Jin Lee
+ */
 @Entity(tableName = "event_notifier")
 public class EventNotifier {
     @TypeConverters(ENotificationEventTypeConverter.class)

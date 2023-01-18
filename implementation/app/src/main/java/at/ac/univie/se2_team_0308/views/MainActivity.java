@@ -37,6 +37,15 @@ import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
+/**
+ * The MainActivity contains the bottom navigation bar and holds a NavHostFragment
+ * to switch between the different fragments (List, Calendar, Settings).
+ * It is part of the observer pattern and acts as an observer whenever a task is
+ * created, updated or deleted, the MainActivity sends out notifications accordingly.
+ * It also sets and cancels alarms whenever an appointment is created or deleted.
+ *
+ * @author Jin-Jin Lee
+ */
 public class MainActivity extends AppCompatActivity implements IObserver {
 
     private static final String TAG = "MAIN_ACTIVITY";
