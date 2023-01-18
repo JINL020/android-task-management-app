@@ -410,7 +410,7 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
     public void openFile(String sketchPath) throws OpenAttachmentException {
         File file = new File(sketchPath);
         if(!file.exists()){
-            throw new OpenAttachmentException("Attachment file doesn't exist");
+            throw new OpenAttachmentException("File doesn't exist");
         }
         // TODO open file
     }

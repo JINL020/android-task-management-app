@@ -104,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements IObserver {
                 Log.d(TAG, "Current app theme: dark");
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 break;
+            default:
+                Log.d(TAG, "Default app theme: light");
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
         }
     }
 

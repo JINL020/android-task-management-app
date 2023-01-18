@@ -1,5 +1,6 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -97,6 +99,8 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
             try {
                 listener.openFile(this.attachments.get(position).getFilePath());
             } catch (OpenAttachmentException e) {
+                holder.messageText.setText("File doesn't exist");
+                holder.fileParentCard.setCardBackgroundColor(Color.GRAY);
                 Log.d(TAG, "Cannot open attachment: " + e.getMessage());
             }
         });
@@ -111,8 +115,10 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
 
         private TextView textExtension;
         private TextView txtFileName;
+        private TextView messageText;
         private ImageButton deleteFileBtn;
         private ImageButton openFileBtn;
+        private CardView fileParentCard;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -120,6 +126,8 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
             txtFileName = itemView.findViewById(R.id.txtFileName);
             deleteFileBtn = itemView.findViewById(R.id.deleteFileBtn);
             openFileBtn = itemView.findViewById(R.id.openFileBtn);
+            fileParentCard = itemView.findViewById(R.id.fileParentCard);
+            messageText = itemView.findViewById(R.id.messageText);
         }
     }
 
