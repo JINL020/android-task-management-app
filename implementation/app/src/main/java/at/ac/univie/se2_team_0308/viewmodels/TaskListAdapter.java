@@ -137,6 +137,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             });
         } else {
             holder.buttonSelect.setVisibility(View.GONE);
+            tasks.get(holder.getAdapterPosition()).setSelected(false);
+            holder.buttonSelect.setChecked(false);
         }
 
         if (tasks.get(holder.getAdapterPosition()).getCategory() == ECategory.APPOINTMENT) {
