@@ -8,20 +8,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 
-import androidx.room.Room;
-import androidx.test.core.app.ApplicationProvider;
-
-import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
-
-import at.ac.univie.se2_team_0308.repository.AppDatabase;
 
 public class GetFilenameTest {
     private Uri uri;
@@ -32,7 +24,6 @@ public class GetFilenameTest {
     public void setUp() {
         contentResolver = Mockito.mock(ContentResolver.class);
         cursor = Mockito.mock(Cursor.class);
-
 
         when(contentResolver.query(uri, null, null, null, null)).thenReturn(cursor);
         when(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)).thenReturn(0);
@@ -54,19 +45,19 @@ public class GetFilenameTest {
     public void xmlFile_expectedOutput() throws UnsupportedDocumentFormatException {
         List<String> supportedFormats = Arrays.asList(".json", ".xml");
         String expected = "tasks.xml";
-
         when(cursor.getString(0)).thenReturn(expected);
+
         String actual = FilenameRetriever.getFilename(uri, contentResolver, supportedFormats);
 
         assertEquals(expected, actual);
     }
 
     @Test(expected = UnsupportedDocumentFormatException.class)
-    public void unsupportedFormat_ThrowsException() throws UnsupportedDocumentFormatException {
+    public void unsupportedFormat_throwsException() throws UnsupportedDocumentFormatException {
         List<String> supportedFormats = Arrays.asList(".json", ".xml");
         String expected = "tasks.pdf";
-
         when(cursor.getString(0)).thenReturn(expected);
+
         String actual = FilenameRetriever.getFilename(uri, contentResolver, supportedFormats);
 
         assertEquals(expected, actual);
