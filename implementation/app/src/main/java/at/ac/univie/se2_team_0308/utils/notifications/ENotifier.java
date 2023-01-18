@@ -1,4 +1,4 @@
-package at.ac.univie.se2_team_0308.models;
+package at.ac.univie.se2_team_0308.utils.notifications;
 
 public enum ENotifier {
     LOGGER,

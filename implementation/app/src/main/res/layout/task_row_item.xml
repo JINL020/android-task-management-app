@@ -181,15 +181,6 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_task_drag" />
 
-<!--        TODO display subtasks on the main card -->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/taskNameText"-->
-<!--            android:layout_toStartOf="@+id/taskNameText"-->
-<!--            android:id="@+id/subtasksList"/>-->
-
-
 
     </RelativeLayout>
 

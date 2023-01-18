@@ -9,7 +9,7 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
-import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.SubtasksConverter;
 
 /**
  * TaskChecklistSerializer implements the JsonSerializer from Gson in order to create a custom

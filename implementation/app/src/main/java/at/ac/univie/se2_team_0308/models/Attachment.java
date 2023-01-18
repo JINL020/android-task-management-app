@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 
 import java.io.File;
+import java.util.Objects;
 
 @Entity(tableName = "file_attachments")
 public class Attachment implements Parcelable {
@@ -21,6 +22,9 @@ public class Attachment implements Parcelable {
         if (index > 0) {
             this.extension = fileName.substring(index + 1);
             this.baseName = fileName.substring(0, index);
+        } else {
+            this.extension = "";
+            this.baseName = "";
         }
     }
 
@@ -85,5 +89,13 @@ public class Attachment implements Parcelable {
                 "baseName=" + this.baseName +
                 "extension=" + this.extension +
                 "}";
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Attachment attachment = (Attachment) o;
+        return this.filePath == attachment.filePath && this.extension == attachment.getExtension() && this.baseName == attachment.getBaseName();
     }
 }

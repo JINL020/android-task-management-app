@@ -140,7 +140,7 @@ public class ListFragment extends ATaskListFragment {
             }
         });
 
-        //Switch hidden tasks
+        //Switch betweeen hidden and unhidden tasks
         switchHidden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -268,6 +268,7 @@ public class ListFragment extends ATaskListFragment {
         viewModel.getAllLiveTasks().observe(getViewLifecycleOwner(), new Observer<Pair<List<TaskAppointment>, List<TaskChecklist>>>() {
             @Override
             public void onChanged(Pair<List<TaskAppointment>, List<TaskChecklist>> taskModels) {
+                //Based on switch mode we use relevant filter
                 if(switchHidden.isChecked()) {
                     adapter.setTasks(new FilterManager().applyFilter(viewModel.getAllTasks(), new HiddenTasksFilter()));
                     adapter.notifyDataSetChanged();
@@ -313,6 +314,7 @@ public class ListFragment extends ATaskListFragment {
         initDragAndDrop();
     }
 
+    //Initializing drag and drop functionality on task list
     private void initDragAndDrop() {
         // START https://androidapps-development-blogs.medium.com/drag-and-drop-reorder-in-recyclerview-android-2a3093d16ba2
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP| ItemTouchHelper.DOWN|ItemTouchHelper.START | ItemTouchHelper.END, 0) {

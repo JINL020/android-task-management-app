@@ -9,6 +9,12 @@ import java.util.List;
 
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 
+/**
+ * Repository for EventNotifiers
+ * Acts as an intermediate layer between the database and the EventNotifierViewModel.
+ *
+ * @author Jin-Jin Lee
+ */
 public class EventNotifierRepository implements IEventNotifierRepository {
     private static final String TAG = "NOTIFIER_REPOSITORY";
 

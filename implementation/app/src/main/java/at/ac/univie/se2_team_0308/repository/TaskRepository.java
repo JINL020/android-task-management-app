@@ -130,8 +130,6 @@ public class TaskRepository {
         AppDatabase.databaseWriteExecutor.execute( () -> taskChecklistDao.updateHiddenStatus(taskIds, isHidden));
     }
 
-    //Update task color property
-
     /**
      * Updates task color property
      * on both TaskAppointment and TaskChecklist

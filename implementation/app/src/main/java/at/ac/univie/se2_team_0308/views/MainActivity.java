@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -29,15 +28,24 @@ import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.databinding.ActivityMainBinding;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ECategory;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
-import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.INotifierTypeConverter;
 import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
+/**
+ * The MainActivity contains the bottom navigation bar and holds a NavHostFragment
+ * to switch between the different fragments (List, Calendar, Settings).
+ * It is part of the observer pattern and acts as an observer. Whenever a task is
+ * created, updated or deleted, the MainActivity sends out notifications accordingly.
+ * It also sets and cancels alarms whenever an appointment is created or deleted.
+ *
+ * @author Jin-Jin Lee
+ */
 public class MainActivity extends AppCompatActivity implements IObserver {
 
     private static final String TAG = "MAIN_ACTIVITY";
@@ -79,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         Log.d(TAG, "detached observer from taskViewModel(MainActivity)");
     }
 
+    //Getting current app theme and setting Shared Preferences value to it for later use in Setting Fragment
     private void setAppTheme() {
         sharedPreferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -86,12 +95,18 @@ public class MainActivity extends AppCompatActivity implements IObserver {
 
         String sTheme = sharedPreferences.getString("theme", ""); // "theme" is key and second "" is default value
 
-        switch(sTheme){
+        switch (sTheme) {
             case "light":
+                Log.d(TAG, "Current app theme: light");
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
             case "dark":
+                Log.d(TAG, "Current app theme: dark");
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            default:
+                Log.d(TAG, "Default app theme: light");
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
         }
     }
@@ -138,12 +153,12 @@ public class MainActivity extends AppCompatActivity implements IObserver {
     }
 
     @Override
-    public void receivedUpdate(ENotificationEvent event, ATask... tasks) {
+    public void receivedUpdate(ENotificationEvent event, ATask... tasks) throws DeadlinePassedException {
         if (event == ENotificationEvent.CREATE) {
             eventNotifierViewModel.getOnCreateNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    setAlarm((TaskAppointment)task);
+                    setAlarm((TaskAppointment) task);
                 }
                 Log.d(TAG, "received onCreate update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
@@ -165,13 +180,12 @@ public class MainActivity extends AppCompatActivity implements IObserver {
         }
     }
 
-    private void setAlarm(@NonNull TaskAppointment appointment) {
-        Date deadline = appointment.getDeadline();
+    private void setAlarm(@NonNull TaskAppointment appointment) throws DeadlinePassedException {
 
+        Date deadline = appointment.getDeadline();
         Date currentTime = Calendar.getInstance().getTime();
-        if(currentTime.after(deadline)){
-            Log.d(TAG, "deadline already passed");
-            return;
+        if (currentTime.after(deadline)) {
+            throw new DeadlinePassedException(currentTime, deadline);
         }
 
         Calendar calendar = Calendar.getInstance();

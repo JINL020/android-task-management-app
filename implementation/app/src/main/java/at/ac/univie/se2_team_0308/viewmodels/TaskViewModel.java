@@ -1,7 +1,6 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 
 import android.app.Application;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.core.util.Pair;
@@ -15,16 +14,16 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import at.ac.univie.se2_team_0308.models.ATask;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.utils.notifications.ISubject;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.repository.TaskRepository;
+import at.ac.univie.se2_team_0308.views.DeadlinePassedException;
 
 
 public class TaskViewModel extends AndroidViewModel implements ISubject {
@@ -36,7 +35,7 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
 
     public static final String TAG = "TaskViewModel";
 
-    private List<IObserver> taskViewModelObservers = new ArrayList<>();
+    private List<IObserver> observers = new ArrayList<>();
 
     public TaskViewModel(Application application){
         super(application);
@@ -187,25 +186,30 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
 
     @Override
     public void attachObserver(IObserver observer) {
-        if(!taskViewModelObservers.contains(observer)){
-            taskViewModelObservers.add(observer);
+        if(!observers.contains(observer)){
+            observers.add(observer);
         }
     }
 
     @Override
     public void detachObserver(IObserver observer) {
-        if(taskViewModelObservers.contains(observer)){
-            taskViewModelObservers.remove(observer);
+        if(observers.contains(observer)){
+            observers.remove(observer);
         }
     }
 
     @Override
     public void notifyObservers(ENotificationEvent event, ATask... tasks) {
-        for(IObserver observer : taskViewModelObservers){
-            observer.receivedUpdate(event, tasks);
+        for(IObserver observer : observers){
+            try {
+                observer.receivedUpdate(event, tasks);
+            } catch (DeadlinePassedException e) {
+                    Log.d(TAG, e.getErrorMessage());
+            }
         }
     }
 
+    //Getting appointment tasks based on deadline for later use in Calendar Fragment
     public List<ATask> getAppointmentTasks(Date deadline){
         List<ATask> tasks = new ArrayList<>();
         for (TaskAppointment task : allTasks.getValue().first) {

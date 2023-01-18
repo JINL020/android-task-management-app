@@ -8,10 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 
 import at.ac.univie.se2_team_0308.models.ATask;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
-import at.ac.univie.se2_team_0308.models.TaskAppointment;
-import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.INotifierTypeConverter;
 
+/**
+ * The onReceive method is triggered every time a alarm is due.
+ *
+ * @param intent contains the task that is due and a INotifier to send out
+ *               notifications according to what is saved in the settings
+ * @author Jin-Jin Lee
+ */
 public class AlarmReceiver extends BroadcastReceiver {
     private INotifierTypeConverter notifierTypeConverter = new INotifierTypeConverter();
 
