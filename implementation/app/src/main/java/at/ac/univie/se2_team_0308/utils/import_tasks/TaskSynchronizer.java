@@ -10,7 +10,7 @@ import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 
 /**
- TaskSynchronizer is a class that synchronizes imported tasks with the task data in the viewmodel.
+ * TaskSynchronizer is a class that synchronizes imported tasks with the task data in the viewmodel.
  */
 public class TaskSynchronizer {
     private static final String TAG = "TaskSynchronizer";
@@ -18,9 +18,9 @@ public class TaskSynchronizer {
     /**
      * Synchronizes imported tasks with the task data in the viewmodel.
      *
-     * @param viewModel a TaskViewModel containing the task data
+     * @param viewModel        a TaskViewModel containing the task data
      * @param taskAppointments a list of TaskAppointment objects to be imported
-     * @param taskChecklists a list of TaskChecklist objects to be imported
+     * @param taskChecklists   a list of TaskChecklist objects to be imported
      */
     public void synchronizeTasks(TaskViewModel viewModel, List<TaskAppointment> taskAppointments, List<TaskChecklist> taskChecklists){
         List<ATask> allTasks = viewModel.getAllTasks();
@@ -28,7 +28,7 @@ public class TaskSynchronizer {
             boolean taskExists = false;
 
             for(ATask existingTask : allTasks){
-                if(existingTask.getId() == eachTask.getId()){
+                if(existingTask.getCreationDate() == eachTask.getCreationDate()){
                     taskExists = true;
                     break;
                 }
@@ -45,12 +45,11 @@ public class TaskSynchronizer {
             }
         }
 
-        // TODO: do streams instead
         for(TaskChecklist eachTask: taskChecklists){
             boolean taskExists = false;
 
             for(ATask existingTask : allTasks){
-                if(existingTask.getId() == eachTask.getId()){
+                if(existingTask.getCreationDate() == eachTask.getCreationDate()){
                     taskExists = true;
                     break;
                 }

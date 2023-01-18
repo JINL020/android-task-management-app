@@ -14,38 +14,37 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 
 /**
- XmlImporter is a class that imports tasks from an xml file and converts them into task objects.
- It implements the ITaskImporter interface.
+ * XmlToTaskConverter is a class that imports tasks from an xml file and converts them into task objects.
+ * It implements the IFileConverter interface.
  */
-public class XmlImporter implements ITaskImporter {
-    private final static String TAG = "XmlImpoter";
+public class XmlToTaskConverter implements IFileConverter {
+    private final static String TAG = "XmlToTaskConverter";
     private final XmlTaskRetriever xmlTaskRetriever;
 
-    public XmlImporter(XmlTaskRetriever xmlTaskRetriever){
+    public XmlToTaskConverter(XmlTaskRetriever xmlTaskRetriever){
         this.xmlTaskRetriever = xmlTaskRetriever;
     }
 
     /**
      * Imports tasks from an xml file and converts them into task objects.
-     *
-     * @return a Pair object containing two lists of task objects. The first list contains TaskAppointment objects and
-     * the second list contains TaskChecklist objects.
+     * @return a Pair object containing two lists of task objects. The first list contains
+     * TaskAppointment objects and the second list contains TaskChecklist objects.
      */
     @Override
-    public Pair<List<TaskAppointment>, List<TaskChecklist>> importTasks() {
+    public Pair<List<TaskAppointment>, List<TaskChecklist>> convertTasks() {
         Log.d(TAG, "Converting imported tasks from xml to task objects");
 
         Pair<List<TaskAppointment>, List<TaskChecklist>> importedTasks = new Pair<>(new ArrayList<>(), new ArrayList<>());
         Pair<List<String>, List<String>> tasks = xmlTaskRetriever.getTasks();
 
         for(String eachAppointmentString: tasks.first){
-            TaskAppointment taskAppointment = (TaskAppointment) convertATask(eachAppointmentString, TaskAppointment.class);
+            TaskAppointment taskAppointment = (TaskAppointment) convertString(eachAppointmentString, TaskAppointment.class);
             importedTasks.first.add(taskAppointment);
             Log.d(TAG, taskAppointment.toString());
         }
 
         for(String eachChecklistString: tasks.second){
-            TaskChecklist taskChecklist = (TaskChecklist) convertATask(eachChecklistString, TaskChecklist.class);
+            TaskChecklist taskChecklist = (TaskChecklist) convertString(eachChecklistString, TaskChecklist.class);
             importedTasks.second.add(taskChecklist);
             Log.d(TAG, taskChecklist.toString());
         }
@@ -53,23 +52,15 @@ public class XmlImporter implements ITaskImporter {
         return importedTasks;
     }
 
-    // TODO: check if private methods should have javadocs as well
-    /**
-     * Converts the string representation of a task in the xml file to a task object.
-     *
-     * @param xml a string representation of the task in the xml file
-     * @param t the class of the task object to be converted. This can be either TaskAppointment.class or TaskChecklist.class
-     * @return a task object of the specified class
-     */
-    private ATask convertATask(String xml, Class<?> t) {
+    private ATask convertString(String xml, Class<?> classType) {
         XStream xstream = new XStream();
 
         ATask task;
-        if(t == TaskAppointment.class) {
+        if(classType == TaskAppointment.class) {
             task = (TaskAppointment) xstream.fromXML(xml);
         }
         else {
-            assert t == TaskChecklist.class;
+            assert classType == TaskChecklist.class;
 
             task = (TaskChecklist) xstream.fromXML(xml);
         }

@@ -10,34 +10,31 @@ import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
-import at.ac.univie.se2_team_0308.utils.export.TaskChecklistSerializer;
 
 
 /**
- JsonImporter is a class that imports tasks from a json file and converts them into task objects.
- It implements the ITaskImporter interface.
+ * JsonToTaskConverter is a class that imports tasks from a json file and converts them into task objects.
+ * It implements the IFileConverter interface.
  */
-public class JsonImporter implements ITaskImporter {
-    private static final String TAG = "TaskImporter";
+public class JsonToTaskConverter implements IFileConverter {
+    private static final String TAG = "JsonToTaskConverter";
     private final JsonTaskRetriever jsonTaskRetriever;
 
     /**
-     * Constructor for JsonImporter class.
-     *
+     * Constructor for JsonToTaskConverter class.
      * @param jsonTaskRetriever an object of the JsonTaskRetriever class.
      */
-    public JsonImporter(JsonTaskRetriever jsonTaskRetriever){
+    public JsonToTaskConverter(JsonTaskRetriever jsonTaskRetriever){
         this.jsonTaskRetriever = jsonTaskRetriever;
     }
 
     /**
      * Imports tasks from a json file and converts them into task objects.
-     *
-     * @return a Pair object containing two lists of task objects. The first list contains TaskAppointment objects and
-     * the second list contains TaskChecklist objects.
+     * @return a Pair object containing two lists of task objects. The first list contains
+     * TaskAppointment objects and the second list contains TaskChecklist objects.
      */
     @Override
-    public Pair<List<TaskAppointment>, List<TaskChecklist>> importTasks() {
+    public Pair<List<TaskAppointment>, List<TaskChecklist>> convertTasks() {
         Log.d(TAG, "Converting imported tasks from json to task objects");
         
         Pair<List<TaskAppointment>, List<TaskChecklist>> importedTasks = new Pair<>(new ArrayList<>(), new ArrayList<>());

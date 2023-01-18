@@ -25,10 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import at.ac.univie.se2_team_0308.databinding.FragmentListBinding;
 import at.ac.univie.se2_team_0308.models.ASubtask;
@@ -42,8 +40,8 @@ import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskAppointmentFactory;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.models.TaskChecklistFactory;
-import at.ac.univie.se2_team_0308.utils.export.EFormat;
-import at.ac.univie.se2_team_0308.utils.export.Exporter;
+import at.ac.univie.se2_team_0308.utils.export_tasks.EFormat;
+import at.ac.univie.se2_team_0308.utils.export_tasks.Exporter;
 import at.ac.univie.se2_team_0308.utils.filter.FilterManager;
 import at.ac.univie.se2_team_0308.utils.filter.HiddenTasksFilter;
 import at.ac.univie.se2_team_0308.utils.filter.UnhiddenTasksFilter;
@@ -185,7 +183,6 @@ public class ListFragment extends ATaskListFragment {
         btnImport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO add exception if not xml/json
                 mGetContent.launch( "*/*");
             }
         });
@@ -222,6 +219,8 @@ public class ListFragment extends ATaskListFragment {
                     List<TaskChecklist> taskChecklist = viewModel.getSelectedTaskChecklist(viewModel.getSelectedTaskChecklistIds());
                     List<TaskAppointment> taskAppointment = viewModel.getSelectedTaskAppointment(viewModel.getSelectedTaskAppointmentIds());
                     if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
+                        Log.d(TAG, "Export tasks as Xml");
+
                         exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
                         adapter.setSelectModeOn(false);
                         viewModel.deselectAllTaskAppointment();

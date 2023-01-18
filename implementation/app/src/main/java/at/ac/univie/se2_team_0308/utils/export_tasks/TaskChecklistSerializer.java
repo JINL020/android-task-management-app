@@ -1,4 +1,4 @@
-package at.ac.univie.se2_team_0308.utils.export;
+package at.ac.univie.se2_team_0308.utils.export_tasks;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,6 +11,10 @@ import java.lang.reflect.Type;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.typeConverters.SubtasksConverter;
 
+/**
+ * TaskChecklistSerializer implements the JsonSerializer from Gson in order to create a custom
+ * serialization of the subtasks in a TaskChecklist. It uses the SubtasksConverter class to achieve this.
+ */
 public class TaskChecklistSerializer implements JsonSerializer<TaskChecklist> {
     @Override
     public JsonElement serialize(TaskChecklist taskChecklist, Type typeOfSrc, JsonSerializationContext jsonSerializationContext) {
