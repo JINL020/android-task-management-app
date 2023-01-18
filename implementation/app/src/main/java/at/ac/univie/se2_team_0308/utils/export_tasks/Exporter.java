@@ -61,7 +61,7 @@ public class Exporter {
         writeToFile(fileContent, filename);
     }
 
-    private void writeToFile(String convertedFile, String fileName){
+    private void writeToFile(String fileContent, String fileName){
         try {
             // Downloads directory in local storage chosen as directory to export to
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -70,7 +70,7 @@ public class Exporter {
             Log.d(TAG, "Directory to be saved in " + file);
 
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file));
-            outputStreamWriter.write(convertedFile);
+            outputStreamWriter.write(fileContent);
             outputStreamWriter.close();
 
             Log.d(TAG, "File written to system");
