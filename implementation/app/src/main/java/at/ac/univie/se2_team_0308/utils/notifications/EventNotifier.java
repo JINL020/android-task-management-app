@@ -17,25 +17,18 @@ public class EventNotifier {
     @TypeConverters(INotifierTypeConverter.class)
     private INotifier notifier;
 
-    public EventNotifier(ENotificationEvent event, INotifier notifier) {
+    public EventNotifier(@NonNull ENotificationEvent event, INotifier notifier) {
         this.event = event;
         this.notifier = notifier;
     }
 
+    @NonNull
     public ENotificationEvent getEvent() {
         return event;
     }
 
-    public void setEvent(ENotificationEvent event) {
-        this.event = event;
-    }
-
     public INotifier getNotifier() {
         return notifier;
-    }
-
-    public void setNotifier(INotifier notifier) {
-        this.notifier = notifier;
     }
 
     public boolean isPopup() {
@@ -49,7 +42,6 @@ public class EventNotifier {
     @NonNull
     @Override
     public String toString() {
-        String ret = event.name() + " " + notifier.getNotifierType().toString();
-        return ret;
+        return event.name() + " " + notifier.getNotifierType().toString();
     }
 }

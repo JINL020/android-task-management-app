@@ -35,7 +35,7 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
 
     public static final String TAG = "TaskViewModel";
 
-    private List<IObserver> taskViewModelObservers = new ArrayList<>();
+    private List<IObserver> observers = new ArrayList<>();
 
     public TaskViewModel(Application application){
         super(application);
@@ -186,21 +186,21 @@ public class TaskViewModel extends AndroidViewModel implements ISubject {
 
     @Override
     public void attachObserver(IObserver observer) {
-        if(!taskViewModelObservers.contains(observer)){
-            taskViewModelObservers.add(observer);
+        if(!observers.contains(observer)){
+            observers.add(observer);
         }
     }
 
     @Override
     public void detachObserver(IObserver observer) {
-        if(taskViewModelObservers.contains(observer)){
-            taskViewModelObservers.remove(observer);
+        if(observers.contains(observer)){
+            observers.remove(observer);
         }
     }
 
     @Override
     public void notifyObservers(ENotificationEvent event, ATask... tasks) {
-        for(IObserver observer : taskViewModelObservers){
+        for(IObserver observer : observers){
             try {
                 observer.receivedUpdate(event, tasks);
             } catch (DeadlinePassedException e) {
