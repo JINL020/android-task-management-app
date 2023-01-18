@@ -48,6 +48,7 @@ dependencies {
 
     //Color Picker
     implementation 'com.github.duanhong169:colorpicker:1.1.6'
+    implementation 'androidx.navigation:navigation-testing:2.5.3'
 
     // Room
     def room_version = "2.4.3"

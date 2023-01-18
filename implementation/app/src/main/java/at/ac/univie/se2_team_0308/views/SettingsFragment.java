@@ -61,8 +61,9 @@ public class SettingsFragment extends Fragment {
         eventNotifierViewModel = new ViewModelProvider(getActivity()).get(EventNotifierViewModel.class);
 
         initViews();
-        initCheckboxListeners();
+        initListeners();
         initCheckboxLayout();
+        setCurrentTheme();
 
         return binding.getRoot();
     }
@@ -87,11 +88,11 @@ public class SettingsFragment extends Fragment {
 
     /**
      * A listener for each CheckBox is set so that the settings are saved
-     * into the database everytime a CheckBox is clicked.
+     * into the room database everytime a CheckBox is clicked.
      *
      * @author Jin-Jin Lee
      */
-    private void initCheckboxListeners() {
+    private void initListeners() {
         onCreatePopupCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -225,8 +226,6 @@ public class SettingsFragment extends Fragment {
                 }
             }
         });
-
-        setCurrentTheme();
     }
 
     private void updateOnCreateNotifier() {

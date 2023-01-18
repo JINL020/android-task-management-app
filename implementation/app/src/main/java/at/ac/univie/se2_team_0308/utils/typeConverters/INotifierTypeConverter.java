@@ -26,7 +26,7 @@ public class INotifierTypeConverter {
         Gson gson = new Gson();
         String json = gson.toJson(ret);
 
-        Log.d(TAG, "fromINotifier: " + json);
+        //Log.d(TAG, "fromINotifier: " + json);
         return json;
     }
 
@@ -45,7 +45,7 @@ public class INotifierTypeConverter {
             notifier = new BasicNotifier(notifier);
         }
 
-        Log.d(TAG, "toINotifier: " + notifier.getNotifierType());
+        //Log.d(TAG, "toINotifier: " + notifier.getNotifierType());
 
         return notifier;
     }

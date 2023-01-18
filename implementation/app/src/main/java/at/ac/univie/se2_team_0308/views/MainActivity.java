@@ -40,7 +40,7 @@ import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 /**
  * The MainActivity contains the bottom navigation bar and holds a NavHostFragment
  * to switch between the different fragments (List, Calendar, Settings).
- * It is part of the observer pattern and acts as an observer whenever a task is
+ * It is part of the observer pattern and acts as an observer. Whenever a task is
  * created, updated or deleted, the MainActivity sends out notifications accordingly.
  * It also sets and cancels alarms whenever an appointment is created or deleted.
  *

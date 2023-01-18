@@ -22,11 +22,7 @@ import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
 import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
 
 @RunWith(AndroidJUnit4.class)
-public class SetAlarmTest {
-
-    public static final String TAG = "ALARM_TEST";
-
-    private EventNotifierViewModel eventNotifierViewModel;
+public class MainActivityTest {
 
      @Before
      public void setupClass(){
@@ -35,7 +31,7 @@ public class SetAlarmTest {
      }
 
     @Test
-    public void deadlinePassed_noAlarmSet() {
+    public void receivedUpdate_deadlinePassed_throwException() {
 
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
@@ -61,7 +57,7 @@ public class SetAlarmTest {
     }
 
     @Test
-    public void deadlineNotPassed_AlarmSet() {
+    public void receivedUpdate_deadlineValid_SetAlarm() {
 
         try(ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             scenario.onActivity(activity -> {
