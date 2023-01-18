@@ -104,8 +104,14 @@ public class ListFragment extends ATaskListFragment {
                 selectedPressed = !selectedPressed;
                 if (selectedPressed) {
                     showLayout(ELayout.SELECTED);
+                    viewModel.deselectAllTaskAppointment();
+                    viewModel.deselectAllTaskChecklist();
+
                 } else {
                     showLayout(ELayout.ADD);
+                    adapter.setSelectModeOn(false);
+                    viewModel.deselectAllTaskAppointment();
+                    viewModel.deselectAllTaskChecklist();
                 }
             }
         });

@@ -32,6 +32,7 @@ import at.ac.univie.se2_team_0308.models.ASubtask;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.ATaskFactory;
 import at.ac.univie.se2_team_0308.models.Attachment;
+import at.ac.univie.se2_team_0308.models.ECategory;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
@@ -133,14 +134,8 @@ public class CalendarFragment extends ATaskListFragment {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
-//                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
-//                }
                 PropertyToBeUpdated fragment = new PropertyToBeUpdated(CalendarFragment.this);
                 fragment.show(getChildFragmentManager(), "update_property");
-                /*if (viewModel.getSelectedTasksAppointment() != null && viewModel.getSelectedTasksChecklist() != null) {
-                    viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTasksAppointment(), viewModel.getSelectedTasksChecklist(), EPriority.HIGH);
-                }*/
             }
         });
 
@@ -163,6 +158,9 @@ public class CalendarFragment extends ATaskListFragment {
 
                         if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
                             exporter.exportTasks(taskAppointment, taskChecklist, EFormat.JSON);
+                            adapter.setSelectModeOn(false);
+                            viewModel.deselectAllTaskAppointment();
+                            viewModel.deselectAllTaskChecklist();
                             showToast("Tasks exported");
                         }
                     } catch (Exception e) {
@@ -182,6 +180,9 @@ public class CalendarFragment extends ATaskListFragment {
                     if (!taskAppointment.isEmpty() || !taskChecklist.isEmpty()) {
                         Log.d(TAG, "Export tasks as Xml");
                         exporter.exportTasks(taskAppointment, taskChecklist, EFormat.XML);
+                        adapter.setSelectModeOn(false);
+                        viewModel.deselectAllTaskAppointment();
+                        viewModel.deselectAllTaskChecklist();
                         showToast("Tasks exported");
                     }
                 } catch (Exception e) {
@@ -195,7 +196,13 @@ public class CalendarFragment extends ATaskListFragment {
             @Override
             public void onClick(View view) {
                 if (viewModel.getSelectedTaskAppointmentIds() != null && viewModel.getSelectedTaskChecklistIds() != null) {
-                    viewModel.hideAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), true);
+                    if (!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
+                        viewModel.hideAllSelectedTasks(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), true);
+                        adapter.setSelectModeOn(false);
+                        viewModel.deselectAllTaskAppointment();
+                        viewModel.deselectAllTaskChecklist();
+                        showLayout(ELayout.ADD);
+                    }
                 }
             }
         });
@@ -260,10 +267,18 @@ public class CalendarFragment extends ATaskListFragment {
             @Override
             public void onItemSelected(ATask taskModel) {
                 if (taskModel.isSelected()) {
-                    viewModel.selectTaskAppointment(taskModel);
+                    if (taskModel.getCategory() == ECategory.APPOINTMENT) {
+                        viewModel.selectTaskAppointment(taskModel);
+                    } else {
+                        viewModel.selectTaskChecklist(taskModel);
+                    }
                     Log.d(TAG, "onItemSelected: item is selected");
                 } else {
-                    viewModel.deselectTaskAppointment(taskModel);
+                    if (taskModel.getCategory() == ECategory.APPOINTMENT) {
+                        viewModel.deselectTaskAppointment(taskModel);
+                    } else {
+                        viewModel.deselectTaskChecklist(taskModel);
+                    }
                     Log.d(TAG, "onItemSelected: item is deselected");
                 }
             }
@@ -305,6 +320,10 @@ public class CalendarFragment extends ATaskListFragment {
         if ((viewModel.getSelectedTaskAppointmentIds() != null) && (viewModel.getSelectedTaskChecklistIds() != null)) {
             if (!viewModel.getSelectedTaskAppointmentIds().isEmpty() || !viewModel.getSelectedTaskChecklistIds().isEmpty()) {
                 viewModel.updateAllSelectedTasksPriorities(viewModel.getSelectedTaskAppointmentIds(), viewModel.getSelectedTaskChecklistIds(), EPriority.HIGH);
+                adapter.setSelectModeOn(false);
+                viewModel.deselectAllTaskAppointment();
+                viewModel.deselectAllTaskChecklist();
+                showLayout(ELayout.ADD);
             }
         }
     }
