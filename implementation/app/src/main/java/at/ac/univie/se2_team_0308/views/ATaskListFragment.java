@@ -11,7 +11,9 @@ import android.widget.Toast;
 /**
  * Abstract class for Task List fragments on main activity
  */
-public abstract class ATaskListFragment extends Fragment implements AddTaskFragment.AddTaskDialogListener, AddTaskFragment.SendDataFromAddDialog, PropertyToBeUpdated.SelectPropertyToUpdateDialogListener, PropertyToBeUpdated.SendDataFromSelectPropertyUpdateDialog {
+public abstract class ATaskListFragment extends Fragment implements AddTaskFragment.AddTaskDialogListener,
+        AddTaskFragment.SendDataFromAddDialog, PropertyToBeUpdated.SelectPropertyToUpdateDialogListener,
+        PropertyToBeUpdated.SendDataFromSelectPropertyUpdateDialog {
     /**
      * Layout initialization function with steps that are overwritten on specific fragments
      */
