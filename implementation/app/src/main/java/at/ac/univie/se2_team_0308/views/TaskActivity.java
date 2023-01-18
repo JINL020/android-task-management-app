@@ -35,8 +35,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.thoughtworks.xstream.mapper.Mapper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Calendar;
@@ -47,19 +45,20 @@ import at.ac.univie.se2_team_0308.R;
 import at.ac.univie.se2_team_0308.models.ATask;
 import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.models.ECategory;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.EPriority;
 import at.ac.univie.se2_team_0308.models.EStatus;
 import at.ac.univie.se2_team_0308.models.SubtaskList;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
 import at.ac.univie.se2_team_0308.utils.DisplayClass;
-import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.INotifierTypeConverter;
 import at.ac.univie.se2_team_0308.utils.notifications.AlarmReceiver;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.IObserver;
 import at.ac.univie.se2_team_0308.viewmodels.AttachmentsAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.EventNotifierViewModel;
+import at.ac.univie.se2_team_0308.viewmodels.OpenAttachmentException;
 import at.ac.univie.se2_team_0308.viewmodels.SubtaskListAdapter;
 import at.ac.univie.se2_team_0308.viewmodels.TaskViewModel;
 import top.defaults.colorpicker.ColorPickerPopup;
@@ -136,10 +135,11 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
         });
 
         addSubtaskButton.setOnClickListener(view -> {
+            Log.d(TAG, "Add subtask");
             subtaskListAdapter.addTask(new SubtaskList(""));
         });
 
-        //Color picker popup
+        //Color picker popup https://github.com/duanhong169/ColorPicker
         editTaskColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +173,6 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
 
     private void setViews(DisplayClass incomingTask) {
 
-        Log.d(TAG, "Color: " + incomingTask.getTaskColor());
         editTaskColor.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(incomingTask.getTaskColor())));
 
         if (incomingTask.getTaskName() != null) {
@@ -390,6 +389,7 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
                 public void onActivityResult(Uri uri) {
                     File file = new File(uri.getPath());
                     String fileName = file.getPath().split(":")[1];
+                    Log.d(TAG, "Add new attachment: " + fileName);
                     attachmentsAdapter.addAttachment(new Attachment(fileName));
                 }
             });
@@ -400,16 +400,21 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
         sketchData = bos.toByteArray();
-        // update image view
+        // update image view to display sketch in task activity
         Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         sketchPlacheholder.setImageBitmap(mutableBitmap);
         sketchPlacheholder.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void openFile(String sketchPath) {
+    public void openFile(String sketchPath) throws OpenAttachmentException {
+        File file = new File(sketchPath);
+        if(!file.exists()){
+            throw new OpenAttachmentException("File doesn't exist");
+        }
         // TODO open file
     }
+
     private void initNotifierViewModel(){
         eventNotifierViewModel = new ViewModelProvider(this).get(EventNotifierViewModel.class);
         eventNotifierViewModel.getAllNotifiers().observe(this, new Observer<List<EventNotifier>>() {
@@ -440,20 +445,23 @@ public class TaskActivity extends AppCompatActivity implements SketchFragment.Se
             eventNotifierViewModel.getOnUpdateNotifier().sendNotification(this, event, tasks);
             for (ATask task : tasks) {
                 if (task.getCategory().equals(ECategory.APPOINTMENT)) {
-                    setAlarm((TaskAppointment) task);
+                    try {
+                        setAlarm((TaskAppointment) task);
+                    } catch (DeadlinePassedException e) {
+                        Log.d(TAG, e.getErrorMessage());
+                    }
                 }
                 Log.d(TAG, "received onUpdate update from taskViewModel: " + event.name() + " " + task.getTaskName());
             }
         }
     }
 
-    private void setAlarm(TaskAppointment appointment) {
+    private void setAlarm(TaskAppointment appointment) throws DeadlinePassedException {
         Date deadline = appointment.getDeadline();
 
         Date currentTime = Calendar.getInstance().getTime();
         if (currentTime.after(deadline)) {
-            Log.d(TAG, "deadline already passed");
-            return;
+            throw new DeadlinePassedException(currentTime, deadline);
         }
 
         Calendar calendar = Calendar.getInstance();

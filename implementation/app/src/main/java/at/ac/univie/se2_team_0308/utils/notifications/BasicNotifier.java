@@ -1,10 +1,7 @@
 package at.ac.univie.se2_team_0308.utils.notifications;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -12,9 +9,6 @@ import androidx.core.app.NotificationManagerCompat;
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.ATask;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
-import at.ac.univie.se2_team_0308.models.ENotifier;
-import at.ac.univie.se2_team_0308.views.MainActivity;
 
 public class BasicNotifier extends ADecoratorNotifier {
     private static final String TAG = "BASIC_NOTIFIER";

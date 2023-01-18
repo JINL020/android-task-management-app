@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class ASubtask implements Parcelable {
+
     @PrimaryKey(autoGenerate = true)
     private int id;
     protected EStatus state;

@@ -13,16 +13,16 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotificationEvent;
 import at.ac.univie.se2_team_0308.models.TaskAppointment;
 import at.ac.univie.se2_team_0308.models.TaskChecklist;
-import at.ac.univie.se2_team_0308.utils.DateConverter;
-import at.ac.univie.se2_team_0308.utils.ECategoryTypeConverter;
-import at.ac.univie.se2_team_0308.utils.ENotificationEventTypeConverter;
-import at.ac.univie.se2_team_0308.utils.EPriorityTypeConverter;
-import at.ac.univie.se2_team_0308.utils.EStatusTypeConverter;
-import at.ac.univie.se2_team_0308.utils.INotifierTypeConverter;
-import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.DateConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.ECategoryTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.ENotificationEventTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.EPriorityTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.EStatusTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.INotifierTypeConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.SubtasksConverter;
 import at.ac.univie.se2_team_0308.utils.notifications.EventNotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.INotifier;
 import at.ac.univie.se2_team_0308.utils.notifications.LoggerCore;
@@ -67,11 +67,11 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     private static void populateDb(IEventNotifierDao eventNotifierDao){
-        INotifier defaultObserver = new LoggerCore();
-        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.CREATE, defaultObserver));
-        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.UPDATE, defaultObserver));
-        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.DELETE, defaultObserver));
-        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.APPOINTMENT, defaultObserver));
+        INotifier defaultNotifier = new LoggerCore();
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.CREATE, defaultNotifier));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.UPDATE, defaultNotifier));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.DELETE, defaultNotifier));
+        eventNotifierDao.insert(new EventNotifier(ENotificationEvent.APPOINTMENT, defaultNotifier));
     }
 
 }

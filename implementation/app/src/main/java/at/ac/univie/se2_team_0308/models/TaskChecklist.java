@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import at.ac.univie.se2_team_0308.utils.SubtasksConverter;
+import at.ac.univie.se2_team_0308.utils.typeConverters.SubtasksConverter;
 
 @Entity(tableName = "task_checklists")
 public class TaskChecklist extends ATask implements Parcelable {

@@ -1,15 +1,11 @@
 package at.ac.univie.se2_team_0308.utils.notifications;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
 
 import at.ac.univie.se2_team_0308.models.ATask;
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
-import at.ac.univie.se2_team_0308.models.ENotifier;
-import at.ac.univie.se2_team_0308.views.MainActivity;
 
 public class PopupNotifier extends ADecoratorNotifier {
     private static final String TAG = "POPUP_NOTIFIER";

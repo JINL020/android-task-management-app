@@ -1,8 +1,8 @@
-package at.ac.univie.se2_team_0308.utils;
+package at.ac.univie.se2_team_0308.utils.typeConverters;
 
 import androidx.room.TypeConverter;
 
-import at.ac.univie.se2_team_0308.models.ENotificationEvent;
+import at.ac.univie.se2_team_0308.utils.notifications.ENotificationEvent;
 
 public class ENotificationEventTypeConverter {
 

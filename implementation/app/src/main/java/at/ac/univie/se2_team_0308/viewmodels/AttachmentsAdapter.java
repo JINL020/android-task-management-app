@@ -1,11 +1,14 @@
 package at.ac.univie.se2_team_0308.viewmodels;
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -16,14 +19,18 @@ import at.ac.univie.se2_team_0308.models.Attachment;
 import at.ac.univie.se2_team_0308.views.AddTaskFragment;
 import at.ac.univie.se2_team_0308.views.TaskActivity;
 
+/**
+ * This class is used to provide data for the attachments recycle view
+ */
 public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter.ViewHolder> {
     public static final String TAG = "AttachmentsAdapter";
+
     private Context context;
     List<Attachment> attachments;
 
     private AttachmentsAdapter.OpenFileListener listener;
     public interface OpenFileListener {
-        void openFile(String sketchPath);
+        void openFile(String sketchPath) throws OpenAttachmentException;
     }
 
     public AttachmentsAdapter(Context context, TaskActivity activity){
@@ -31,16 +38,16 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
         try {
             this.listener = (OpenFileListener) activity;
         } catch (ClassCastException e){
-            // tODO
+            throw new ClassCastException(activity.toString());
         }
         this.attachments = new ArrayList<>();
     }
-    public AttachmentsAdapter(Context context, AddTaskFragment activity){
+    public AttachmentsAdapter(Context context, AddTaskFragment fragment){
         this.context = context;
         try {
-            this.listener = (OpenFileListener) activity;
+            this.listener = (OpenFileListener) fragment;
         } catch (ClassCastException e){
-            // TODO
+            throw new ClassCastException(fragment.toString());
         }
         this.attachments = new ArrayList<>();
     }
@@ -83,9 +90,19 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
     public void onBindViewHolder(@NonNull AttachmentsAdapter.ViewHolder holder, int position) {
         holder.txtFileName.setText(this.attachments.get(position).getBaseName());
         holder.textExtension.setText(this.attachments.get(position).getExtension().toUpperCase(Locale.ROOT));
-        holder.deleteFileBtn.setOnClickListener(view -> removeAttachment(holder.getAdapterPosition()));
+        holder.deleteFileBtn.setOnClickListener(view -> {
+            Log.d(TAG, "Remove attachment button clicked");
+            removeAttachment(holder.getAdapterPosition());
+        });
         holder.openFileBtn.setOnClickListener(view -> {
-            listener.openFile(this.attachments.get(position).getFilePath());
+            Log.d(TAG, "Open attachment button clicked");
+            try {
+                listener.openFile(this.attachments.get(position).getFilePath());
+            } catch (OpenAttachmentException e) {
+                holder.messageText.setText("File doesn't exist");
+                holder.fileParentCard.setCardBackgroundColor(Color.GRAY);
+                Log.d(TAG, "Cannot open attachment: " + e.getMessage());
+            }
         });
     }
 
@@ -98,8 +115,10 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
 
         private TextView textExtension;
         private TextView txtFileName;
+        private TextView messageText;
         private ImageButton deleteFileBtn;
         private ImageButton openFileBtn;
+        private CardView fileParentCard;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -107,6 +126,8 @@ public class AttachmentsAdapter  extends RecyclerView.Adapter<AttachmentsAdapter
             txtFileName = itemView.findViewById(R.id.txtFileName);
             deleteFileBtn = itemView.findViewById(R.id.deleteFileBtn);
             openFileBtn = itemView.findViewById(R.id.openFileBtn);
+            fileParentCard = itemView.findViewById(R.id.fileParentCard);
+            messageText = itemView.findViewById(R.id.messageText);
         }
     }
 
